@@ -1,0 +1,332 @@
+\appendix
+
+\section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
+\begin{myproof}[Proof.]
+	First, letting $\gamma_n = 1 - 1/n$, we show that
+	\begin{equation} \label{eq:basic_finite_time_gittins}
+	\Regret{\pi^{G, \gamma_n}, n} = O\left( \log^2(n) \right).
+	\end{equation}
+	Let $H \sim \text{Geo}(1/n)$ be an exogenous geometric random variable that is independent of $\theta$ and not observed by the agent. As an abbreviation, define $\mu^* = \E_{q}[\mu^*(\theta)]$. We then have
+	\begin{align}
+	\sum_{t=1}^\infty \gamma^{t-1} \E\left[X_{\pi^{G,\gamma_n},t}\right] & = \E\left[\sum_{t=1}^H X_{\pi^{G,\gamma_n}_t,t}\right] \nonumber \\
+	& =  \E\left[H \mu^*(\theta) -\Regret{\pi^{G,\gamma_n}, H}\right] \\
+	& =  n \mu^* - \E\left[\Regret{\pi^{G,\gamma_n}, H}\right] \nonumber \\
+	& \le n \mu^* - \E\left[\Regret{\pi^{G,\gamma_n}, H} \given H > n\right]\P{H > n} \nonumber \\
+	& \le n \mu^* - \E\left[\Regret{\pi^{G,\gamma_n}, n}\right](1-1/n)^n \nonumber \\
+	& = n \mu^* - \E\left[\Regret{\pi^{G,\gamma_n}, n}\right](e^{-1} + o(1)) \label{bound:geometric_regret1}.
+	\end{align}
+	Let $q, Q$ be the density and CDF, respectively, of the prior distribution. Now, by Theorem 3, part 1 of \cite{lai1987adaptive}, there exists (an efficient) policy $\tilde \pi$, such that as $n$ becomes sufficiently large
+	\begin{equation*}
+	\Regret{\tilde \pi, n} \sim \left( A(A-1)  \int_\Theta q^2(\theta) Q^{A-2}(\theta) \; d\theta \right) \log^2 n.
+	\end{equation*}
+	Therefore for some prior-dependent constant $C_q$, we have $\Regret{\tilde \pi, n} \le C_q \log^2 n$. Let $\Delta(\theta)$ denote worst case  single period regret under parameter $\theta$, that is, $\Delta(\theta) =  \max_{i} \mu(\theta^*) - \mu(\theta_i)$. Let $\Delta$ denote its expectation over $\theta$, from which we obtain the lower bound,
+	\begin{align}
+	\E{\sum_{t=1}^H X_{\pi^{G,\gamma_n}_t,t}} & \ge \E\left[\sum_{t=1}^H X_{ \tilde \pi_t,t}\right] \label{bound:gittins_optimality}\\
+	&  = \E\left[H\mu^*(\theta) - \Regret{\tilde \pi, H}\right] \nonumber \\
+	& \ge \E\left[H\mu^*(\theta) -\Regret{\tilde \pi, H}\ind{H \ge e} - 2\ind{H < e}\Delta(\theta)\right] \nonumber \\
+	& \ge n \mu^* - C_q \Ee{(\log (H))^2 \ind{H \ge 3} } - 2\Delta \nonumber \\
+	& \ge n \mu^* - C_q \Ee{(\log (H))^2 \given H \ge 3}\P{H \ge 3} - 2\Delta \nonumber \\
+	& \ge n \mu^* - C_q \log^2 (n+3)\P{H \ge 3} - 2\Delta\label{bound:jensens_ineq_for_log3t_proof}
+	\end{align}
+	where \eqref{bound:gittins_optimality} holds by optimality of the Gittins Index. The bound \eqref{bound:jensens_ineq_for_log3t_proof} follows from the memoryless property of the Geometric distribution, from Jensen's inequality and the fact that function $\log^2 x$ is a concave function on $[e,+\infty)$. Thus, equation \eqref{eq:basic_finite_time_gittins} is implied by the bounds \eqref{bound:geometric_regret1} and \eqref{bound:jensens_ineq_for_log3t_proof}.
+	
+	Now, for any policy $\pi$, we define $\tilde L_\pi(m) := m\mu^* - \sum_{t=1}^m X_{\pi_t,t}$ to be the random $m$ period shortfall against the expected Bayes' optimal arm and let $g_k = 1 - 1/2^{k-1}$. We break up the time horizon $T$ into geometrically growing epochs and bound, conservatively, the Bayes' risk in each one:
+	\begin{align}
+	\Regret{\pi^D, T} & \le \Regret{\pi^D, 2^{\ceil{\log_2 T}}}\\
+	& = \sum_{k=1}^{\ceil{\log_2 T}} \Ee{\Ee{ \tilde L_{\pi^D}(2^{k-1}) \given[\Big] \mathcal F_{2^{k-1}-1}}} \nonumber \\
+	& =\sum_{k=1}^{\ceil{\log_2 T}} \Ee{\Ee{ \tilde L_{\pi^{G, g_k}}(2^{k-1}) \given[\Big] \mathcal F_{2^{k-1}-1}}} \nonumber \\
+	& \le \sum_{k=1}^{\ceil{\log_2 T}} \Ee{\Ee{ \tilde L_{\pi^{G,g_k}}(2^{k-1}) \given[\Big] \mathcal F_{0}}} \label{bound:super_mg} \\
+	& = \sum_{k=1}^{\ceil{\log_2 T}} \Regret{\pi^{G, g_k}, 2^{k-1}} =  O\left(\sum_{k=1}^{\ceil{\log_2 T}} k^2 \right)\label{eq:order_optimal_bayes} \\
+	& = O(\log^3 T) \nonumber
+	\end{align}
+	where \eqref{eq:order_optimal_bayes} follows from equation \eqref{eq:basic_finite_time_gittins} and \eqref{bound:super_mg} holds because regret increases if history is discarded.
+\end{myproof}
+
+\subsection{Proof of Lemma~\ref{lemma:approx_bound}} \label{prf:approx_bound}
+\begin{myproof}[Proof.]
+	Fix $\lambda > 0$ and an arm $i$. Let $V_\lambda(y)$ be the value of the RHS of \eqref{eqn:gittins_index} with the per-period reward  of $\lambda$, and define $\hat V^K_\lambda(y)$, similarly, for problem \eqref{eqn:ogi_general} (where $y$ is, as before, the state of an arm). Notice that because rewards are generated according to an unknown parameter $\theta_i$, which needs to be learned, that if we condition on a fixed $\theta_i$, we have for any stopping time $\tau$ that
+	\begin{align} 
+	\Ee{ \sum_{t=1}^{\tau-1} \gamma^{t-1}X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i} & \le  \Ee{ \sum_{t=1}^{\tau-1} \gamma^{t-1}\mu(\theta_i) + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i} \label{bound:perfect_info}
+	\end{align}
+	where the expectation is also taken over the agent's prior on $\theta_i$. Simply put, the best performance in the bandit game can be achieved if the parameter governing expected rewards is known from the beginning by the agent. Now recall that $R(y_{i,t})$ is a random variable drawn from the prior on the arm's mean reward at time $t$. We also define the function 
+	\[
+	r_{\lambda,K}(t,x) = \begin{cases}
+	\lambda & t < K \\
+	\max(x,\lambda) & \text{otherwise}
+	\end{cases}
+	\] 
+	Let $\tau$ be the stopping time at which the agent retires and define $\tau_K = \tau \wedge (K+1)$. We then bound $V_\lambda(y)$,
+	\begin{align}
+	V_\lambda(y) & =  \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma}
+		\given[\Big] y_{i,1} = y} \nonumber \\
+	& = \sup_{\tau > 1}\Ee{\Ee{\sum_{t=1}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma}
+			\given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \nonumber \\
+	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} + \Ee{\sum_{t=\tau_K}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \nonumber \\
+	& \le \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} + \Ee{\sum_{t=\tau_K}^{\tau-1} \gamma^{t-1} \mu(\theta_i) + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \label{bound:appl_of_perfect_info} \\
+	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \Ee{ \gamma^{\tau_K - 1} \frac{r_{\lambda,K}(\tau_K, \mu(\theta_i))}{1-\gamma} \given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \nonumber \\
+	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \frac{\gamma^{\tau_K - 1}}{1-\gamma}\Ee{\Ee{  r_{\lambda,K}( \tau_K, \mu(\theta_i)) \given[\Big] \theta_i} \given[\Big] \mathcal{F}_{\tau_K-1}}} \nonumber \\
+	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \frac{\gamma^{\tau_K - 1}}{1-\gamma}\underbrace{\Ee{  r_{\lambda,K}( \tau_K, R(y_{i,\tau_K}))}}_{ = R_{\lambda,K}(\tau_K, y_{i,\tau_K})}\given[\Big] y_{i,1} = y} \nonumber \\
+	& = \sup_{1 < \tau \le K+1}\Ee{\sum_{t=1}^{\tau} \gamma^{t-1} X_{i,t} +  \gamma^{\tau - 1} \frac{ R_{\lambda,K}(\tau, y_{i,\tau})}{1-\gamma}\given[\Big] y_{i,1} = y}  = \hat V^K_\lambda(y). \nonumber
+	\end{align}
+	The main step in the above is \eqref{bound:appl_of_perfect_info} where we bound on the inner conditional expection (in terms of $\theta_i$) by applying \eqref{bound:perfect_info}. We also used the fact that $\mu(\theta_i) \; | \; \mathcal F_{t-1} \sim R(y_{i,t})$ for all $t$. Finally observe that both $\hat V^K_\lambda(y)$ and $V_\lambda(y)$ are increasing in $\lambda$ for any fixed $y$. Therefore if $\lambda_1 = (1-\gamma) \hat V^K_{\lambda_1}(y)$ and $\lambda_2 = (1-\gamma) V_{\lambda_2}(y)$, then, because $V_{\lambda}(y) \le \hat V^K_{\lambda}(y)$ for any $\lambda$, it must be that  $\lambda_1 \ge \lambda_2$. A simple argument shows this, which we omit.
+\end{myproof}
+\subsection{Results for the frequentist regret bound proof}
+\subsubsection{Definitions and properties of Binomial distributions.}
+We list notation and facts related to Beta and Binomial distributions, which are used through this section.
+\begin{definition}
+	$F^B_{n,p}(.)$ is the CDF of the Binomial distribution with parameters $n$ and $p$, and $F^\beta_{a,b}(.)$ is the CDF of the Beta distribution with parameters $a$ and $b$.
+\end{definition}
+
+\begin{lemma} \label{fact:equation_for_beta_binomial_cdfs}
+	Let $a$ and $b$ be positive integers and $y \in [0,1]$, 
+	\[
+	F^\beta_{a,b}(y) = 1 - F^B_{a+b-1,y}(a-1)
+	\]
+\end{lemma}
+\begin{myproof}[Proof.]
+	Proof is found in \cite{agrawalanalysis}.
+\end{myproof}
+\begin{lemma} \label{fact:median_of_binomial_dist}
+	The median of a Binomial$(n,p)$ distribution is either $\ceil{np}$ or $\floor{np}$.
+\end{lemma}
+\begin{myproof}[Proof]
+	Proof is found in \cite{jogdeo1968monotone}.
+\end{myproof}
+
+\begin{corollary}[Corollary of Fact~\ref{fact:median_of_binomial_dist}] \label{cor:corollarly_of_binomial_median_property}
+	Let $n$ be a positive integer and $p \in (0,1)$. For any nonnegative integer $s < np$
+	\[
+	F_{n,p}(s) \le 1/2
+	\]
+\end{corollary}
+
+\begin{lemma} \label{fact:relationship_with_binom_cdfs}
+	Let $n$ be a positive integer and $p \in [0,1]$. Then for any $k \in \{0,\ldots,n\}$,
+	\[
+	(1-p)F_{n-1,p}(k)\le F_{n,p}(k) \le F^B_{n-1,p}(k)
+	\] 
+\end{lemma}
+\begin{myproof}[Proof]
+	To prove $F_{n,p}(k) \le F^B_{n-1,p}(k)$, we let $X_1,\ldots,X_{n}$ be i.i.d samples from a Bernoulli($p$) distribution. We then have
+	\begin{align*}
+	F^B_{n,p}(k)  = \P{\sum_{i=1}^{n} X_i \le k}  \le  \P{\sum_{i=1}^{n-1} X_i \le k}  = F^B_{n-1,p}(k)
+	\end{align*}
+	Now to prove $(1-p)F_{n-1,p}(k)\le F_{n,p}(k)$, it's enough to observe that $F_{n,p}(k) = p F_{n-1,p}(k-1) + (1-p) F_{n-1,p}(k)$.
+\end{myproof}
+
+\subsubsection{Ratio of Binomial CDFs.} \label{sec:ratio_of_bin_cdfs}
+\begin{lemma} \label{lemma:ratio_of_cdfs}
+	Let $0< q < p < 1$. Let $n$ be a positive integer such that $e^{\frac{n}{2} d(q,p)} \ge (n+1)^4$ and let $k$ be a nonnegative integer such that $k < nq$. It then follows that
+	\[
+	F^B_{n,q}(k)/F^B_{n,p}(k) >  e^{\frac{n}{2} d(q,p)}.
+	\]
+\end{lemma}
+\begin{proof}[Proof.]
+	From the method of types  (see \cite{cover2012elements}), we have for any $r \in (0,1)$ and $j < nr$
+	\begin{equation} \label{eqn:appl_of_sanovs}
+	\frac{e^{-nd(j/n, r)}}{(1+n)^2}\le F_{n,r}(j) \le (n+1)^2 e^{- n d(j/n, r)}.
+	\end{equation}
+	Because $k < nq < np$, by applying \eqref{eqn:appl_of_sanovs} to both the numerator and denominator, we get
+	\begin{align*}
+	\frac{F_{n,q}(k)}{F_{n,p}(k)} & \ge  \frac{e^{-nd(k/n, q)}}{(n+1)^4 e^{- n d(k/n, p)}} = \frac{e^{n(d(k/n,p) - d(k/n,q))}}{(n+1)^4}.
+	\end{align*}
+	Examining the exponent, we find
+	\begin{align*}
+	d(k/n, p) - d(k/n,q) & = \frac{k}{n} \log \frac{q}{p} + \left(1-\frac{k}{n}\right)\log \frac{1-q}{1-p} \\
+	& > q \log \frac{q}{p} + (1-q)\log \frac{1-q}{1-p} \\
+	& = d(q,p)
+	\end{align*}
+	where the bound holds because the expression is decreasing in $k$, and $k < nq$. Therefore,
+	\begin{align}
+	\frac{F_{n,q}(k)}{F_{n,p}(k)} & > \frac{e^{n  d(q,p)}}{(n+1)^4} = \frac{e^{\frac{n}{2}d(q,p)}}{(n+1)^4} e^{\frac{n}{2}d(q,p)} \ge e^{\frac{n}{2}d(q,p)} \label{bound:log_1minusq_etc}.
+	\end{align}
+	The final lower bound in \eqref{bound:log_1minusq_etc} follows from the assumption on $n$.
+\end{proof}
+
+\subsubsection{Optimistic Gittins Index results.} \label{sec:amgi_results}
+\begin{lemma} \label{eq:important_fact}
+	Let $\gamma \in (0,1)$ and
+	\begin{equation} \label{eq:def_lambda_in_important_equiv}
+	\lambda = \sup\{ x \in [0,1] : \Ee{V} + \gamma \Ee{(x - V)^+} \ge x\}
+	\end{equation} 
+	where $V$ is a continuous random variable with support $[0,1]$ and $\Ee{V} > 0$. For all $y \in (0,1)$, the following equivalence holds
+	\begin{equation} \label{eq:equivlance_lambda1}
+	\lambda < y  \Longleftrightarrow \Ee{V} + \gamma 
+	\Ee{(y - V)^+} < y.
+	\end{equation}
+\end{lemma}
+\begin{proof}[Proof.]
+	As a shorthand let $g(z) = \Ee{V} + \gamma \Ee{(z - V)^+}$. First let's assume $\lambda < y$. If $y \le g(y)$, then $\lambda$ would not be the supremum over all real numbers $z \in [0,1]$ such that $ z \le g(z)$. Therefore $g(y) < y$.
+	
+	For the converse, assume $\lambda \ge y$. Observe that $g(z)$ is convex. Also, one can verify through the bounded convergence theorem that $g(z)$ is differentiable [the event $\{V=z\}$, at which $(z-V)^+$ is not differentiable, has measure zero]. Thirdly, because $g(.)$ is continuous on $[0,1]$, by the Intermediate Value Theorem, it has a fixed point and in particular $\lambda =g(\lambda)$. Therefore let $\eps < (1-\lambda)/2$ and from the first direction of the proof, we have $\lambda + \eps > g(\lambda + \eps)$. Thus
+	\[
+	g(\lambda + \eps) \ge g(\lambda) + \eps g'(\lambda) = \lambda + \eps g'(\lambda)
+	\]
+	where the inequality follows from $g(.)$ being convex and differentiable. This implies that $g'(\lambda) < 1$ and, moreover, because $g(z)$ is also increasing, it follows that $g'(\lambda) \in (0,1)$, whence
+	\begin{align*}
+	g(y) & \ge g(\lambda) - (\lambda - y) g'(\lambda) \\
+	& = \lambda - (\lambda - y) g'(\lambda) \\
+	& = (1-g'(\lambda)) \lambda + g'(\lambda) y \\
+	& \ge \min(y,\lambda) = y.
+	\end{align*}
+\end{proof}
+\begin{corollary} \label{cor:equivalent_event}
+	Let $v_{i,t}$ be the approximate Optimistic Gittins Index, under the Bernoulli problem with uniform priors, of arm $i$ at time $t$ and let $x \in (0,1)$. The following equivalence holds
+	\[
+	\{v_{i,t} < x \} = \{\Ee{V_t} + \gamma_t \Ee{(x-V_t)^+} < x\}\]
+	where $V_t \sim $Beta$(s_t+1,j_t - s_t + 1)$, $j_t$ denotes the number of pulls of arm $i$ and $s_t$ the number of successes observed.
+\end{corollary}
+\begin{myproof}[Proof.]
+	By the definition in Equation~\eqref{eqn:ogi_k1}, $v_{i,t}$ can be characterized with the relation 
+	\begin{equation*}% \label{eq:form4}
+	v_{i,t} = \sup\left\{ u \in [0,1] : u \le \Ee{V_t}  + \gamma_t \Ee{(u - V_t)^+} \right\}.
+	\end{equation*}
+	The conclusion then follows from Lemma~\ref{eq:important_fact}.
+\end{myproof}
+
+\subsection{Proof of Lemma~\ref{lemma:underestimation}} \label{proof:underestimation_proof}
+\begin{proof}[Proof.]
+	Define $\delta := (\theta_1 - \eta)/2$ and  $\eta' :=  \eta + \delta$. In other words, $\delta$ is half the distance between $\eta$ and $\theta_1$; $\eta'$ is the point half-way. The proof consists of showing two claims
+	
+	\subsubsection*{Claim 1: $\{v_{1,t} < \eta\} \subseteq \left\{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}\right\}$:}
+	Let $V_t \sim $Beta$(s_t+1,j_t - s_t + 1)$ be the agent's posterior on the optimal arm. Using Corollary~\ref{cor:equivalent_event}, we find that
+	\begin{align}
+	\left\{v_{1,t} < \eta \right\} & = \left\{ \Ee{V_t } + \gamma_t\Ee{(\eta - V_t)^+} < y \right\} \nonumber\\
+	& = \left\{ \Ee{ (V_t - \eta)^+}< \frac{1}{t}  \right\}  \label{eq:intermediate_event}
+	\end{align}
+	where the second equality is obtained from rearranging terms. We approximate the conditional expectation in \eqref{eq:intermediate_event} with
+	\begin{align}
+	\Ee{(V_t - \eta)^+ \given s_t, j_t} & = \Ee{(V_t - \eta) \ind{V_t \ge \eta} }\nonumber \\
+	& = \Ee{(V_t - \eta) \ind{\eta + \delta > V_t \ge \eta} }  \nonumber \\
+	& \qquad + \Ee{(V_t - \eta) \ind{ V_t \ge \eta + \delta} } \nonumber \\
+	& > \Ee{(V_t - \eta) \ind{ V_t \ge \eta + \delta} } \nonumber \\
+	& \ge \delta\P{ V_t \ge \eta' } \nonumber \\
+	& = \delta (1 - F_{s_t+1,j_t-s_t+1}(\eta')) = \delta F^B_{j_t+1,\eta'}(s_t) \label{ineq:lower_bound_on_ppart_term}
+	\end{align}
+	The last equality is due to Fact~\ref{fact:equation_for_beta_binomial_cdfs} and this proves the claim.
+	\subsubsection*{Claim 2: $ \sum_{t=1}^\infty \mathbb{P}\left(F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}\right) \le C_1$ where $C_1$ is a constant:}
+	Let us fix the sequence $f_t = -\frac{\log \delta t }{\log (1-\eta')}-1 = O(\log t)$. We then have
+	\begin{align}
+	\P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}} & = \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}, \; j_t > f_t}  \nonumber \\
+	& \qquad + \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}, \; j_t \le f_t} \label{eq:decomp2}.
+	\end{align}
+	For the second term in the RHS of \eqref{eq:decomp2} we have the following bound,
+	\begin{align}
+	\P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}, \; j_t \le f_t}  &  \le \P{F^B_{j_t+1,\eta'}(0) < \frac{1}{\delta  t}, \; j_t \le f_t} \nonumber \\
+	& = \P{(1-\eta')^{j_t+1} <  \frac{1}{\delta  t}, \; j_t \le f_t} \nonumber \\
+	& \le \P{(1-\eta')^{f_t+1} <  \frac{1}{\delta  t}} = 0.\label{bound:bdd_by_zero}
+	\end{align}
+	Now we use the following fact to bound the left term on the RHS of \eqref{eq:decomp2}. Define the function
+	\[
+	F^{-B}_{n,p}(u) := \inf\{x : F^B_{n,p}(x) \ge u\}
+	\]
+	which is the inverse CDF. Then it is known that if $U \sim \text{Unif}(0,1)$, then $F^{-B}_{n,p}(U) \sim \text{Binomial}(n,p)$. Furthermore, $F^B_{n,p}(F^{-B}_{n,p}(U)) \ge U$ due to the definition of the inverse CDF.
+	
+	Now let us only consider large $t$, in particular $t > M = M(\theta_1, \eta')$ where:
+	\begin{enumerate}
+		\item $M$ is such that $e^{d(\eta', \theta_1)f_{M}/2} > (f_M + 1)^4$
+		\item $M > \frac{4}{(1-\eta')\delta }$
+		\item $\ceil{f_M} > 0$ and $F^B_{\ceil{f_M},\eta'}(f_M \eta') > 1/4$. Note that there is a large enough integer for this because $F^B_{\ceil{f_t},\eta'}(f_t \eta') \to \frac{1}{2}$ as $t \to \infty$.
+	\end{enumerate} 
+	Suppose that $t > M$. It then follows that the event $\{F^B_{j_t, \eta'}(s_t) < \frac{1}{(1-\eta')\delta t},\; s_t \ge j_t \eta', \; j_t > f_t\}$ has measure zero because of the assumptions made on $M$. Therefore if $t > M$, we have
+	\begin{align}
+	\mathbb{P}\bigg(F^B_{j_t+1,  \eta'}(s_t) &< \frac{1}{\delta t }  , \; j_t > f_t \bigg) \nonumber \\
+	& \le \P{F^B_{j_t,  \eta'}(s_t) < \frac{1}{(1-\eta')\delta t}, \; j_t > f_t} \label{eqn:part1_decomp_the_cdf_of_y} \\ 
+	& = \P{F^B_{j_t,  \eta'}(s_t) < \frac{1}{(1-\eta')\delta t}, \; s_t < j_t \eta', \; j_t > f_t} \nonumber \\ 
+	& =  \P{F^B_{j_t,\theta_1}(s_t) \frac{F^B_{j_t,\eta'}(s_t)}{F^B_{j_t,\theta_1}(s_t)} < \frac{1}{(1-\eta')\delta  t}, \;s_t < j_t \eta', \; j_t > f_t} \nonumber \\
+	& \le  \P{F_{j_t,\theta_1}^B(s_t)  e^{j_t D} < \frac{1}{(1-\eta')\delta  t} , \; j_t > f_t} \label{eqn:part1_app_of_lemma2} \\
+	& \le  \P{F_{j_t,\theta_1}^B(s_t) e^{f_t D} < \frac{1}{(1-\eta')\delta  t}} \nonumber \\
+	& =  \P{F_{j_t,\theta_1}^B(F^{-B}_{j_t,\theta_1}(U)) < \frac{e^{-f_t D}}{(1-\eta')\delta  t} } \label{eqn:part1_propert_of_inverse_sampling}\\
+	& \le  \P{U < \frac{e^{-f_t D}}{(1-\eta')\delta  t} } \nonumber \\  
+	& =  \frac{e^{-f_t D}}{(1-\eta')\delta  t} \nonumber  \nonumber\\
+	& = O\left( \frac{1}{t^{1+Dc_{\eta'}}} \right)  \label{bound:one_over_t_plus_eps} 
+	\end{align}
+	where $D = d(\eta',\theta_1) > 0$ and $c_{\eta'} = -\log^{-1}(1-\eta') > 0$ are constant. The bound \eqref{eqn:part1_decomp_the_cdf_of_y} holds due to Fact~\eqref{fact:relationship_with_binom_cdfs}. Bound \eqref{eqn:part1_app_of_lemma2} follows from an application of Lemma~\ref{lemma:ratio_of_cdfs} and the fact that $t > M$. Equation \eqref{eqn:part1_propert_of_inverse_sampling} follows from $s_t \sim \text{Binomial}(j_t, \theta_1)$ and the inverse sampling technique. By combining bounds \eqref{bound:one_over_t_plus_eps}, \eqref{bound:bdd_by_zero} and \eqref{eq:decomp2}, we get
+	\begin{align*}
+	\sum_{t=1}^\infty \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}} & \le M +  \sum_{t=M+1}^\infty \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}} \le M +  C_1' =: C_1
+	\end{align*}
+	where $C_1' = C_1'(\theta_1, \eta')$ is some other constant, namely the limit of the series.
+\end{proof}
+
+\subsection{Proof of Lemma~\ref{lemma:overestimation}} \label{proof:overestimation_proof}
+
+\begin{proof}[Proof.]
+	See the main proof of Theorem~\ref{thm:frequentist_optimal_bound} to recall the definition of constants $\eta_1$, $\eta_3$ and their relationship with $\theta_2$ and $\theta_1$. As an abbreviation we let $L = L(T)$. 
+	
+	Firstly, by the law of total probability, we find that
+	\begin{align} 
+	\sum_{t=1}^T \mathbb{P}(v_{2,t} & \ge \eta_3 ,\; k_t \ge L,\; \pi^{\rm OG}_t = 2) \nonumber \\
+	& = \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; k_t \ge L, \; s'_t < \floor{k_t \eta_1}, \; \pi^{\rm OG}_t = 2} \nonumber \\
+	& \qquad + \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; k_t \ge L, \; s'_t \ge \floor{k_t \eta_1},\; \pi^{\rm OG}_t = 2} \nonumber \\
+	& \le \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; k_t \ge L, \; s'_t < \floor{k_t \eta_1}} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; s'_t \ge \floor{k_t \eta_1}} \label{eqn:splitting_not_underestimate}
+	\end{align}
+	Let $V_t \sim \text{Beta}(s'_t + 1, k_t- s'_t + 1)$ denote the agent's posterior on the second arm at time $t$, then
+	\begin{align}
+	\sum_{t=1}^T \mathbb{P}(v_{2,t} \ge \eta_3 ,\; & \; k_t \ge L,\; s'_t < \floor{k_t \eta_1})  \nonumber\\
+	& = \sum_{t=1}^T \P{\Ee{V_t} + \gamma_t \Ee{(\eta_3 - V_t)^+} \ge \eta_3, \; k_t \ge L,\; s'_t < \floor{k_t \eta_1}} \nonumber \\
+	& = \sum_{t=1}^T \P{\frac{\Ee{(\eta_3-V_t)^+ }}{  \Ee{(V_t - \eta_3)^+ }} \le t , \; k_t \ge L,\; s'_t < \floor{k_t \eta_1}} \label{eq:complicated_rv_in_part2}
+	\end{align}
+	where the second equality follows from Corollary~\ref{cor:equivalent_event} in Appendix~\ref{sec:amgi_results}. The following result lets us bound \eqref{eq:complicated_rv_in_part2},
+	\begin{lemma} \label{lem:lb_rv2}
+		Let $0 < x < y < 1$. For any nonnegative integers $s$ and $k$ with $s < \floor{kx}$, it holds that
+		\begin{equation*}
+		\frac{\Ee{(y-V)^+ }}{  \Ee{(V - y)^+ } } \ge \frac{(y-x) \exp(k d(x,y))}{2}
+		\end{equation*}
+		where $V \sim \text{Beta}(s+1,k-s+1)$.
+	\end{lemma}
+	\begin{myproof}[Proof.]
+		See Appendix~\ref{prf:proof_of_lb_rv2}.
+	\end{myproof}
+	Therefore, from equation \eqref{eq:complicated_rv_in_part2} and Lemma~\ref{lem:lb_rv2}, we find that whenever $T > \left(\frac{2}{\eta_3-\eta_1}\right)^{1/\eps} =: T^*(\eps, \theta)$,
+	\begin{align}
+	\sum_{t=1}^T \mathbb{P}(v_{2,t} \ge \eta_3 ,\; & \; k_t \ge L,\; s'_t < \floor{k_t \eta_1}) \nonumber \\
+	& \le  \sum_{t=1}^T\P{  (\eta_3-\eta_1) \exp\{k_t d(\eta_1,\eta_3) \} \le 2t,\; k_t \ge L} \nonumber \\
+	& \le  \sum_{t=1}^T\P{  (\eta_3-\eta_1) \exp\{L d(\eta_1,\eta_3) \} \le 2t} \nonumber \\
+	& =   \sum_{t=1}^T\P{  (\eta_3-\eta_1) T^{1+\eps} \le 2t} = 0 \label{bound:equal_to_zero}
+	\end{align}
+	All that is left is to bound the second term in \eqref{eqn:splitting_not_underestimate}, and to do so we apply the following Lemma whose proof is in Appendix~\ref{prf:proof_of_acc_sub_means}
+	\begin{lemma} \label{lem:accurate_suboptimal_mean}
+		There exist positive constants $C = C(\theta_2,\eta_1)$ and $x' > \theta_2$ such that
+		\begin{equation*}
+		\sum_{t=1}^T \P{s'_t \ge \floor{k_t \eta_1}, \; \pi^{\rm OG}_t = 2} \le  K + \frac{1}{1 - e^{-d(x',\theta_2)}} 
+		\end{equation*}
+	\end{lemma}
+	Combining Lemma~\ref{lem:accurate_suboptimal_mean}, \eqref{bound:equal_to_zero}, \eqref{eqn:splitting_not_underestimate} and \eqref{eq:complicated_rv_in_part2} shows the claim.
+\end{proof}
+
+\subsubsection{Proof of Lemma~\ref{lem:lb_rv2}.} \label{prf:proof_of_lb_rv2}
+\begin{myproof}[Proof.]
+	We upper bound the denominator as follows. Given that $s < \floor{k x}$, we have $s \le kx - 1$. Let $B(a,b)$ denote the Beta function, then
+	\begin{align}
+	\Ee{(V - y)^+ } & = \frac{1}{B(s+1,k-s+1)}\int_{y}^1 (t-y) t^s (1-t)^{k-s} \; dt \nonumber \\
+	& = \frac{1}{B(s+1,k-s+1)}\int_{y}^1 t^{s+1} (1-t)^{k-s}  dt - y \P{V \ge y} \nonumber \\
+	& = \frac{B(s+2,k-s+1)}{B(s+1,j-s+1)}\left( \frac{1}{B(s+2,k-s+1)} \right)\int_{y}^1 t^{s+1} (1-t)^{k-s}  dt - y \P{V \ge y} \nonumber \\
+	& = \frac{s+1}{k+2} F^B_{k+2,y}(s+1)  - y \P{V \ge y} \label{eq:part2_use_of_equiv_between_beta_and_binom} \\
+	& \le \frac{s+1}{k+2} F^B_{k+2,y}(s+1) \le  F^B_{k,y}(k x) \le \exp\left\{- k d(x,y) \label{ineq:chernoff_app} \right\}
+	\end{align}
+	where we use Fact~\ref{fact:equation_for_beta_binomial_cdfs} and the definition of the Beta CDF to establish equation \eqref{eq:part2_use_of_equiv_between_beta_and_binom}. The final bound in \eqref{ineq:chernoff_app} is the result of the Chernoff-Hoeffding theorem and Fact~\ref{fact:relationship_with_binom_cdfs}. Let $\delta:=y-x$, and note that $s < kx \Longrightarrow s \le \floor{(k+1)x}$ due to $s$ being integer, whence
+	\begin{align}
+	\Ee{(y - V)^+ } & =  \Ee{(y - V) \ind{V \le y} \given s, k} \nonumber \\
+	& = \Ee{(y - V) \ind{y - \delta \le V \le y} \given s, k} +  \Ee{(y - V) \ind{V < y - \delta} \given s, k} \nonumber\\
+	& > \Ee{(y - V) \ind{V < y - \delta} \given s, k}\nonumber \\
+	& \ge \delta\Ee{\ind{V < y-\delta} \given s, k}\\
+	& = \delta \P{V < x \given s} \nonumber \\
+	& = \delta\left(1 - F^B_{k+1,x}(s) \right) \label{eq:use_of_bin_beta_identity}  \\
+	& \ge \delta/2  \label{eq:use_of_median_prop}
+	\end{align}
+	where equation \eqref{eq:use_of_bin_beta_identity} relies on Fact~\ref{fact:equation_for_beta_binomial_cdfs}. The bound \eqref{eq:use_of_median_prop} is justified from Fact~\ref{fact:median_of_binomial_dist} and $s \le \floor{(k+1) x}$. Thus using the inequalities for both the numerator and denominator, we obtain the desired bound.
+\end{myproof}
+\subsubsection{Proof of Lemma~\ref{lem:accurate_suboptimal_mean}.} \label{prf:proof_of_acc_sub_means}
+\begin{proof}[Proof.]
+	The steps in this proof follow a similar one in \cite{agrawal2013further} but we show them for completeness. We bound the number of times the suboptimal arm's mean is overestimated. Let $\tau_\ell$ be the time step in which the  suboptimal arm is sampled for the $\ell$\textsuperscript{th} time. Because for any $x$, $\lim_{n\to\infty}\frac{\floor{nx}}{nx} = 1$, we can let $N$ be a large enough integer so that if $\ell \ge N$, then $\eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1} > x' := (\theta_2 + \eta_1)/2 > \theta_2$. In that case,
+	\begin{align}
+	\sum_{t=1}^T\P{s'_t \ge \floor{k_t \eta_1}, \; \pi^{\rm OG}_t = 2} & \le \Ee{\sum_{\ell=1}^T \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1}\ind{s'_{\ell} \ge \floor{k_{\ell} \eta_1}} \ind{\pi^{\rm OG}_t = 2}} \nonumber \\
+	& = \Ee{\sum_{\ell=1}^T \ind{s'_{\tau_{\ell}} \ge \floor{(\ell-1) \eta_1}} \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1} \ind{\pi^{\rm OG}_t = 2}} \nonumber\\
+	& = \Ee{\sum_{\ell=0}^{T-1} \ind{s'_{\tau_{\ell+1}} \ge \floor{\ell \eta_1}}} \nonumber\\
+	& \le  N + \sum_{\ell=N+1}^{T-1} \P{ s'_{\tau_{\ell+1}} \ge \ell \eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1}} \nonumber \\
+	& \le N + \sum_{\ell=N+1}^{T-1} \P{ s'_{\tau_{\ell+1}} \ge \ell x'} \nonumber \\
+	& \le  N + \sum_{\ell=1}^{\infty} \exp(-\ell d(x', \theta_2)) \label{bound:cf_thm} \\
+	& = N + \frac{1}{1 - e^{-d(x',\theta_2)}} \nonumber
+	\end{align}
+\end{proof}
+The bound \eqref{bound:cf_thm} follows from the Chernoff-Hoeffding theorem and that $s'_{\tau_{\ell+1}} \sim \text{Binomial}(k_{\ell+1}, \theta_2) \sim \text{Binomial}(\ell, \theta_2)$.

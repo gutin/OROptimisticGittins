@@ -1,0 +1,131 @@
+\section{Gittins Indices and Approximations} \label{sec:gittins_and_approx}
+One way to compute the Gittins Index is via the so-called retirement value formulation \cite{whittle1980multi}. The \emph{Gittins Index} for arm $i$ in state $y$ is the value for $\lambda$ that solves
+\begin{equation} \label{eqn:gittins_index}
+\frac{\lambda}{1-\gamma} = \sup_{\tau > 1}\E\left[\sum_{t=1}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma}
+	\given y_{i,1} = y
+\right].
+\end{equation}
+We denote this quantity by $\nu_\gamma(y)$. If one thought of the notion of retiring as receiving a deterministic reward $\lambda$ in every period, then the value of $\lambda$ that solves the above equation could be interpreted as the per-period retirement reward that makes us indifferent between retiring immediately and the option of continuing to play arm $i$ with the potential of retiring at some future time. The Gittins index policy can thus succinctly be stated as follows: at time $t$, play an arm in the set $\argmax_{i} v_\gamma(y_{i,N_i(t)})$. 
+Ignoring computational considerations, we cannot hope for a scheme such as the one above to achieve acceptable regret or Bayes risk. Specifically, denoting the Gittins policy by $\pi^{G,\gamma}$, we have 
+
+\begin{lemma}
+	There exists an instance of the multi armed bandit problem with $|\mathcal A| = 2$ for which 
+	\[
+	{\rm Regret}\left(
+	\pi^{G,\gamma},T
+	\right)
+	= 
+	\Omega(T)
+	\]
+	for any $\gamma \in (0,1)$.
+\end{lemma}
+
+The above result is expected. If the posterior means on the two arms are sufficiently apart, the Gittins index policy will pick the arm with the larger posterior mean. The threshold beyond which the Gittins policy `exploits' depends on the discount factor and with a fixed discount factor there is a positive probability that the superior arm is never explored sufficiently so as to establish that it is, in fact, the superior arm. Fixing this issue then requires that the discount factor employed increase over time.
+
+Consider then employing discount factors that increase at roughly the rate $1 - 1/t$; specifically, consider setting 
+\[
+\gamma_t = 
+1 - 
+\frac{1}
+{2^{\floor{\log_2 t}+1}}
+\]
+and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is within a factor of $\log T$ of the optimal Bayes risk. Specifically, we have:
+\begin{proposition}
+	\label{prop:gittins_log3T}
+	\[
+	{\rm Regret}(\pi^{\rm D},T)
+	=
+	O
+	\left(
+	\log^3 T
+	\right).
+	\] 
+\end{proposition}
+where the constant in the big-Oh term depends on the prior $q$ and $A$. The proof of this simple result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is within a constant factor of the optimal finite horizon regret. The second ingredient is a doubling trick.
+
+While increasing discount factors does not appear to get us to the optimal Bayes risk (the achievable lower bound being $\log^2T$; see \cite{lai1987adaptive}); we conjecture that in fact this is a deficiency in our analysis for Proposition~\ref{prop:gittins_log3T}. In any case, the policy $\pi^{\rm D}$ is not the primary subject of the paper but merely a motivation for the discount factor schedule proposed. Putting aside this issue, one is still left with the computational burden associated with $\pi^{\rm D}$ -- which is clearly onerous relative to any of the incumbent index rules discussed in the introduction. 
+
+\subsection{Optimistic Approximations to The Gittins Index}\label{sec:approx_agi_deriv}
+
+The retirement value formulation makes clear that computing a Gittins index is equivalent to solving a discounted, infinite horizon stopping problem. Since the state space $\mathcal Y$ associated with this problem is typically at least countable, solving this stopping problem, although not necessarily intractable, is a non-trivial computational task. Consider the following alternative stopping problem that requires as input the parameters $\lambda$ (which has the same interpretation as it did before), and $K$, an integer limiting the number of steps that we need to look ahead. For an arm in state $y$ (recall that the state specifies sufficient statistics for the current prior on the arm reward), let $R(y)$ be a random variable drawn from the prior on expected arm reward specified by $y$. Define the retirement value $R_{\lambda,K}(s,y)$ according to 
+\[
+R_{\lambda,K}(s, y) = 
+\begin{cases}
+\lambda ,& \text{if } s < K+1\\
+\max\left(\lambda, R(y) \right), & \text{otherwise}
+\end{cases}
+\]
+For a given $K$, the \emph{Optimistic Gittins Index} for arm $i$ in state $y$ is now defined as the value for $\lambda$ that solves
+\begin{equation} \label{eqn:ogi_general}
+\frac{ \lambda}{1-\gamma} = \sup_{1 < \tau \leq K+1}
+\E\left[
+	\sum_{s=1}^{\tau-1} \gamma^{s-1}X_{i,s} + \gamma^{\tau-1} \frac{R_{\lambda,K}(\tau, y_{i,\tau})}{1-\gamma}
+	\given
+	y_{i,1}=y
+\right].
+\end{equation}
+We denote the solution to this equation by $v_\gamma^{K}(y)$.
+The problem above admits a simple, attractive interpretation: nature reveals the {\em true} mean reward for the arm at time $K+1$ should we choose to not retire prior to that time, which enables the decision maker to then instantaneously decide whether to retire at time $K+1$ or else, never retire. In this manner one is better off than in the stopping problem inherent to the definition of the Gittins index, so that we use the moniker optimistic. Since we need to look ahead at most $K$ steps in solving the stopping problem implicit in the definition above, the computational burden in index computation is limited. The following Lemma formalizes this intuition
+
+\begin{lemma} \label{lemma:approx_bound}
+	For all discount factors $\gamma$ and states $y \in \mathcal Y$, we have 
+	\[
+	v_\gamma^{K}(y) \geq v_\gamma(y) \quad \forall K.
+	\]
+\end{lemma}
+\begin{myproof}[Proof]
+	See Appendix~\ref{prf:approx_bound}%.\halmos
+\end{myproof}
+
+It is instructive to consider the simplest version of the approximation proposed here, namely the case where $K=1$. There, equation~\eqref{eqn:ogi_general} simplifies to
+\begin{equation} \label{eqn:ogi_k1}
+\lambda = \hat \mu(y) + \gamma \E[(\lambda - R(y))^+]
+\end{equation}
+where $\hat \mu(y) := \E[R(y)]$ is the mean reward under the prior given by $y$. The equation for $\lambda$ above can also be viewed as an upper confidence bound to an arm's expected reward. Solving equation~\eqref{eqn:ogi_k1} is often simple in practice, and we list a few examples to illustrate this:
+\begin{example}[Beta]
+	In this case $y$ is the pair $(a,b)$, which specifices a Beta prior distribution. The 1-step Optimistic Gittins Index, is the value of $\lambda$ that solves
+	\begin{align*}
+	\lambda = \frac{a}{a+b} + \gamma \E[(\lambda - {\rm Beta}(a,b))^+] =  \frac{a}{a+b}(1 - \gamma F^\beta_{a+1,b}(\lambda)) + \gamma \lambda (1-F^\beta_{a,b}(\lambda))
+	\end{align*}
+	where $F^\beta_{a,b}$ is the CDF of a Beta distribution with parameters $a, b$.
+\end{example}
+
+\begin{example}[Gaussian]
+	Here $y = (\mu,\sigma^2)$, which specifices a Gaussian prior and the corresponding equation is
+	\begin{align*}
+	\lambda & = \mu  + \gamma \E[(\lambda - {\rm \mathcal{N}}(\mu,\sigma^2))^+]  \\
+	& = \mu + \gamma \left[( \lambda - \mu) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma\phi\left(\frac{\mu-\lambda}{\sigma}\right) \right]
+	\end{align*}
+\end{example}
+
+Notice that in both the Beta and Gaussian examples, the equations for $\lambda$ are in terms of distribution functions. Therefore it's straightforward to compute a derivative for these equations (which would be in terms of the density and CDF of the prior) and makes finding a solution, using a method such as Newton-Raphson, simple and efficient.
+
+We summarize the Optimistic Gittins Index (OGI) algorithm succinctly as follows. 
+
+{\em Assume the state of arm $i$ at time $t$ is given by $y_{i,t}$, and let $\gamma_t = 1-1/t$. Play an arm 
+	$$i^* \in \argmax_i v^K_{\gamma_t}(y_{i,t}),$$ 
+	and update the posterior on the arm based on the observed reward.}
+
+\subsection{Connection to Expected Improvement algorithm}
+In this section, we briefly point out how OGI can look similar, in some cases, to existing algorithms from Bayesian Optimization (see \cite{shahriari2016taking} as an excellent reference on the topic). The Expected improvement index is defined by $v^{EI}_i(y_{t}) = \E[\max\left(R(y_{i,t}), \mu^*_t(y_t)\right)]$ where $\mu^*(y_t) = \max_{1 \le i \le A} \E[R(y_{i,t})]$. The result below shows that for a certain discount factor, the values of the Optimisic Gittins Index and the EI acquisition function coincide:
+\begin{proposition}
+For any tuple of states $y_t := (y_{1,t}, \ldots, y_{A,t})$ and any arm $i$, there exists a discount factor $\gamma \in [0,1)$ such that
+\[
+v^{1}_{\gamma}(y_{i,t}) = v^{EI}_i(y_{t})
+\]
+\end{proposition}
+\begin{myproof}[Proof.]
+Fix any $\gamma$, we than have
+\begin{align*}
+v^1_{\gamma}(y_{i,t}) & = \E[R(y_{i,t})] + \gamma \E[(v^1_{\gamma}(y_{i,t}) - R(y_{i,t}))^+] \\
+& = (1-\gamma) \E[R(y_{i,t})] + \gamma\E[\max(v^1_{\gamma}(y_{i,t}), R(y_{i,t}))].
+\end{align*}
+Setting $\gamma = 0$, we see that $v^1_{\gamma}(y_{i,t}) = \E{R(y_{i,t})} \le \E[\max\left(R(y_{i,t}), \E[R(y_{i,t})]\right)] \le v^{EI}_i(y_t)$. Finally, note that as $\gamma \uparrow 1$, that $v^1_{\gamma}(y_{i,t}) \uparrow \sup_{s \in \mathcal{S}} R(y) \ge \E[R(y_{i^*,t})] = \mu^*_t(y_t)$. Therefore, we conclude that for any $\epsilon > 0$, there exists $\gamma_0$ large enough such that
+\begin{align*}
+v^{1}_{\gamma_0}(y_{i,t}) & = (1-\gamma_0) \E[R(y_{i,t})] + \gamma_0\E[\max(v^1_{\gamma_0}(y_{i,t}), R(y_{i,t}))]  \\
+ & \ge \epsilon +  \gamma_0\E[\max(v^1_{\gamma_0}(y_{i,t}), R(y_{i,t}))] \\
+ & \ge  \epsilon +  \gamma_0\E[\max( \mu^*_t(y_t), R(y_{i,t}))] \\
+ & =  \epsilon +  \gamma_0v^{EI}_i(y_t).
+\end{align*}
+Letting $\epsilon \downarrow 0$, $\gamma_0 \uparrow 1$ and using the Intermediate Value Thorem gives the result.
+\end{myproof}

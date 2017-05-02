@@ -1,0 +1,10 @@
+\section{Multiple simultaneous arm pulls} \label{sec:multiple_pulls}
+In this section we show how the approach in this paper can be applied to a more general Multi-Armed Bandit problem, where the decision maker is able to ``pull" up to a certain number (say $m < A$) of the arms simultaneously. \citep{whittle1988restless} considers a slightly more general version of the problem just discussed, where arms that are not pulled (idled) are able to change state and proposes an index scheme, Whittle's heuristic, for it. However, if arms that are idled are frozen in  state Whittle's heuristic becomes equivalent to pulling arms with the $m$ largest Gittins indices.
+
+For the purposes of this section, we denote by the action space $\mathcal{A}$ the set of all binary vectors with $K$ ones in them, and $X_t$ to be a tuple of (potential) rewards from all $A$ arms at time $t$. A policy  $\pi$ is then a non-anticipative sequence of such vectors and we define its regret over $T$ periods to be
+\[
+\Regret{\pi, T} = T \cdot \max_{a \in A} a^\top \E[ X_t] - \sum_{t=1}^T \E[\pi_t^\top X_t ]
+\]
+where the expectation is over both the randomness in the rewards, the prior and the policy's actions.
+
+We give two examples of policies that empirically have low regret. Both rely on the use of an increasing discount factor, that is $\gamma_t = 1 - 1/t$, and on approximating solutions to a sequence of Markov Decision problems whose rewards are discounted by $\gamma_t$ (if it's the $t$\textsuperscript{th} problem). The first of these heuristics involves pulling arms with $m$ largest Optimistic Gittins Indices, which is essentially an approximation to Whittle's heuristic. The second is approximating the solution of the $t$\textsuperscript{th} Markov Decision problem by an using a Linear Programming relaxation of it \citep{bertsimas1996conservation}.

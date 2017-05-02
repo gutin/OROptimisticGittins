@@ -1,0 +1,60 @@
+\section{Analysis and Regret bounds} \label{sec:analysis_of_regret}
+We establish a regret bound for Optimistic Gittins Indices when the algorithm is given the parameter $K = 1$, the prior distribution $q$ is uniform and arm rewards are Bernoulli. The result shows that the algorithm, in that case, meets the Lai-Robbins lower bound and is thus asymptotically optimal, in both a frequentist and Bayesian sense. After stating the main theorem, we briefly discuss two generalizations to the algorithm.
+
+In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x,y) := d_{\rm KL}(\text{Ber}(x),\text{Ber}(y))$. Also, we will refer to the Optimistic Gittins Index policy simply as $\pi^{\rm OG}$, with the understanding that this refers to the case when $K$, the `look-ahead' parameter, equals 1. Moreover, we will denote the Optimistic Gittins Index of the $i$\textsuperscript{th} arm as $v_{i,t} := v^1_{1-1/t}(y_{i,t})$. Now we state the main result:
+\begin{theorem} \label{thm:frequentist_optimal_bound}
+	Let $\epsilon > 0$. For the multi-armed bandit problem with Bernoulli rewards and any parameter vector $\theta \subset [0,1]^A$, there exists $T^* = T^*(\epsilon, \theta)$ and $C = C(\epsilon,\theta)$ such that for all $T \ge T^*$,
+	\begin{equation}
+	\Regret{\pi^{\rm OG}, T, \theta} \le \sum_{\substack{i=1,\ldots,A \\ i \ne i^*}} \frac{(1+\epsilon)^2(\theta^* - \theta_i)}{d(\theta_i, \theta^*)} \log T  + C(\epsilon,\theta)
+	\end{equation}
+	where $C(\epsilon,\theta)$ is a constant that is only determined by $\epsilon$ and the parameter $\theta$.
+\end{theorem}
+\begin{myproof}[Proof.]
+	Because we prove frequentist regret, the first few steps of the proof will be similar to that of UCB and Thompson Sampling.
+	
+	Assume w.l.o.g that arm 1 is uniquely optimal, and therefore $\theta^* = \theta_1$. Fix an arbitrary suboptimal arm, which for convenience we will say is arm 2. Let $j_t$ and $k_t$ denote the number of pulls of arms 1 and 2, respectively, by (but not including) time $t$. Finally, we let $s_t$ and $s'_t$ be the corresponding integer reward accumulated from arms 1 and 2, respectively. That is,
+	\[
+	s_t = \sum_{s=1}^{j_t} X_{1,s}  \qquad s_t' = \sum_{s=1}^{k_t} X_{2,s}.
+	\]
+	Therefore, by definition, $j_1 = k_1 = s_1 = s_1' = 0$. Let $\eta_1,\eta_2,\eta_3 \in (\theta_2, \theta_1)$ be chosen such that $\eta_1 < \eta_2 < \eta_3$, $d(\eta_1, \eta_3) = \frac{d(\theta_2, \theta_1)}{1+\epsilon}$ and $d(\eta_2,\eta_3) =\frac{d(\eta_1, \eta_3)}{1+\epsilon} $. Next, we define $L(T) := \frac{\log T}{d(\eta_2,\eta_3)}$.
+	
+	We upper bound the expected number of pulls of the second arm as follows,
+	\begin{align}
+	\E[k_T] & \le L(T) + \sum_{t=\floor{L(T)}+1}^T \P{\pi^{\rm OG}_t = 2, \; k_t \ge L(T)} \nonumber \\
+	& \le L(T) +   \sum_{t=1}^T \P{v_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v_{1,t} \ge \eta_3, \; k_t \ge L(T)} \nonumber \\
+	& \le L(T) +   \sum_{t=1}^T \P{v_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v_{2,t} \ge \eta_3, \; k_t \ge L(T)} \nonumber \\
+	& \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} + \underbrace{\sum_{t=1}^\infty \P{v_{1,t} < \eta_3}}_{A} + \underbrace{\sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\;v_{2,t} \ge \eta_3, \; k_t \ge L(T)}}_{B} \label{bound:final_step_in_freq_regret}
+	\end{align}
+	All that remains is to show that terms $A$ and $B$ are bounded by constants. These bounds are given in Lemmas~\ref{lemma:underestimation} and \ref{lemma:overestimation} whose proofs we describe at a high-level with the details in the Appendix.
+	\begin{lemma}[Bound on term A] \label{lemma:underestimation}
+		For any $\eta < \theta_1$, the following bounds holds for some constant $C_1 = C_1(\epsilon, \theta_1)$
+		\begin{equation*}
+		\sum_{t=1}^\infty \P{v_{1,t} < \eta} \le C_1.
+		\end{equation*}
+	\end{lemma}
+	\begin{myproof}[Proof outline]
+		The goal is to bound $\P{v_{1,t} < \eta}$ by an expression that decays fast enough in $t$ so that the series converges. To prove this, we express the event $\{v_{1,t} < \eta\}$ in the form $\{W_t < 1/t\}$ for some sequence of random variables $W_t$. It  turns out that for large enough $t$, $\P{W_t < 1/t} \le \P{c U^{1/(1+h)} < 1/t}$ where $U$ is a uniform random variable, $c, h > 0$ and therefore $\P{v_{1,t} < \eta} = O\left(\frac{1}{t^{1+h}}\right)$. The full proof is in Appendix~\ref{proof:underestimation_proof}.
+		
+		We remark that the core technique in the proof of Lemma~\ref{lemma:underestimation} is the use of the Beta CDF. As such, our analysis can, in some sense, improve the result for Bayes UCB. In the main theorem of \cite{kaufmann2012thompson}, the authors state that the quantile in their algorithm is required to be $1 - 1/(t \log^c T)$ for some parameter $c \ge 5$, however they show simulations with the quantile $1 -1/t$ and suggest that, in practice, it should be used instead. By utilizing techniques in our analysis, it is possible to prove that the use of $1-1/t$, as a discount factor, in Bayes UCB would lead to the same optimal regret bound. Therefore the `scaling' by $\log^c T$ is unnecessary.
+	\end{myproof}
+	\begin{lemma}[Bound on term B] \label{lemma:overestimation}
+		There exists $T^* = T^*(\epsilon, \theta)$ sufficiently large and a constant $C_2 = C_2(\epsilon, \theta_1, \theta_2)$ so that for any $T \ge T^*$, we have
+		\begin{equation*}
+		\sum_{t=1}^T \P{\pi_t^{\rm OG} = 2,\; v_{2,t} \ge \eta_3, \; k_t \ge L(T)} \le C_2.
+		\end{equation*}
+	\end{lemma}
+	\begin{myproof}[Proof outline]
+		This relies on a concentration of measure result and the assumption that the 2\textsuperscript{nd} arm was sampled at least $L(T)$ times. The full proof is given in Appendix~\ref{proof:overestimation_proof}.
+	\end{myproof}
+	Lemma~\ref{lemma:underestimation} and \ref{lemma:overestimation}, together with \eqref{bound:final_step_in_freq_regret}, imply that
+	\[
+	\E[k_T] \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} +  C_1 +  C_2.
+	\]
+	From this the regret bound follows.
+\end{myproof}
+\subsection{Generalizations and a tuning parameter}
+There is an argument in Agrawal and Goyal \cite{agrawalanalysis} which shows that any algorithm optimal for the Bernoulli bandit problem, can be modified to yield an algorithm that has $O(\log T)$ regret with general bounded stochastic rewards. Therefore Optimistic Gittins Indices is an effective and practical alternative to policies such as Thompson Sampling and UCB. We also suspect that the proof of Theorem~\ref{thm:frequentist_optimal_bound} can be generalized to all lookahead values ($K > 1$) and to a general exponential family of distributions.
+
+A slight modification to Optimistic Gittins Indices gives an algorithm that has $O(\log T)$ regret for the general stochastic bandit problem with bounded rewards. Specifically, when arms have arbitrary reward distributions, bounded in the interval $[a,b]$, the approach is to each time sample the reward $X_{i,t}$, then generate an `artifical' Bernoulli reward with probability $X_{i,t}/(b-a)$ and provide that as input to the policy. The choice of arm pulls from the resulting algorithm leads to an $O(\log T)$ regret bound, as is shown in that paper. The constant in front of $\log T$, however, depends on the KL divergences of \emph{Bernoulli} random variables as opposed to the actual underlying distributions.
+
+Another important observation is that the discount factor for Optimistic Gittins Indices does not have to be exactly $1-1/t$. In fact, a tuning parameter can be added to make the discount factor $\gamma_{t+\alpha} = 1-1/(t+\alpha)$ instead. An inspection of the proofs of Lemmas~\ref{lemma:underestimation} and \ref{lemma:overestimation} shows that the result in Theorem~\ref{thm:frequentist_optimal_bound} would still hold were one to use such a tuning parameter. In practice, performance is remarkably robust to our choice of $K$ and $\alpha$.
