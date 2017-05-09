@@ -191,10 +191,13 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	\subsubsection*{Claim 1: $\{v_{1,t} < \eta\} \subseteq \left\{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}\right\}$:}
 	Let $V_t \sim $Beta$(s_t+1,j_t - s_t + 1)$ be the agent's posterior on the optimal arm. Using Corollary~\ref{cor:equivalent_event}, we find that
 	\begin{align}
-	\left\{v_{1,t} < \eta \right\} & = \left\{ \Ee{V_t } + \gamma_t\Ee{(\eta - V_t)^+} < y \right\} \nonumber\\
-	& = \left\{ \Ee{ (V_t - \eta)^+}< \frac{1}{t}  \right\}  \label{eq:intermediate_event}
+	\left\{v_{1,t} < \eta \right\} & = \left\{ \Ee{V_t } + \gamma_t\Ee{(\eta - V_t)^+} < \eta \right\} \nonumber\\
+	& =  \left\{ (1-1/t)\Ee{(\eta - V_t)^+} < \Ee{\eta - V_t} \right\} \label{eq:def_gamma_t} \\
+	& =  \left\{ \Ee{(\eta - V_t)^+} - \Ee{\eta - V_t} <  \frac{1}{t}\Ee{(\eta - V_t)^+}\right\} \nonumber\\
+	& =  \left\{ \Ee{(V_t - \eta)^+}<  \frac{1}{t}\Ee{(\eta - V_t)^+}\right\} \nonumber\\
+	& \subseteq \left\{ \Ee{ (V_t - \eta)^+}< \frac{1}{t}  \right\}  \label{eq:intermediate_event}
 	\end{align}
-	where the second equality is obtained from rearranging terms. We approximate the conditional expectation in \eqref{eq:intermediate_event} with
+	where \eqref{eq:def_gamma_t} follows from the definition of $\gamma_t$ and \eqref{eq:intermediate_event} is due to $V_t, \eta$ both lying in the interval $[0,1]$. We approximate the conditional expectation in \eqref{eq:intermediate_event} with
 	\begin{align}
 	\Ee{(V_t - \eta)^+ \given s_t, j_t} & = \Ee{(V_t - \eta) \ind{V_t \ge \eta} }\nonumber \\
 	& = \Ee{(V_t - \eta) \ind{\eta + \delta > V_t \ge \eta} }  \nonumber \\
