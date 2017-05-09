@@ -105,27 +105,3 @@ We summarize the Optimistic Gittins Index (OGI) algorithm succinctly as follows.
 {\em Assume the state of arm $i$ at time $t$ is given by $y_{i,t}$, and let $\gamma_t = 1-1/t$. Play an arm 
 	$$i^* \in \argmax_i v^K_{\gamma_t}(y_{i,t}),$$ 
 	and update the posterior on the arm based on the observed reward.}
-
-\subsection{Connection to Expected Improvement algorithm}
-In this section, we briefly point out how OGI can look similar, in some cases, to existing algorithms from Bayesian Optimization (see \cite{shahriari2016taking} as an excellent reference on the topic). The Expected improvement index is defined by $v^{EI}_i(y_{t}) = \E[\max\left(R(y_{i,t}), \mu^*_t(y_t)\right)]$ where $\mu^*(y_t) = \max_{1 \le i \le A} \E[R(y_{i,t})]$. The result below shows that for a certain discount factor, the values of the Optimisic Gittins Index and the EI acquisition function coincide:
-\begin{proposition}
-For any tuple of states $y_t := (y_{1,t}, \ldots, y_{A,t})$ and any arm $i$, there exists a discount factor $\gamma \in [0,1)$ such that
-\[
-v^{1}_{\gamma}(y_{i,t}) = v^{EI}_i(y_{t})
-\]
-\end{proposition}
-\begin{myproof}[Proof.]
-Fix any $\gamma$, we than have
-\begin{align*}
-v^1_{\gamma}(y_{i,t}) & = \E[R(y_{i,t})] + \gamma \E[(v^1_{\gamma}(y_{i,t}) - R(y_{i,t}))^+] \\
-& = (1-\gamma) \E[R(y_{i,t})] + \gamma\E[\max(v^1_{\gamma}(y_{i,t}), R(y_{i,t}))].
-\end{align*}
-Setting $\gamma = 0$, we see that $v^1_{\gamma}(y_{i,t}) = \E{R(y_{i,t})} \le \E[\max\left(R(y_{i,t}), \E[R(y_{i,t})]\right)] \le v^{EI}_i(y_t)$. Finally, note that as $\gamma \uparrow 1$, that $v^1_{\gamma}(y_{i,t}) \uparrow \sup_{s \in \mathcal{S}} R(y) \ge \E[R(y_{i^*,t})] = \mu^*_t(y_t)$. Therefore, we conclude that for any $\epsilon > 0$, there exists $\gamma_0$ large enough such that
-\begin{align*}
-v^{1}_{\gamma_0}(y_{i,t}) & = (1-\gamma_0) \E[R(y_{i,t})] + \gamma_0\E[\max(v^1_{\gamma_0}(y_{i,t}), R(y_{i,t}))]  \\
- & \ge \epsilon +  \gamma_0\E[\max(v^1_{\gamma_0}(y_{i,t}), R(y_{i,t}))] \\
- & \ge  \epsilon +  \gamma_0\E[\max( \mu^*_t(y_t), R(y_{i,t}))] \\
- & =  \epsilon +  \gamma_0v^{EI}_i(y_t).
-\end{align*}
-Letting $\epsilon \downarrow 0$, $\gamma_0 \uparrow 1$ and using the Intermediate Value Thorem gives the result.
-\end{myproof}
