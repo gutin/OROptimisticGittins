@@ -156,7 +156,16 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	\end{equation}
 \end{lemma}
 \begin{proof}[Proof.]
-	As a shorthand let $g(z) = \Ee{V} + \gamma \Ee{(z - V)^+}$. First let's assume $\lambda < y$. If $y \le g(y)$, then $\lambda$ would not be the supremum over all real numbers $z \in [0,1]$ such that $ z \le g(z)$. Therefore $g(y) < y$.
+	Figure~\ref{fig:visaulize_gx_proof} gives a visualization of the proof. In the plot, the line $g(x) = \Ee{ (1-\gamma) V + \max(x, V)}$  is the  value of the Optimistic Gittins' stopping problem (multiplied by $(1-\gamma)$) with a retirement payoff of $x$ and the point $x^*$, where $g(x^*)$ and $x^*$ intersect, is the Optimistic Gittins Index. Notice how if $x > x^*$, $g(x)$ is below $x$ and otherwise $g(x)$ is above $x$; this is the crux of the proof.
+	
+	For the formal proof, let $g(z) = \Ee{V} + \gamma \Ee{(z - V)^+}$. First let's assume $\lambda < y$. If $y \le g(y)$, then $\lambda$ would not be the supremum over all real numbers $z \in [0,1]$ such that $ z \le g(z)$. Therefore $g(y) < y$.
+	
+	\begin{figure}
+		\centering
+		\input{plots/visualize_gx.pgf}
+		\caption{Visualization of Lemma~\ref{eq:important_fact}'s proof for a problem with Beta parameters $3,7$ and $\gamma=0.7$. The intersection of the two lines represents the Optimistic Gittins Index.}
+		\label{fig:visaulize_gx_proof}
+	\end{figure}
 	
 	For the converse, assume $\lambda \ge y$. Observe that $g(z)$ is convex. Also, one can verify through the bounded convergence theorem that $g(z)$ is differentiable [the event $\{V=z\}$, at which $(z-V)^+$ is not differentiable, has measure zero]. Thirdly, because $g(.)$ is continuous on $[0,1]$, by the Intermediate Value Theorem, it has a fixed point and in particular $\lambda =g(\lambda)$. Therefore let $\eps < (1-\lambda)/2$ and from the first direction of the proof, we have $\lambda + \eps > g(\lambda + \eps)$. Thus
 	\[
