@@ -174,7 +174,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	Let $v_{i,t}$ be the approximate Optimistic Gittins Index, under the Bernoulli problem with uniform priors, of arm $i$ at time $t$ and let $x \in (0,1)$. The following equivalence holds
 	\[
 	\{v_{i,t} < x \} = \{\Ee{V_t} + \gamma_t \Ee{(x-V_t)^+} < x\}\]
-	where $V_t \sim $Beta$(s_t+1,j_t - s_t + 1)$, $j_t$ denotes the number of pulls of arm $i$ and $s_t$ the number of successes observed.
+	where $V_t \sim $Beta$(S_i(t)+1,N_i(t) - S_i(t) + 1)$, $N_i(t)$ denotes the number of pulls of arm $i$ and $S_i(t)$ the number of successes observed.
 \end{corollary}
 \begin{myproof}[Proof.]
 	By the definition in Equation~\eqref{eqn:ogi_k1}, $v_{i,t}$ can be characterized with the relation 
@@ -188,8 +188,8 @@ We list notation and facts related to Beta and Binomial distributions, which are
 \begin{proof}[Proof.]
 	Define $\delta := (\theta_1 - \eta)/2$ and  $\eta' :=  \eta + \delta$. In other words, $\delta$ is half the distance between $\eta$ and $\theta_1$; $\eta'$ is the point half-way. The proof consists of showing two claims
 	
-	\subsubsection*{Claim 1: $\{v_{1,t} < \eta\} \subseteq \left\{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}\right\}$:}
-	Let $V_t \sim $Beta$(s_t+1,j_t - s_t + 1)$ be the agent's posterior on the optimal arm. Using Corollary~\ref{cor:equivalent_event}, we find that
+	\subsubsection*{Claim 1: $\{v_{1,t} < \eta\} \subseteq \left\{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}\right\}$:}
+	Let $V_t \sim $Beta$(S_1(t)+1,N_1(t) - S_1(t) + 1)$ be the agent's posterior on the optimal arm. Using Corollary~\ref{cor:equivalent_event}, we find that
 	\begin{align}
 	\left\{v_{1,t} < \eta \right\} & = \left\{ \Ee{V_t } + \gamma_t\Ee{(\eta - V_t)^+} < \eta \right\} \nonumber\\
 	& =  \left\{ (1-1/t)\Ee{(\eta - V_t)^+} < \Ee{\eta - V_t} \right\} \label{eq:def_gamma_t} \\
@@ -199,24 +199,24 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	\end{align}
 	where \eqref{eq:def_gamma_t} follows from the definition of $\gamma_t$ and \eqref{eq:intermediate_event} is due to $V_t, \eta$ both lying in the interval $[0,1]$. We approximate the conditional expectation in \eqref{eq:intermediate_event} with
 	\begin{align}
-	\Ee{(V_t - \eta)^+ \given s_t, j_t} & = \Ee{(V_t - \eta) \ind{V_t \ge \eta} }\nonumber \\
+	\Ee{(V_t - \eta)^+ \given S_1(t), N_1(t)} & = \Ee{(V_t - \eta) \ind{V_t \ge \eta} }\nonumber \\
 	& = \Ee{(V_t - \eta) \ind{\eta + \delta > V_t \ge \eta} }  \nonumber \\
 	& \qquad + \Ee{(V_t - \eta) \ind{ V_t \ge \eta + \delta} } \nonumber \\
 	& > \Ee{(V_t - \eta) \ind{ V_t \ge \eta + \delta} } \nonumber \\
 	& \ge \delta\P{ V_t \ge \eta' } \nonumber \\
-	& = \delta (1 - F_{s_t+1,j_t-s_t+1}(\eta')) = \delta F^B_{j_t+1,\eta'}(s_t) \label{ineq:lower_bound_on_ppart_term}
+	& = \delta (1 - F_{S_1(t)+1,N_1(t)-S_1(t)+1}(\eta')) = \delta F^B_{N_1(t)+1,\eta'}(S_1(t)) \label{ineq:lower_bound_on_ppart_term}
 	\end{align}
 	The last equality is due to Fact~\ref{fact:equation_for_beta_binomial_cdfs} and this proves the claim.
-	\subsubsection*{Claim 2: $ \sum_{t=1}^\infty \mathbb{P}\left(F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}\right) \le C_1$ where $C_1$ is a constant:}
+	\subsubsection*{Claim 2: $ \sum_{t=1}^\infty \mathbb{P}\left(F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}\right) \le C_1$ where $C_1$ is a constant:}
 	Let us fix the sequence $f_t = -\frac{\log \delta t }{\log (1-\eta')}-1 = O(\log t)$. We then have
 	\begin{align}
-	\P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}} & = \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}, \; j_t > f_t}  \nonumber \\
-	& \qquad + \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}, \; j_t \le f_t} \label{eq:decomp2}.
+	\P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}} & = \P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}, \; N_1(t) > f_t}  \nonumber \\
+	& \qquad + \P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}, \; N_1(t) \le f_t} \label{eq:decomp2}.
 	\end{align}
 	For the second term in the RHS of \eqref{eq:decomp2} we have the following bound,
 	\begin{align}
-	\P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}, \; j_t \le f_t}  &  \le \P{F^B_{j_t+1,\eta'}(0) < \frac{1}{\delta  t}, \; j_t \le f_t} \nonumber \\
-	& = \P{(1-\eta')^{j_t+1} <  \frac{1}{\delta  t}, \; j_t \le f_t} \nonumber \\
+	\P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}, \; N_1(t) \le f_t}  &  \le \P{F^B_{N_1(t)+1,\eta'}(0) < \frac{1}{\delta  t}, \; N_1(t) \le f_t} \nonumber \\
+	& = \P{(1-\eta')^{N_1(t)+1} <  \frac{1}{\delta  t}, \; N_1(t) \le f_t} \nonumber \\
 	& \le \P{(1-\eta')^{f_t+1} <  \frac{1}{\delta  t}} = 0.\label{bound:bdd_by_zero}
 	\end{align}
 	Now we use the following fact to bound the left term on the RHS of \eqref{eq:decomp2}. Define the function
@@ -231,22 +231,22 @@ We list notation and facts related to Beta and Binomial distributions, which are
 		\item $M > \frac{4}{(1-\eta')\delta }$
 		\item $\ceil{f_M} > 0$ and $F^B_{\ceil{f_M},\eta'}(f_M \eta') > 1/4$. Note that there is a large enough integer for this because $F^B_{\ceil{f_t},\eta'}(f_t \eta') \to \frac{1}{2}$ as $t \to \infty$.
 	\end{enumerate} 
-	Suppose that $t > M$. It then follows that the event $\{F^B_{j_t, \eta'}(s_t) < \frac{1}{(1-\eta')\delta t},\; s_t \ge j_t \eta', \; j_t > f_t\}$ has measure zero because of the assumptions made on $M$. Therefore if $t > M$, we have
+	Suppose that $t > M$. It then follows that the event $\{F^B_{N_1(t), \eta'}(S_1(t)) < \frac{1}{(1-\eta')\delta t},\; S_1(t) \ge N_1(t) \eta', \; N_1(t) > f_t\}$ has measure zero because of the assumptions made on $M$. Therefore if $t > M$, we have
 	\begin{align}
-	\mathbb{P}\bigg(F^B_{j_t+1,  \eta'}(s_t) &< \frac{1}{\delta t }  , \; j_t > f_t \bigg) \nonumber \\
-	& \le \P{F^B_{j_t,  \eta'}(s_t) < \frac{1}{(1-\eta')\delta t}, \; j_t > f_t} \label{eqn:part1_decomp_the_cdf_of_y} \\ 
-	& = \P{F^B_{j_t,  \eta'}(s_t) < \frac{1}{(1-\eta')\delta t}, \; s_t < j_t \eta', \; j_t > f_t} \nonumber \\ 
-	& =  \P{F^B_{j_t,\theta_1}(s_t) \frac{F^B_{j_t,\eta'}(s_t)}{F^B_{j_t,\theta_1}(s_t)} < \frac{1}{(1-\eta')\delta  t}, \;s_t < j_t \eta', \; j_t > f_t} \nonumber \\
-	& \le  \P{F_{j_t,\theta_1}^B(s_t)  e^{j_t D} < \frac{1}{(1-\eta')\delta  t} , \; j_t > f_t} \label{eqn:part1_app_of_lemma2} \\
-	& \le  \P{F_{j_t,\theta_1}^B(s_t) e^{f_t D} < \frac{1}{(1-\eta')\delta  t}} \nonumber \\
-	& =  \P{F_{j_t,\theta_1}^B(F^{-B}_{j_t,\theta_1}(U)) < \frac{e^{-f_t D}}{(1-\eta')\delta  t} } \label{eqn:part1_propert_of_inverse_sampling}\\
+	\mathbb{P}\bigg(F^B_{N_1(t)+1,  \eta'}(S_1(t)) &< \frac{1}{\delta t }  , \; N_1(t) > f_t \bigg) \nonumber \\
+	& \le \P{F^B_{N_1(t),  \eta'}(S_1(t)) < \frac{1}{(1-\eta')\delta t}, \; N_1(t) > f_t} \label{eqn:part1_decomp_the_cdf_of_y} \\ 
+	& = \P{F^B_{N_1(t),  \eta'}(S_1(t)) < \frac{1}{(1-\eta')\delta t}, \; S_1(t) < N_1(t) \eta', \; N_1(t) > f_t} \nonumber \\ 
+	& =  \P{F^B_{N_1(t),\theta_1}(S_1(t)) \frac{F^B_{N_1(t),\eta'}(S_1(t))}{F^B_{N_1(t),\theta_1}(S_1(t))} < \frac{1}{(1-\eta')\delta  t}, \;S_1(t) < N_1(t) \eta', \; N_1(t) > f_t} \nonumber \\
+	& \le  \P{F_{N_1(t),\theta_1}^B(S_1(t))  e^{N_1(t) D} < \frac{1}{(1-\eta')\delta  t} , \; N_1(t) > f_t} \label{eqn:part1_app_of_lemma2} \\
+	& \le  \P{F_{N_1(t),\theta_1}^B(S_1(t)) e^{f_t D} < \frac{1}{(1-\eta')\delta  t}} \nonumber \\
+	& =  \P{F_{N_1(t),\theta_1}^B(F^{-B}_{N_1(t),\theta_1}(U)) < \frac{e^{-f_t D}}{(1-\eta')\delta  t} } \label{eqn:part1_propert_of_inverse_sampling}\\
 	& \le  \P{U < \frac{e^{-f_t D}}{(1-\eta')\delta  t} } \nonumber \\  
 	& =  \frac{e^{-f_t D}}{(1-\eta')\delta  t} \nonumber  \nonumber\\
 	& = O\left( \frac{1}{t^{1+Dc_{\eta'}}} \right)  \label{bound:one_over_t_plus_eps} 
 	\end{align}
-	where $D = d(\eta',\theta_1) > 0$ and $c_{\eta'} = -\log^{-1}(1-\eta') > 0$ are constant. The bound \eqref{eqn:part1_decomp_the_cdf_of_y} holds due to Fact~\eqref{fact:relationship_with_binom_cdfs}. Bound \eqref{eqn:part1_app_of_lemma2} follows from an application of Lemma~\ref{lemma:ratio_of_cdfs} and the fact that $t > M$. Equation \eqref{eqn:part1_propert_of_inverse_sampling} follows from $s_t \sim \text{Binomial}(j_t, \theta_1)$ and the inverse sampling technique. By combining bounds \eqref{bound:one_over_t_plus_eps}, \eqref{bound:bdd_by_zero} and \eqref{eq:decomp2}, we get
+	where $D = d(\eta',\theta_1) > 0$ and $c_{\eta'} = -\log^{-1}(1-\eta') > 0$ are constant. The bound \eqref{eqn:part1_decomp_the_cdf_of_y} holds due to Fact~\eqref{fact:relationship_with_binom_cdfs}. Bound \eqref{eqn:part1_app_of_lemma2} follows from an application of Lemma~\ref{lemma:ratio_of_cdfs} and the fact that $t > M$. Equation \eqref{eqn:part1_propert_of_inverse_sampling} follows from $S_1(t) \sim \text{Binomial}(N_1(t), \theta_1)$ and the inverse sampling technique. By combining bounds \eqref{bound:one_over_t_plus_eps}, \eqref{bound:bdd_by_zero} and \eqref{eq:decomp2}, we get
 	\begin{align*}
-	\sum_{t=1}^\infty \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}} & \le M +  \sum_{t=M+1}^\infty \P{F^B_{j_t+1, \eta'}(s_t) < \frac{1}{\delta t}} \le M +  C_1' =: C_1
+	\sum_{t=1}^\infty \P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}} & \le M +  \sum_{t=M+1}^\infty \P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}} \le M +  C_1' =: C_1
 	\end{align*}
 	where $C_1' = C_1'(\theta_1, \eta')$ is some other constant, namely the limit of the series.
 \end{proof}
@@ -258,16 +258,16 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	
 	Firstly, by the law of total probability, we find that
 	\begin{align} 
-	\sum_{t=1}^T \mathbb{P}(v_{2,t} & \ge \eta_3 ,\; k_t \ge L,\; \pi^{\rm OG}_t = 2) \nonumber \\
-	& = \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; k_t \ge L, \; s'_t < \floor{k_t \eta_1}, \; \pi^{\rm OG}_t = 2} \nonumber \\
-	& \qquad + \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; k_t \ge L, \; s'_t \ge \floor{k_t \eta_1},\; \pi^{\rm OG}_t = 2} \nonumber \\
-	& \le \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; k_t \ge L, \; s'_t < \floor{k_t \eta_1}} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; s'_t \ge \floor{k_t \eta_1}} \label{eqn:splitting_not_underestimate}
+	\sum_{t=1}^T \mathbb{P}(v_{2,t} & \ge \eta_3 ,\; N_2(t) \ge L,\; \pi^{\rm OG}_t = 2) \nonumber \\
+	& = \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) < \floor{N_2(t) \eta_1}, \; \pi^{\rm OG}_t = 2} \nonumber \\
+	& \qquad + \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) \ge \floor{N_2(t) \eta_1},\; \pi^{\rm OG}_t = 2} \nonumber \\
+	& \le \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) < \floor{N_2(t) \eta_1}} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; S_2(t) \ge \floor{N_2(t) \eta_1}} \label{eqn:splitting_not_underestimate}
 	\end{align}
-	Let $V_t \sim \text{Beta}(s'_t + 1, k_t- s'_t + 1)$ denote the agent's posterior on the second arm at time $t$, then
+	Let $V_t \sim \text{Beta}(S_2(t) + 1, N_2(t)- S_2(t) + 1)$ denote the agent's posterior on the second arm at time $t$, then
 	\begin{align}
-	\sum_{t=1}^T \mathbb{P}(v_{2,t} \ge \eta_3 ,\; & \; k_t \ge L,\; s'_t < \floor{k_t \eta_1})  \nonumber\\
-	& = \sum_{t=1}^T \P{\Ee{V_t} + \gamma_t \Ee{(\eta_3 - V_t)^+} \ge \eta_3, \; k_t \ge L,\; s'_t < \floor{k_t \eta_1}} \nonumber \\
-	& = \sum_{t=1}^T \P{\frac{\Ee{(\eta_3-V_t)^+ }}{  \Ee{(V_t - \eta_3)^+ }} \le t , \; k_t \ge L,\; s'_t < \floor{k_t \eta_1}} \label{eq:complicated_rv_in_part2}
+	\sum_{t=1}^T \mathbb{P}(v_{2,t} \ge \eta_3 ,\; & \; N_2(t) \ge L,\; S_2(t) < \floor{N_2(t) \eta_1})  \nonumber\\
+	& = \sum_{t=1}^T \P{\Ee{V_t} + \gamma_t \Ee{(\eta_3 - V_t)^+} \ge \eta_3, \; N_2(t) \ge L,\; S_2(t) < \floor{N_2(t) \eta_1}} \nonumber \\
+	& = \sum_{t=1}^T \P{\frac{\Ee{(\eta_3-V_t)^+ }}{  \Ee{(V_t - \eta_3)^+ }} \le t , \; N_2(t) \ge L,\; S_2(t) < \floor{N_2(t) \eta_1}} \label{eq:complicated_rv_in_part2}
 	\end{align}
 	where the second equality follows from Corollary~\ref{cor:equivalent_event} in Appendix~\ref{sec:amgi_results}. The following result lets us bound \eqref{eq:complicated_rv_in_part2},
 	\begin{lemma} \label{lem:lb_rv2}
@@ -282,8 +282,8 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	\end{myproof}
 	Therefore, from equation \eqref{eq:complicated_rv_in_part2} and Lemma~\ref{lem:lb_rv2}, we find that whenever $T > \left(\frac{2}{\eta_3-\eta_1}\right)^{1/\eps} =: T^*(\eps, \theta)$,
 	\begin{align}
-	\sum_{t=1}^T \mathbb{P}(v_{2,t} \ge \eta_3 ,\; & \; k_t \ge L,\; s'_t < \floor{k_t \eta_1}) \nonumber \\
-	& \le  \sum_{t=1}^T\P{  (\eta_3-\eta_1) \exp\{k_t d(\eta_1,\eta_3) \} \le 2t,\; k_t \ge L} \nonumber \\
+	\sum_{t=1}^T \mathbb{P}(v_{2,t} \ge \eta_3 ,\; & \; N_2(t) \ge L,\; S_2(t) < \floor{N_2(t) \eta_1}) \nonumber \\
+	& \le  \sum_{t=1}^T\P{  (\eta_3-\eta_1) \exp\{N_2(t) d(\eta_1,\eta_3) \} \le 2t,\; N_2(t) \ge L} \nonumber \\
 	& \le  \sum_{t=1}^T\P{  (\eta_3-\eta_1) \exp\{L d(\eta_1,\eta_3) \} \le 2t} \nonumber \\
 	& =   \sum_{t=1}^T\P{  (\eta_3-\eta_1) T^{1+\eps} \le 2t} = 0 \label{bound:equal_to_zero}
 	\end{align}
@@ -291,7 +291,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	\begin{lemma} \label{lem:accurate_suboptimal_mean}
 		There exist positive constants $C = C(\theta_2,\eta_1)$ and $x' > \theta_2$ such that
 		\begin{equation*}
-		\sum_{t=1}^T \P{s'_t \ge \floor{k_t \eta_1}, \; \pi^{\rm OG}_t = 2} \le  K + \frac{1}{1 - e^{-d(x',\theta_2)}} 
+		\sum_{t=1}^T \P{S_2(t) \ge \floor{N_2(t) \eta_1}, \; \pi^{\rm OG}_t = 2} \le  K + \frac{1}{1 - e^{-d(x',\theta_2)}} 
 		\end{equation*}
 	\end{lemma}
 	Combining Lemma~\ref{lem:accurate_suboptimal_mean}, \eqref{bound:equal_to_zero}, \eqref{eqn:splitting_not_underestimate} and \eqref{eq:complicated_rv_in_part2} shows the claim.
@@ -323,13 +323,13 @@ We list notation and facts related to Beta and Binomial distributions, which are
 \begin{proof}[Proof.]
 	The steps in this proof follow a similar one in \cite{agrawal2013further} but we show them for completeness. We bound the number of times the suboptimal arm's mean is overestimated. Let $\tau_\ell$ be the time step in which the  suboptimal arm is sampled for the $\ell$\textsuperscript{th} time. Because for any $x$, $\lim_{n\to\infty}\frac{\floor{nx}}{nx} = 1$, we can let $N$ be a large enough integer so that if $\ell \ge N$, then $\eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1} > x' := (\theta_2 + \eta_1)/2 > \theta_2$. In that case,
 	\begin{align}
-	\sum_{t=1}^T\P{s'_t \ge \floor{k_t \eta_1}, \; \pi^{\rm OG}_t = 2} & \le \Ee{\sum_{\ell=1}^T \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1}\ind{s'_{\ell} \ge \floor{k_{\ell} \eta_1}} \ind{\pi^{\rm OG}_t = 2}} \nonumber \\
-	& = \Ee{\sum_{\ell=1}^T \ind{s'_{\tau_{\ell}} \ge \floor{(\ell-1) \eta_1}} \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1} \ind{\pi^{\rm OG}_t = 2}} \nonumber\\
-	& = \Ee{\sum_{\ell=0}^{T-1} \ind{s'_{\tau_{\ell+1}} \ge \floor{\ell \eta_1}}} \nonumber\\
-	& \le  N + \sum_{\ell=N+1}^{T-1} \P{ s'_{\tau_{\ell+1}} \ge \ell \eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1}} \nonumber \\
-	& \le N + \sum_{\ell=N+1}^{T-1} \P{ s'_{\tau_{\ell+1}} \ge \ell x'} \nonumber \\
+	\sum_{t=1}^T\P{S_2(t) \ge \floor{N_2(t) \eta_1}, \; \pi^{\rm OG}_t = 2} & \le \Ee{\sum_{\ell=1}^T \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1}\ind{S_2(\ell) \ge \floor{N_1(\ell) \eta_1}} \ind{\pi^{\rm OG}_t = 2}} \nonumber \\
+	& = \Ee{\sum_{\ell=1}^T \ind{S_2(\tau_{\ell}) \ge \floor{(\ell-1) \eta_1}} \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1} \ind{\pi^{\rm OG}_t = 2}} \nonumber\\
+	& = \Ee{\sum_{\ell=0}^{T-1} \ind{S_2(\tau_{\ell+1}) \ge \floor{\ell \eta_1}}} \nonumber\\
+	& \le  N + \sum_{\ell=N+1}^{T-1} \P{ S_2(\tau_{\ell+1}) \ge \ell \eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1}} \nonumber \\
+	& \le N + \sum_{\ell=N+1}^{T-1} \P{ S_2(\tau_{\ell+1}) \ge \ell x'} \nonumber \\
 	& \le  N + \sum_{\ell=1}^{\infty} \exp(-\ell d(x', \theta_2)) \label{bound:cf_thm} \\
 	& = N + \frac{1}{1 - e^{-d(x',\theta_2)}} \nonumber
 	\end{align}
 \end{proof}
-The bound \eqref{bound:cf_thm} follows from the Chernoff-Hoeffding theorem and that $s'_{\tau_{\ell+1}} \sim \text{Binomial}(k_{\ell+1}, \theta_2) \sim \text{Binomial}(\ell, \theta_2)$.
+The bound \eqref{bound:cf_thm} follows from the Chernoff-Hoeffding theorem and that $S_2(\tau_{\ell+1}) \sim \text{Binomial}(N_1(\ell+1), \theta_2) \sim \text{Binomial}(\ell, \theta_2)$.

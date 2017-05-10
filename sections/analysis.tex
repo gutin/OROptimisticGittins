@@ -12,18 +12,18 @@ In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x
 \begin{myproof}[Proof.]
 	Because we prove frequentist regret, the first few steps of the proof will be similar to that of UCB and Thompson Sampling.
 	
-	Assume w.l.o.g that arm 1 is uniquely optimal, and therefore $\theta^* = \theta_1$. Fix an arbitrary suboptimal arm, which for convenience we will say is arm 2. Let $j_t$ and $k_t$ denote the number of pulls of arms 1 and 2, respectively, by (but not including) time $t$. Finally, we let $s_t$ and $s'_t$ be the corresponding integer reward accumulated from arms 1 and 2, respectively. That is,
+	Assume w.l.o.g that arm 1 is uniquely optimal, and therefore $\theta^* = \theta_1$. Fix an arbitrary suboptimal arm, which for convenience we will say is arm 2. Let $N_i(t)$ denote the number of pulls of the $i$th arm, by (but not including) time $t$. Finally, we let $S_i(t)$ be the corresponding total reward accumulated from the $i$th arm from the $N_i(t)$ pulls. That is,
 	\[
-	s_t = \sum_{s=1}^{j_t} X_{1,s}  \qquad s_t' = \sum_{s=1}^{k_t} X_{2,s}.
+	S_i(t) = \sum_{t'=1}^{N_i(t)} X_{i,t'}
 	\]
-	Therefore, by definition, $j_1 = k_1 = s_1 = s_1' = 0$. Let $\eta_1,\eta_2,\eta_3 \in (\theta_2, \theta_1)$ be chosen such that $\eta_1 < \eta_2 < \eta_3$, $d(\eta_1, \eta_3) = \frac{d(\theta_2, \theta_1)}{1+\epsilon}$ and $d(\eta_2,\eta_3) =\frac{d(\eta_1, \eta_3)}{1+\epsilon} $. Next, we define $L(T) := \frac{\log T}{d(\eta_2,\eta_3)}$.
+	Therefore, by definition, $N_i(t) = S_i(t) = 0$ for every $i \in \mathcal{A}$. Let $\eta_1,\eta_2,\eta_3 \in (\theta_2, \theta_1)$ be chosen such that $\eta_1 < \eta_2 < \eta_3$, $d(\eta_1, \eta_3) = \frac{d(\theta_2, \theta_1)}{1+\epsilon}$ and $d(\eta_2,\eta_3) =\frac{d(\eta_1, \eta_3)}{1+\epsilon} $. Next, we define $L(T) := \frac{\log T}{d(\eta_2,\eta_3)}$.
 	
 	We upper bound the expected number of pulls of the second arm as follows,
 	\begin{align}
-	\E[k_T] & \le L(T) + \sum_{t=\floor{L(T)}+1}^T \P{\pi^{\rm OG}_t = 2, \; k_t \ge L(T)} \nonumber \\
-	& \le L(T) +   \sum_{t=1}^T \P{v_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v_{1,t} \ge \eta_3, \; k_t \ge L(T)} \nonumber \\
-	& \le L(T) +   \sum_{t=1}^T \P{v_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v_{2,t} \ge \eta_3, \; k_t \ge L(T)} \nonumber \\
-	& \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} + \underbrace{\sum_{t=1}^\infty \P{v_{1,t} < \eta_3}}_{A} + \underbrace{\sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\;v_{2,t} \ge \eta_3, \; k_t \ge L(T)}}_{B} \label{bound:final_step_in_freq_regret}
+	\E[N_2(T)] & \le L(T) + \sum_{t=\floor{L(T)}+1}^T \P{\pi^{\rm OG}_t = 2, \; N_2(t) \ge L(T)} \nonumber \\
+	& \le L(T) +   \sum_{t=1}^T \P{v_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v_{1,t} \ge \eta_3, \; N_2(t) \ge L(T)} \nonumber \\
+	& \le L(T) +   \sum_{t=1}^T \P{v_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v_{2,t} \ge \eta_3, \; N_2(t) \ge L(T)} \nonumber \\
+	& \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} + \underbrace{\sum_{t=1}^\infty \P{v_{1,t} < \eta_3}}_{A} + \underbrace{\sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\;v_{2,t} \ge \eta_3, \; N_2(t) \ge L(T)}}_{B} \label{bound:final_step_in_freq_regret}
 	\end{align}
 	All that remains is to show that terms $A$ and $B$ are bounded by constants. These bounds are given in Lemmas~\ref{lemma:underestimation} and \ref{lemma:overestimation} whose proofs we describe at a high-level with the details in the Appendix.
 	\begin{lemma}[Bound on term A] \label{lemma:underestimation}
@@ -40,7 +40,7 @@ In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x
 	\begin{lemma}[Bound on term B] \label{lemma:overestimation}
 		There exists $T^* = T^*(\epsilon, \theta)$ sufficiently large and a constant $C_2 = C_2(\epsilon, \theta_1, \theta_2)$ so that for any $T \ge T^*$, we have
 		\begin{equation*}
-		\sum_{t=1}^T \P{\pi_t^{\rm OG} = 2,\; v_{2,t} \ge \eta_3, \; k_t \ge L(T)} \le C_2.
+		\sum_{t=1}^T \P{\pi_t^{\rm OG} = 2,\; v_{2,t} \ge \eta_3, \; N_2(t) \ge L(T)} \le C_2.
 		\end{equation*}
 	\end{lemma}
 	\begin{myproof}[Proof outline]
@@ -48,7 +48,7 @@ In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x
 	\end{myproof}
 	Lemma~\ref{lemma:underestimation} and \ref{lemma:overestimation}, together with \eqref{bound:final_step_in_freq_regret}, imply that
 	\[
-	\E[k_T] \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} +  C_1 +  C_2.
+	\E[N_2(T)] \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} +  C_1 +  C_2.
 	\]
 	From this the regret bound follows.
 \end{myproof}
