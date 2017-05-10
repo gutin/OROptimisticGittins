@@ -9,7 +9,7 @@ We denote this quantity by $\nu_\gamma(y)$. If one thought of the notion of reti
 Ignoring computational considerations, we cannot hope for a scheme such as the one above to achieve acceptable regret or Bayes risk. Specifically, denoting the Gittins policy by $\pi^{G,\gamma}$, we have 
 
 \begin{lemma}
-	There exists an instance of the multi armed bandit problem with $|\mathcal A| = 2$ for which 
+	There exists an instance of the multi armed bandit problem for which 
 	\[
 	{\rm Regret}\left(
 	\pi^{G,\gamma},T
@@ -19,7 +19,9 @@ Ignoring computational considerations, we cannot hope for a scheme such as the o
 	\]
 	for any $\gamma \in (0,1)$.
 \end{lemma}
-
+\begin{myproof}[Proof.]
+	\cite{berry1985bandit} show that the Gittins index is, in general, sub-optimal for bandit problems without both geometric discounting and an infinite horizon.
+\end{myproof}
 The above result is expected. If the posterior means on the two arms are sufficiently apart, the Gittins index policy will pick the arm with the larger posterior mean. The threshold beyond which the Gittins policy `exploits' depends on the discount factor and with a fixed discount factor there is a positive probability that the superior arm is never explored sufficiently so as to establish that it is, in fact, the superior arm. Fixing this issue then requires that the discount factor employed increase over time.
 
 Consider then employing discount factors that increase at roughly the rate $1 - 1/t$; specifically, consider setting 
@@ -40,8 +42,9 @@ and consider using the policy that at time $t$ picks an arm from the set $\argma
 	\log^3 T
 	\right).
 	\] 
+	where the constant in the big-Oh term depends on the prior $q$ and $A$.
 \end{proposition}
-where the constant in the big-Oh term depends on the prior $q$ and $A$. The proof of this simple result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is within a constant factor of the optimal finite horizon regret. The second ingredient is a doubling trick.
+The proof of this simple result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is within a constant factor of the optimal finite horizon regret. The second ingredient is a doubling trick.
 
 While increasing discount factors does not appear to get us to the optimal Bayes risk (the achievable lower bound being $\log^2T$; see \cite{lai1987adaptive}); we conjecture that in fact this is a deficiency in our analysis for Proposition~\ref{prop:gittins_log3T}. In any case, the policy $\pi^{\rm D}$ is not the primary subject of the paper but merely a motivation for the discount factor schedule proposed. Putting aside this issue, one is still left with the computational burden associated with $\pi^{\rm D}$ -- which is clearly onerous relative to any of the incumbent index rules discussed in the introduction. 
 
