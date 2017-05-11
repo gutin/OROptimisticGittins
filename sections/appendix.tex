@@ -143,62 +143,118 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	The final lower bound in \eqref{bound:log_1minusq_etc} follows from the assumption on $n$.
 \end{proof}
 
-\subsubsection{Optimistic Gittins Index results.} \label{sec:amgi_results}
+\section{Optimistic Gittins Index results.} \label{sec:amgi_results}
+For this section it is useful to define the value of a stopping problem used in the calculation of the Optimistic Gittins Index. For any fixed arm $i$, we write
+\begin{align*}
+V_K(y; x, \gamma) & := \sup_{1 < \tau \le K} \Ee{\sum_{t=1}^{\tau-1} (1-\gamma)X_{i,t} + \gamma^{\tau-1} R_{x, K}(\tau, y_{i,\tau})	\given y_{i,1} = y}.
+\end{align*}
+Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamma$, is the solution in $x$ to $V_K(y; x, \gamma) = x$. We show some key properties of $V_K$, which we exploit later on. For fixed $y$, $K$ and $\gamma$, we will call $V(x) \defeq V(y; x, \gamma)$.
+\begin{fact}
+	$V(x)$ is convex and differentiable.
+\end{fact}
+\begin{myproof}[Proof.]
+	We prove this by induction. For $K = 1$, we have $\tau = 2$ almost surely and so
+	\begin{align*}
+	V(x) & = V_1(y; x, \gamma) \\
+	& = (1-\gamma_t)\Ee{X_{i,1} \given y_{i,1 = y}} + \gamma_t \Ee{R_{x, 1}(2, y_{i,1}) \given y_{i,1} = y} \\
+	& = (1-\gamma_t)\Ee{X_{i,1} \given y_{i,1 = y}} + \gamma_t \Ee{\max(x, \E{X_{i,1}}) \given y_{i,1} = y}
+	\end{align*}
+	The function is convex because for any random variable $Z$ the term $\max(g, Z)$ is convex and taking expectations preserves convexity. Also, we verify through the bounded convergence theorem that $V(x)$ is differentiable and the event $\{\E X_{i,1}=z \given y_{i,1} = y\}$, at which $V$ is not differentiable, has measure zero.
+	
+	For $K > 1$, assume that $V_{K-1}$ is convex and differentiable. By writing the Bellman equation
+	\begin{align*}
+		V_K(y; x, \gamma) & = (1-\gamma_t)\Ee{X_{i,1} \given y_{i,1}=y} + \Ee{\gamma_t \max(x, V_{K-1}(y_{i,t+1}; x, \gamma)) \given y_{i,1} = y}
+	\end{align*}
+	we again notice a maximum of convex functions in $x$. This form for $V_K$ implies that it is convex and differentiable.
+\end{myproof}
 \begin{lemma} \label{eq:important_fact}
 	Let $\gamma \in (0,1)$ and
 	\begin{equation} \label{eq:def_lambda_in_important_equiv}
-	\lambda = \sup\{ x \in [0,1] : \Ee{V} + \gamma \Ee{(x - V)^+} \ge x\}
+	\lambda = \sup\{ x \in [0,1] : V(x) \ge x\}
 	\end{equation} 
-	where $V$ is a continuous random variable with support $[0,1]$ and $\Ee{V} > 0$. For all $y \in (0,1)$, the following equivalence holds
+	For all $x \in (0,1)$, the following equivalence holds
 	\begin{equation} \label{eq:equivlance_lambda1}
-	\lambda < y  \Longleftrightarrow \Ee{V} + \gamma 
-	\Ee{(y - V)^+} < y.
+	\lambda < x  \Longleftrightarrow V(x) < x.
 	\end{equation}
 \end{lemma}
-\begin{proof}[Proof.]
-	Figure~\ref{fig:visaulize_gx_proof} gives a visualization of the proof. In the plot, the line $g(x) = \Ee{ (1-\gamma) V + \max(x, V)}$  is the  value of the Optimistic Gittins' stopping problem (multiplied by $(1-\gamma)$) with a retirement payoff of $x$ and the point $x^*$, where $g(x^*)$ and $x^*$ intersect, is the Optimistic Gittins Index. Notice how if $x > x^*$, $g(x)$ is below $x$ and otherwise $g(x)$ is above $x$; this is the crux of the proof.
+\begin{myproof}[Proof.]
+	Figure~\ref{fig:visaulize_gx_proof} gives a visualization of the proof. In the plot, the point $x^*$, where $V(x^*)$ and $x^*$ intersect, is the Optimistic Gittins Index. Notice how if $x > x^*$, $V(x)$ is below $x$ and otherwise $V(x)$ is above $x$; this is the crux of the proof.
 	
-	For the formal proof, let $g(z) = \Ee{V} + \gamma \Ee{(z - V)^+}$. First let's assume $\lambda < y$. If $y \le g(y)$, then $\lambda$ would not be the supremum over all real numbers $z \in [0,1]$ such that $ z \le g(z)$. Therefore $g(y) < y$.
+	We also give a formal proof. Firstly let's assume that $\lambda < x$. If $x\le V(x)$, then $\lambda$ would not be the supremum over all $z \in [0,1]$ such that $ z \le V(z)$. Therefore $V(x) < x$.
 	
 	\begin{figure}
 		\centering
 		\input{plots/visualize_gx.pgf}
-		\caption{Visualization of Lemma~\ref{eq:important_fact}'s proof for a problem with Beta parameters $3,7$ and $\gamma=0.7$. The intersection of the two lines represents the Optimistic Gittins Index.}
+		\caption{Visualization of Lemma~\ref{eq:important_fact}'s proof for a Beta-Bernoulli problem with parameters $(3,7)$ and $\gamma=0.7$. The intersection of the two lines represents the Optimistic Gittins Index.}
 		\label{fig:visaulize_gx_proof}
 	\end{figure}
 	
-	For the converse, assume $\lambda \ge y$. Observe that $g(z)$ is convex. Also, one can verify through the bounded convergence theorem that $g(z)$ is differentiable [the event $\{V=z\}$, at which $(z-V)^+$ is not differentiable, has measure zero]. Thirdly, because $g(.)$ is continuous on $[0,1]$, by the Intermediate Value Theorem, it has a fixed point and in particular $\lambda =g(\lambda)$. Therefore let $\eps < (1-\lambda)/2$ and from the first direction of the proof, we have $\lambda + \eps > g(\lambda + \eps)$. Thus
+	For the converse, assume $\lambda \ge x$. Recall that $V(z)$ is convex. Since $V$ is continuous on $[0,1]$, by the Intermediate Value Theorem, there exists a point $\lambda$ at which $\lambda =V(\lambda)$. Therefore let $\eps < (1-\lambda)/2$ and from the first direction of the proof, we have $\lambda + \eps > V(\lambda + \eps)$. Thus
 	\[
-	g(\lambda + \eps) \ge g(\lambda) + \eps g'(\lambda) = \lambda + \eps g'(\lambda)
+	V(\lambda + \eps) \ge V(\lambda) + \eps V'(\lambda) = \lambda + \eps V'(\lambda)
 	\]
-	where the inequality follows from $g(.)$ being convex and differentiable. This implies that $g'(\lambda) < 1$ and, moreover, because $g(z)$ is also increasing, it follows that $g'(\lambda) \in (0,1)$, whence
+	where the inequality follows from $V$ being convex and differentiable. This implies that $V'(\lambda) < 1$ and, moreover, because $V$ is also increasing, it follows that $V'(\lambda) \in (0,1)$, whence
 	\begin{align*}
-	g(y) & \ge g(\lambda) - (\lambda - y) g'(\lambda) \\
-	& = \lambda - (\lambda - y) g'(\lambda) \\
-	& = (1-g'(\lambda)) \lambda + g'(\lambda) y \\
-	& \ge \min(y,\lambda) = y.
+	V(x) & \ge V(\lambda) - (\lambda - x) V'(\lambda) \\
+	& = \lambda - (\lambda - x) V'(\lambda) \\
+	& = (1-V'(\lambda)) \lambda + V'(\lambda) x \\
+	& \ge \min(x,\lambda) = x.
 	\end{align*}
-\end{proof}
+	This completes the proof.
+\end{myproof}
 \begin{corollary} \label{cor:equivalent_event}
-	Let $v_{i,t}$ be the approximate Optimistic Gittins Index, under the Bernoulli problem with uniform priors, of arm $i$ at time $t$ and let $x \in (0,1)$. The following equivalence holds
+	Let $v_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $x \in (0,1)$. The following equivalence holds
 	\[
-	\{v_{i,t} < x \} = \{\Ee{V_t} + \gamma_t \Ee{(x-V_t)^+} < x\}\]
-	where $V_t \sim $Beta$(S_i(t)+1,N_i(t) - S_i(t) + 1)$, $N_i(t)$ denotes the number of pulls of arm $i$ and $S_i(t)$ the number of successes observed.
+	\{v^K_{i,t} < x \} = \{V_K(y_{i,t}; x, \gamma_t) < x\}\]
+	where $y_{i,t}$ is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$.
 \end{corollary}
 \begin{myproof}[Proof.]
-	By the definition in Equation~\eqref{eqn:ogi_k1}, $v_{i,t}$ can be characterized with the relation 
+	By the definition in Equation~\eqref{eqn:ogi_k1}, $v^K_{i,t}$ can be characterized with the relation 
 	\begin{equation*}% \label{eq:form4}
-	v_{i,t} = \sup\left\{ u \in [0,1] : u \le \Ee{V_t}  + \gamma_t \Ee{(u - V_t)^+} \right\}.
+	v_{i,t} = \sup\left\{ x \in [0,1] : x \le V_K(y_{i,t}; x, \gamma_t)  \right\}.
 	\end{equation*}
 	The conclusion then follows from Lemma~\ref{eq:important_fact}.
 \end{myproof}
 
 \subsection{Proof of Lemma~\ref{lemma:underestimation}} \label{proof:underestimation_proof}
-\begin{proof}[Proof.]
-	Define $\delta := (\theta_1 - \eta)/2$ and  $\eta' :=  \eta + \delta$. In other words, $\delta$ is half the distance between $\eta$ and $\theta_1$; $\eta'$ is the point half-way. The proof consists of showing two claims
+\begin{myproof}[Proof.]
+	This proof involves induction. We state what the base case is, in the following Lemma, but we defer its proof to the end of the section.
+	\begin{lemma} \label{lemma:underestimation_base_case}
+		Suppose the OGI algorithm uses only one lookahead step, and so $K = 1$. Then we have
+		\[
+		\P{v^1_{1,t} < \eta} = \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right)
+		\]
+		where $h$ is a positive yet decreasing function of $\eta$.
+	\end{lemma}
+	Now we show the induction step. Suppose that for $K \ge 2$, it holds that
+	\[
+	\P{v^{K-1}_{1,t} < \eta} = \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right).
+	\]
+	We show the same is true for $v^{K}_{1,t}$. Indeed, we have for $t > 1$
+	\begin{align}
+	\P{v^K_{1,t} < \eta} & = \P{V_K(y_{1,t}; \eta, \gamma_t) < \eta} \label{eq:appl_of_lemma_9}\\
+	& = \P{(1-\gamma_t)\Ee{X_{1,t} \given y_{1,t}} + \gamma_t \Ee{\max(\eta, V_{K-1}(y_{1,t+1}; \eta, \gamma_{t})) \given y_{1,t}}< \eta} \nonumber \\
+	& \le \P{\frac{1}{t}\Ee{X_{1,t} \given y_{1,t}} + \gamma_t \max(\eta, \Ee{V_{K-1}(y_{1,t+1}; \eta, \gamma_{t}) \given y_{1,t}})< \eta} \label{ineq:appl_jensens} \\
+	& \le \P{\frac{1}{t}\Ee{X_{1,t} \given y_{1,t}} + \left(1-\frac{1}{t}\right) \Ee{V_{K-1}(y_{1,t+1}; \eta, \gamma_{t}) \given y_{1,t} }< \eta} \nonumber \\
+	& \le \P{\frac{1}{t}\Ee{X_{1,t} \given y_{1,t}} + \left(1-\frac{1}{t}\right) V_{K-1}(y_{1,t}; \eta, \gamma_{t})< \eta} \label{ineq:missing_step} \\
+	& \le \P{ V_{K-1}(y_{1,t}; \eta, \gamma_{t})< \eta \left(\frac{t}{t-1}\right)} \nonumber \\
+	& \le \mathcal{O}\left(\frac{1}{t^{1 + h(\eta t/(t-1))}}\right) =  \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right) \nonumber
+	\end{align}
+	where \eqref{eq:appl_of_lemma_9} follows from Lemma~\ref{cor:equivalent_event} and \eqref{ineq:appl_jensens} uses Jensen's inequality. [{\eqref{ineq:missing_step} is yet to be shown but I suspect it's 100\% true from computer simulations}]
 	
+	We finish the proof by using the following asymptotic argument. Take $M$ to be a large enough integer, then we have, using the result of the induction proof,
+	\begin{align*}
+	\sum_{t=1}^\infty \P{v^K_{1,t} < \eta} & \le M +  \sum_{t=M+1}^\infty \frac{C_1}{t^{1 + h(\eta)}} \le M +  C_2
+	\end{align*}
+	where $C_2 = C_2(\eta)$ is the limit of the series and $C_1$ is a constant used in the definition of the big-Oh.
+\end{myproof}
+\subsubsection{Proof of the base case in Lemma~\ref{lemma:underestimation_base_case}}
+\begin{myproof}[Proof.]
+	For simplicity let's abbreviate $v^1_{1,t}$ as $v_{1,t}$. Define $\delta := (\theta_1 - \eta)/2$ and  $\eta' :=  \eta + \delta$. In other words, $\delta$ is half the distance between $\eta$ and $\theta_1$; $\eta'$ is the point half-way.
+	
+	The proof consists of showing two claims
 	\subsubsection*{Claim 1: $\{v_{1,t} < \eta\} \subseteq \left\{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}\right\}$:}
-	Let $V_t \sim $Beta$(S_1(t)+1,N_1(t) - S_1(t) + 1)$ be the agent's posterior on the optimal arm. Using Corollary~\ref{cor:equivalent_event}, we find that
+	Let $V_t \sim $Beta$(S_1(t)+1,N_1(t) - S_1(t) + 1)$ be the agent's posterior on the optimal arm. Using Corollary~\ref{cor:equivalent_event} and the simplified form for $K=1$ \[V_K((S_1(t)+1, N_1(t) - S_1(t) + 1); \eta, \gamma_t) = \E{V_t} + \gamma_t\Ee{(\eta - V_t)^+}\] we find that
 	\begin{align}
 	\left\{v_{1,t} < \eta \right\} & = \left\{ \Ee{V_t } + \gamma_t\Ee{(\eta - V_t)^+} < \eta \right\} \nonumber\\
 	& =  \left\{ (1-1/t)\Ee{(\eta - V_t)^+} < \Ee{\eta - V_t} \right\} \label{eq:def_gamma_t} \\
@@ -253,17 +309,13 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	& =  \frac{e^{-f_t D}}{(1-\eta')\delta  t} \nonumber  \nonumber\\
 	& = O\left( \frac{1}{t^{1+Dc_{\eta'}}} \right)  \label{bound:one_over_t_plus_eps} 
 	\end{align}
-	where $D = d(\eta',\theta_1) > 0$ and $c_{\eta'} = -\log^{-1}(1-\eta') > 0$ are constant. The bound \eqref{eqn:part1_decomp_the_cdf_of_y} holds due to Fact~\eqref{fact:relationship_with_binom_cdfs}. Bound \eqref{eqn:part1_app_of_lemma2} follows from an application of Lemma~\ref{lemma:ratio_of_cdfs} and the fact that $t > M$. Equation \eqref{eqn:part1_propert_of_inverse_sampling} follows from $S_1(t) \sim \text{Binomial}(N_1(t), \theta_1)$ and the inverse sampling technique. By combining bounds \eqref{bound:one_over_t_plus_eps}, \eqref{bound:bdd_by_zero} and \eqref{eq:decomp2}, we get
-	\begin{align*}
-	\sum_{t=1}^\infty \P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}} & \le M +  \sum_{t=M+1}^\infty \P{F^B_{N_1(t)+1, \eta'}(S_1(t)) < \frac{1}{\delta t}} \le M +  C_1' =: C_1
-	\end{align*}
-	where $C_1' = C_1'(\theta_1, \eta')$ is some other constant, namely the limit of the series.
-\end{proof}
+	where $D = d(\eta',\theta_1) > 0$ and $c_{\eta'} = -\log^{-1}(1-\eta') > 0$ are constant. The bound \eqref{eqn:part1_decomp_the_cdf_of_y} holds due to Fact~\eqref{fact:relationship_with_binom_cdfs}. Bound \eqref{eqn:part1_app_of_lemma2} follows from an application of Lemma~\ref{lemma:ratio_of_cdfs} and the fact that $t > M$. Equation \eqref{eqn:part1_propert_of_inverse_sampling} follows from $S_1(t) \sim \text{Binomial}(N_1(t), \theta_1)$ and the inverse sampling technique. By combining bounds \eqref{bound:one_over_t_plus_eps}, \eqref{bound:bdd_by_zero} and \eqref{eq:decomp2}, we get the big-Oh bound.
+\end{myproof}
 
 \subsection{Proof of Lemma~\ref{lemma:overestimation}} \label{proof:overestimation_proof}
 
 \begin{proof}[Proof.]
-	See the main proof of Theorem~\ref{thm:frequentist_optimal_bound} to recall the definition of constants $\eta_1$, $\eta_3$ and their relationship with $\theta_2$ and $\theta_1$. As an abbreviation we let $L = L(T)$. 
+	See the main proof of Theorem~\ref{thm:frequentist_optimal_bound} to recall the definition of constants $\eta_1$, $\eta_3$ and their relationship with $\theta_2$ and $\theta_1$. As an abbreviation we let $L = L(T)$. Moreover, because for any arm $i$ $v^K_{i,t} \le v^{K-1}_{i,t} \le \ldots \le v^1_{i,t}$, it will be sufficient to consider this proof only for $v^1_{2,t}$, which we also will abbreviate as $v_{2,t} \defeq v^1_{2,t}$.
 	
 	Firstly, by the law of total probability, we find that
 	\begin{align} 

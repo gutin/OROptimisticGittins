@@ -1,5 +1,5 @@
 \section{Computational Experiments} \label{sec:experiments}
-Our goal is to benchmark Optimistic Gittins Indices (OGI) against state-of-the-art algorithms in the Bayesian setting. Specifically, we compare ourselves against Thomson sampling, Bayes UCB, and IDS. Each of these algorithms has in turn been shown to substantially dominate other extant schemes. 
+Our goal is to benchmark Optimistic Gittins Indices (OGI) against state-of-the-art algorithms in Bayesian and frequentist setting. Specifically, we compare ourselves against Thomson sampling, Bayes UCB, and IDS. Each of these algorithms has in turn been shown to substantially dominate other extant schemes. We replicate some of the same experiments as in papers of \cite{russo2014learning,kaufmann2012thompson} and then add our own for evaulating the problem with multiple simultaneous arm pulls.  
 
 We consider the OGI algorithm for two values of the lookahead parameter $K$ ($1$ and $3$) , and in one experiment included for completeness, the case of exact Gittins indices ($K=\infty$). We used a common discount factor schedule in all experiments setting $\gamma_t = 1 - 1/(100 + t)$. The choice of $\alpha = 100$ is second order and our conclusions remain unchanged (and actually appear to improve in an absolute sense) with other choices (we show this in a second set of experiments). 
 
@@ -62,10 +62,30 @@ Each version of OGI outperforms other algorithms and the one that uses (actual) 
 	\caption{Bayesian regret. In the legend, OGI($K$)-$\alpha$ is the format used to indicate parameters $K$ and $\alpha$. The OGI Appox policy uses the approximation to the Gittins index from \cite{powell2012optimal}.}
 	\label{fig:bayesian_regret}
 \end{figure}
-\subsection{Longer Horizon and Robustness} \label{exp:robustness}
+\subsubsection{Longer horizon and robustness}
+To understand how Bayes' regret grows in the long run, we simulate Bernoulli and Gaussian bandit problems for a longer horizon of 5000 time steps with the results shown in Figure~\ref{fig:sub1}. 
 
-For this experiment, we simulate the earlier Bernoulli and Gaussian bandit setups with a longer horizon of 5000 steps and with 3 arms. The arms' parameters are drawn  at random in the same manner as the previous two experiments and regret is averaged over 100,000 independent trials. Results are shown in Figures~\ref{fig:sub1} and ~\ref{fig:sub2}. In the Bernoulli experiment of this section, due to the computational cost, we are only able to simulate OGI with $K = 1$. In addition, to show robustness with respect to the choice of tuning parameter $\alpha$, we show results for $\alpha = 50,100,150$. The message here is essentially the same as in the earlier experiments: the OGI scheme offers a non-trivial performance improvement at a tiny fraction of the computational effort required by its nearest competitor. We omit Thompson Sampling and Bayes UCB from the plots in order to more clearly see the difference between OGI and IDS. The complete graphs can be found in Appendix~\ref{sec:additional_plots}.
+In the Bernoulli experiment of this section, due to the computational cost, we are only able to simulate OGI with $K = 1$. In addition, to show robustness with respect to the choice of tuning parameter $\alpha$, we show results for $\alpha = 50,100,150$. The message here is essentially the same as in the earlier experiments: the OGI scheme offers a non-trivial performance improvement at a tiny fraction of the computational effort required by its nearest competitor. We omit Thompson Sampling and Bayes UCB from the plots in order to more clearly see the difference between OGI and IDS.
+
 In the Gaussian experiment, we again see that OGI dominates other policies and the tuning parameter has the same effect of lowering regret as it's increased. Also, just as in Table~\ref{table:gaussian_experiment1}, the OGI algorithm that uses the Gaussian-specific approximation has the best performance. 
+\subsection{Bayes UCB, \cite{kaufmann2012thompson} experiment} \label{exp:robustness}
+For this section that replicates some of the experiments in \cite{kaufmann2012thompson}, we simulate the Bernoulli bandit problem over 500 time steps and with 2 arms. The arms' parameters are fixed to the same values as in \cite{kaufmann2012thompson} and regret is averaged over 5,000 independent trials. We show the results in Figures~\ref{fig:sub3} and ~\ref{fig:sub4}, and as in the Bayes' regret case we see that OGI offers notable performance improvements of Thompson Sampling and Bayes UCB for this modest horizon, but where the arm parameters are fixed rather than being drawn at random.
+\begin{figure}[h!]
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{plots/kaufmann_fig1.jpeg}
+		\caption{Bernoulli experiment with two arms and $\mu_1 = 0.1$, $\mu_2 = 0.2$}
+		\label{fig:sub3}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{plots/kaufmann_fig1b.jpeg}
+		\caption{Bernoulli experiment with two arms and $\mu_1 = 0.1$, $\mu_2 = 0.2$}
+		\label{fig:sub4}
+	\end{subfigure}%
+	\caption{Frequentist regret. The OGI policy is configured $K=1$ and $\alpha=100$.}
+	\label{fig:kaufmann_regret}
+\end{figure}
 
 \subsection{Bandits with multiple arm pulls}
 We evaluate the heuristics outlined in Section~\ref{sec:multiple_pulls}, for the case when $m$ simulataneous arm pulls are allowed, and compare them against Thompson Sampling and IDS. The implementation of IDS in this setting was the same as for the linear bandits problem; see \citep{russo2014learning} for details. Thompson Sampling was straightfoward in that it merely involved sampling from the prior of all arms and picking the arms with the largest $m$ samples. 
