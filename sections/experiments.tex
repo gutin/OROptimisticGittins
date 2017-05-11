@@ -1,7 +1,7 @@
 \section{Computational Experiments} \label{sec:experiments}
-Our goal is to benchmark Optimistic Gittins Indices (OGI) against state-of-the-art algorithms in Bayesian and frequentist setting. Specifically, we compare ourselves against Thomson sampling, Bayes UCB, and IDS. Each of these algorithms has in turn been shown to substantially dominate other extant schemes. We replicate some of the same experiments as in papers of \cite{russo2014learning,kaufmann2012thompson} and then add our own for evaulating the problem with multiple simultaneous arm pulls.  
+Our goal is to benchmark Optimistic Gittins Indices (OGI) against state-of-the-art algorithms in Bayesian and frequentist setting. Specifically, we compare ourselves against Thomson sampling, Bayes UCB, and IDS. Each of these algorithms has in turn been shown to substantially dominate other extant schemes. We replicate some of the same experiments as in papers of \cite{russo2014learning,kaufmann2012thompson} and then add our own for evaluating the problem with multiple simultaneous arm pulls.  
 
-We consider the OGI algorithm for two values of the lookahead parameter $K$ ($1$ and $3$) , and in one experiment included for completeness, the case of exact Gittins indices ($K=\infty$). We used a common discount factor schedule in all experiments setting $\gamma_t = 1 - 1/(100 + t)$. The choice of $\alpha = 100$ is second order and our conclusions remain unchanged (and actually appear to improve in an absolute sense) with other choices (we show this in a second set of experiments). 
+We consider the OGI algorithm for two values of the look-ahead parameter $K$ ($1$ and $3$) , and in one experiment included for completeness, the case of exact Gittins indices ($K=\infty$). We used a common discount factor schedule in all experiments setting $\gamma_t = 1 - 1/(100 + t)$. The choice of $\alpha = 100$ is second order and our conclusions remain unchanged (and actually appear to improve in an absolute sense) with other choices (we show this in a second set of experiments). 
 
 A major consideration in running the experiments is that the CPU time required to execute IDS (the closest competitor) based on the current suggested implementation is orders of magnitudes greater than that of the index schemes or Thompson Sampling. The main bottleneck is that IDS uses numerical integration,  requiring the calculation of a CDF over, at least, hundreds of iterations. By contrast, the version of OGI with $K=1$ uses 10 iterations of the Newton-Raphson method. In the remainder of this section, we discuss the results.
 
@@ -88,7 +88,7 @@ For this section that replicates some of the experiments in \cite{kaufmann2012th
 \end{figure}
 
 \subsection{Bandits with multiple arm pulls}
-We evaluate the heuristics outlined in Section~\ref{sec:multiple_pulls}, for the case when $m$ simulataneous arm pulls are allowed, and compare them against Thompson Sampling and IDS. The implementation of IDS in this setting was the same as for the linear bandits problem; see \citep{russo2014learning} for details. Thompson Sampling was straightfoward in that it merely involved sampling from the prior of all arms and picking the arms with the largest $m$ samples. 
+We evaluate the heuristics outlined in Section~\ref{sec:multiple_pulls}, for the case when $m$ simultaneous arm pulls are allowed, and compare them against Thompson Sampling and IDS. The implementation of IDS in this setting was the same as for the linear bandits problem; see \citep{russo2014learning} for details. Thompson Sampling was straightforward in that it merely involved sampling from the prior of all arms and picking the arms with the largest $m$ samples. 
 
 For the experiment we have $A = 6$ binary arms with uniformly  distributed biases and fixed $m$ to be 3. We simulate 1000 independent trials and show the results in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. There is a significant spread in the performance between the OGI-inspired heuristics and both Thompson Sampling and IDS. Again, despite the closest competitor being IDS, the computational cost incurred in running IDS makes Whittle's heuristic, which has the some order of complexity as for the case $m=1$, seem like a particularly attractive algorithm. In fact the implementation of IDS for this experiment required taking Monte-Carlo samples, which can be prohibitively expensive.
 \begin{figure}
@@ -111,6 +111,6 @@ For the experiment we have $A = 6$ binary arms with uniformly  distributed biase
 		Quartile3 &         21.90 &         21.37 & 23.61 &     23.28 &       20.75 &       21.32 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Regret from the multiple arm pulls experiment. ``Whittle($K$)" refers to the Whittle heuristic-like policy described in Section~\ref{sec:multiple_pulls}, using $K$ lookahead steps. ``Bertsimas($K$)" refers to the alternative heuristic from the same section using the same number of lookahead steps.}
+	\caption{Regret from the multiple arm pulls experiment. ``Whittle($K$)" refers to the Whittle heuristic-like policy described in Section~\ref{sec:multiple_pulls}, using $K$ look-ahead steps. ``Bertsimas($K$)" refers to the alternative heuristic from the same section using the same number of look-ahead steps.}
 	\label{table:restless1_summary}
 \end{table}

@@ -68,7 +68,7 @@
 	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \frac{\gamma^{\tau_K - 1}}{1-\gamma}\underbrace{\Ee{  r_{\lambda,K}( \tau_K, R(y_{i,\tau_K}))}}_{ = R_{\lambda,K}(\tau_K, y_{i,\tau_K})}\given[\Big] y_{i,1} = y} \nonumber \\
 	& = \sup_{1 < \tau \le K+1}\Ee{\sum_{t=1}^{\tau} \gamma^{t-1} X_{i,t} +  \gamma^{\tau - 1} \frac{ R_{\lambda,K}(\tau, y_{i,\tau})}{1-\gamma}\given[\Big] y_{i,1} = y}  = \hat V^K_\lambda(y). \nonumber
 	\end{align}
-	The main step in the above is \eqref{bound:appl_of_perfect_info} where we bound on the inner conditional expection (in terms of $\theta_i$) by applying \eqref{bound:perfect_info}. We also used the fact that $\mu(\theta_i) \; | \; \mathcal F_{t-1} \sim R(y_{i,t})$ for all $t$. Finally observe that both $\hat V^K_\lambda(y)$ and $V_\lambda(y)$ are increasing in $\lambda$ for any fixed $y$. Therefore if $\lambda_1 = (1-\gamma) \hat V^K_{\lambda_1}(y)$ and $\lambda_2 = (1-\gamma) V_{\lambda_2}(y)$, then, because $V_{\lambda}(y) \le \hat V^K_{\lambda}(y)$ for any $\lambda$, it must be that  $\lambda_1 \ge \lambda_2$. A simple argument shows this, which we omit.
+	The main step in the above is \eqref{bound:appl_of_perfect_info} where we bound on the inner conditional expectation (in terms of $\theta_i$) by applying \eqref{bound:perfect_info}. We also used the fact that $\mu(\theta_i) \; | \; \mathcal F_{t-1} \sim R(y_{i,t})$ for all $t$. Finally observe that both $\hat V^K_\lambda(y)$ and $V_\lambda(y)$ are increasing in $\lambda$ for any fixed $y$. Therefore if $\lambda_1 = (1-\gamma) \hat V^K_{\lambda_1}(y)$ and $\lambda_2 = (1-\gamma) V_{\lambda_2}(y)$, then, because $V_{\lambda}(y) \le \hat V^K_{\lambda}(y)$ for any $\lambda$, it must be that  $\lambda_1 \ge \lambda_2$. A simple argument shows this, which we omit.
 \end{myproof}
 \subsection{Results for the frequentist regret bound proof}
 \subsubsection{Definitions and properties of Binomial distributions.}
@@ -94,7 +94,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 \end{myproof}
 
 \begin{corollary}[Corollary of Fact~\ref{fact:median_of_binomial_dist}] \label{cor:corollarly_of_binomial_median_property}
-	Let $n$ be a positive integer and $p \in (0,1)$. For any nonnegative integer $s < np$
+	Let $n$ be a positive integer and $p \in (0,1)$. For any non-negative integer $s < np$
 	\[
 	F_{n,p}(s) \le 1/2
 	\]
@@ -116,7 +116,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 
 \subsubsection{Ratio of Binomial CDFs.} \label{sec:ratio_of_bin_cdfs}
 \begin{lemma} \label{lemma:ratio_of_cdfs}
-	Let $0< q < p < 1$. Let $n$ be a positive integer such that $e^{\frac{n}{2} d(q,p)} \ge (n+1)^4$ and let $k$ be a nonnegative integer such that $k < nq$. It then follows that
+	Let $0< q < p < 1$. Let $n$ be a positive integer such that $e^{\frac{n}{2} d(q,p)} \ge (n+1)^4$ and let $k$ be a non-negative integer such that $k < nq$. It then follows that
 	\[
 	F^B_{n,q}(k)/F^B_{n,p}(k) >  e^{\frac{n}{2} d(q,p)}.
 	\]
@@ -220,7 +220,7 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 \begin{myproof}[Proof.]
 	This proof involves induction. We state what the base case is, in the following Lemma, but we defer its proof to the end of the section.
 	\begin{lemma} \label{lemma:underestimation_base_case}
-		Suppose the OGI algorithm uses only one lookahead step, and so $K = 1$. Then we have
+		Suppose the OGI algorithm uses only one look-ahead step, and so $K = 1$. Then we have
 		\[
 		\P{v^1_{1,t} < \eta} = \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right)
 		\]
@@ -332,7 +332,7 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 	\end{align}
 	where the second equality follows from Corollary~\ref{cor:equivalent_event} in Appendix~\ref{sec:amgi_results}. The following result lets us bound \eqref{eq:complicated_rv_in_part2},
 	\begin{lemma} \label{lem:lb_rv2}
-		Let $0 < x < y < 1$. For any nonnegative integers $s$ and $k$ with $s < \floor{kx}$, it holds that
+		Let $0 < x < y < 1$. For any non-negative integers $s$ and $k$ with $s < \floor{kx}$, it holds that
 		\begin{equation*}
 		\frac{\Ee{(y-V)^+ }}{  \Ee{(V - y)^+ } } \ge \frac{(y-x) \exp(k d(x,y))}{2}
 		\end{equation*}
@@ -382,7 +382,7 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 \end{myproof}
 \subsubsection{Proof of Lemma~\ref{lem:accurate_suboptimal_mean}.} \label{prf:proof_of_acc_sub_means}
 \begin{proof}[Proof.]
-	The steps in this proof follow a similar one in \cite{agrawal2013further} but we show them for completeness. We bound the number of times the suboptimal arm's mean is overestimated. Let $\tau_\ell$ be the time step in which the  suboptimal arm is sampled for the $\ell$\textsuperscript{th} time. Because for any $x$, $\lim_{n\to\infty}\frac{\floor{nx}}{nx} = 1$, we can let $N$ be a large enough integer so that if $\ell \ge N$, then $\eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1} > x' := (\theta_2 + \eta_1)/2 > \theta_2$. In that case,
+	The steps in this proof follow a similar one in \cite{agrawal2013further} but we show them for completeness. We bound the number of times the sub-optimal arm's mean is overestimated. Let $\tau_\ell$ be the time step in which the  sub-optimal arm is sampled for the $\ell$\textsuperscript{th} time. Because for any $x$, $\lim_{n\to\infty}\frac{\floor{nx}}{nx} = 1$, we can let $N$ be a large enough integer so that if $\ell \ge N$, then $\eta_1 \frac{\floor{\ell \eta_1}}{\ell \eta_1} > x' := (\theta_2 + \eta_1)/2 > \theta_2$. In that case,
 	\begin{align}
 	\sum_{t=1}^T\P{S_2(t) \ge \floor{N_2(t) \eta_1}, \; \pi^{\rm OG}_t = 2} & \le \Ee{\sum_{\ell=1}^T \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1}\ind{S_2(\ell) \ge \floor{N_1(\ell) \eta_1}} \ind{\pi^{\rm OG}_t = 2}} \nonumber \\
 	& = \Ee{\sum_{\ell=1}^T \ind{S_2(\tau_{\ell}) \ge \floor{(\ell-1) \eta_1}} \sum_{t=\tau_\ell}^{\tau_{\ell+1}-1} \ind{\pi^{\rm OG}_t = 2}} \nonumber\\
