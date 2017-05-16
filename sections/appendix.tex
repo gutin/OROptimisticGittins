@@ -215,7 +215,24 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 	\end{equation*}
 	The conclusion then follows from Lemma~\ref{eq:important_fact}.
 \end{myproof}
-
+The next Lemma will be the final property for the function $V_K$ that we prove. This will subsequently be used in the proof of Lemma~\ref{lemma:underestimation}.
+\begin{lemma} \label{lemma:vk_bound}
+	Let $i$ be any arm. For any state $y$, look-ahead parameter $K \in \mathbb{Z}_+$ and $\gamma, \eta \in [0,1]$, we have
+	\begin{equation*}
+		\Ee{V_K(y'; \gamma, \eta) \given y} \ge V_K(y; \gamma, \eta)
+	\end{equation*}
+	where $y'$ is the next state (posterior) for that arm.
+\end{lemma}
+\begin{myproof}[Proof.]
+	Let $\tau^\star(y)$ be the optimal stopping time for an initial state $y$ in the problem for computing $V_K$. Then
+	\begin{align}
+		\Ee{V_K(y'; \gamma, \eta) \given y} & = \Ee{\Ee{\sum_{s=1}^{\tau^\star(y')-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y')-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y')})}{1-\gamma} \given[\Bigg] y_{i,1} = y'} \given[\Bigg] y} \nonumber \\
+		& \ge  \Ee{\Ee{\sum_{s=1}^{\tau^\star(y)-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y)-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y)})}{1-\gamma} \given[\Bigg] y_{i,1} = y'} \given[\Bigg] y} \label{ineq:subopt_of_y}\\
+		& = \Ee{\sum_{s=1}^{\tau^\star(y)-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y)-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y)})}{1-\gamma} \given[\Bigg] y_{i,1} = y} \label{eq:tower_prop} \\
+		& = V_K(y; \gamma, \eta). \nonumber
+	\end{align}
+	The bound \eqref{ineq:subopt_of_y} is due to the sub-optimality of $\tau^\star(y)$ when the actual starting state is $y'$ and equation \eqref{eq:tower_prop} is the tower property.
+\end{myproof}
 \subsection{Proof of Lemma~\ref{lemma:underestimation}} \label{proof:underestimation_proof}
 \begin{myproof}[Proof.]
 	This proof involves induction. We state what the base case is, in the following Lemma, but we defer its proof to the end of the section.
@@ -240,7 +257,7 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 	& \le \P{ V_{K-1}(y_{1,t}; \eta, \gamma_{t})< \eta \left(\frac{t}{t-1}\right)} \nonumber \\
 	& \le \mathcal{O}\left(\frac{1}{t^{1 + h(\eta t/(t-1))}}\right) =  \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right) \nonumber
 	\end{align}
-	where \eqref{eq:appl_of_lemma_9} follows from Lemma~\ref{cor:equivalent_event} and \eqref{ineq:appl_jensens} uses Jensen's inequality. [{\eqref{ineq:missing_step} is yet to be shown but I suspect it's 100\% true from computer simulations}]
+	where \eqref{eq:appl_of_lemma_9} follows from Lemma~\ref{cor:equivalent_event} and \eqref{ineq:appl_jensens} uses Jensen's inequality. Lemma~\ref{lemma:vk_bound} give us \eqref{ineq:missing_step}.
 	
 	We finish the proof by using the following asymptotic argument. Take $M$ to be a large enough integer, then we have, using the result of the induction proof,
 	\begin{align*}
