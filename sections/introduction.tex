@@ -1,38 +1,69 @@
 \section{Introduction} \label{sec:intro}
-The Multi-Armed Bandit (MAB) problem is perhaps the simplest example of a learning problem that exposes the tension between exploration and exploitation. Recent years have seen a resurgence of interest in Bayesian MAB problems wherein we are endowed with a prior on arm rewards, and a number of index schemes that exploit this prior have been proposed and analyzed. These include Thompson Sampling \citep{thompson1933likelihood}, Bayes-UCB \citep{kaufmann2012thompson}, KL-UCB \citep{garivier2011kl}, and Information Directed Sampling \citep{russo2014learning}. The ultimate motivation for these algorithms appears to be two-fold: superior empirical performance and light computational burden. The strongest performance results available for these algorithms establish regret lower bounds that match the Lai-Robbins lower bound \citep{lai1985asymptotically}.  Even among this set of recently proposed algorithms, there is a wide spread in empirically observed performance. Table~\ref{table:intro_algorithm_summary} lists well-known algorithms in the literature and what is known about them.
 
-\begin{table}
-	\centering
-	\begin{tabular}{@{}llll}\toprule
-		Algorithm & Bayes/Frequentist & Regret Optimal & Framework \\ \midrule
-		KL-UCB & Frequentist & Yes & Index-based \\
-		UCB & Frequentist & Unknown & Index-based \\
-		MOSS & Frequentist & Unknown & Index-based \\
-		Thompson Sampling &Bayes & Yes & Posterior Sampling \\
-		Bayes UCB & Bayes & Yes & Index-based \\
-		IDS & Bayes & Unknown  & Mixed \\
-		Gittins Index & Bayes & No & Index-based \\
-		\bottomrule
-	\end{tabular}
-	\caption{Summary of some famous bandit policies and their properties.}
-	\label{table:intro_algorithm_summary}
-\end{table}
+%points to make: (1) current bayesian landscape appears to offer v. good algos. (2) Bayesian setup yields an MDP, but this has not been leveraged. (3) Gitins index is optimal for MDPs. (4) Challenges with Gittins. (5) Our contribution. 
 
-Interestingly, the design of the index policies referenced above has been somewhat ad-hoc as opposed to having emerged from a principled analysis of the underlying Markov Decision Process. Now if in contrast to requiring `small' regret for all sufficiently large time horizons, we cared about minimizing Bayesian regret over an infinite horizon, discounted at a fixed, pre-specified rate (or equivalently, maximizing discounted infinite horizon rewards), the celebrated Gittin's index theorem provides an {\em optimal, efficient} solution. Importing this celebrated result to the fundamental problem of designing algorithms that achieve low regret (either frequentist or Bayesian) simultaneously over all sufficiently large time horizons runs into two substantial challenges:
+The Multi-Armed Bandit (MAB) problem is perhaps the simplest example of a learning problem that exposes the tension between exploration and exploitation. In its simplest form, we are given a collection of random variables or `arms'. By adaptively sampling these random variables, we seek to eventually sample consistently from the random variable with the highest mean. This is typically formalized by asking that we minimize cumulative `regret'; a notion we make precise in a later section. 
 
-\noindent {\em High-Dimensional State Space: }Even minor `tweaks' to the discounted infinite horizon objective appear to render the corresponding Markov Decision problem for the Bayesian MAB problem intractable. For instance, it is known that a Gittins-like index strategy is sub-optimal for a fixed, finite-horizon \citep{berry1985bandit}. Moreover, the problem of minimizing regret simultaneously over all sufficiently large horizons is not well understood.
-\newline
-\newline
-\noindent {\em Computational Burden: }Even in the context of the discounted infinite horizon problem, the computational burden of calculating a Gittins index is substantially larger than that required for any of the index schemes for the multi-armed bandit discussed thus far. 
+Recent years have seen a resurgence of interest in {\em Bayesian} algorithms for the MAB problem. In this variant of the MAB problem, we are endowed with a prior on arm means, and a number of index schemes that exploit this prior have been proposed and analyzed. These include Thompson Sampling \citep{thompson1933likelihood}, Bayes-UCB \citep{kaufmann2012thompson}, KL-UCB \citep{garivier2011kl}, and Information Directed Sampling \citep{russo2014learning}. The ultimate motivation for these algorithms appears to be the empirical performance they offer. Specifically, these Bayesian algorithms appear to incur smaller regret than their frequentist counterparts such as \cite{UCB?}, even when regret is measured in a frequentist sense. This empirical evidence has, very recently, been reinforced by theoretical performance guarantees; the strongest performance results available for these algorithms establish upper bounds on frequentist regret that match the Lai-Robbins lower bound \citep{lai1985asymptotically}. Interestingly, even amongst the various Bayesian algorithm proposed there appears to be a wide range in empirical performance. For instance, empirical evidence presented in \cite{russo2014learning} suggests that the IDS algorithm offer a substantial improvement in frequentist regret over Thompson sampling and the Bayes-UCB algorithm, among others. These algorithms also vary substantially in their design (as opposed to being variations on a theme) and enjoy distinct performance guarantees.    
 
-The present paper attempts to make progress on these challenges. Specifically, we make the following contributions:
-\begin{itemize}
-	\item We propose a class of `optimistic' approximations to the Gittins index that can be computed with significantly less effort. In fact, the computation of the simplest of these approximations is no more burdensome than the computation of indices for the Bayes UCB algorithm, and several orders of magnitude faster than the nearest competitor, IDS. 
-	\item We establish that an arm selection rule that is greedy with respect to the simplest of these optimistic approximations achieves optimal regret in the sense of meeting the Lai-Robbins lower bound (including matching constants) provided the discount factor is increased at a certain rate.
-	\item We show empirically that even the simplest optimistic approximation to the Gittins index proposed here {\em outperforms the state-of-the-art incumbent schemes discussed in this introduction by a non-trivial margin}. We view this as our primary contribution -- the Bayesian MAB problem is fundamental making the performance improvements we demonstrate important.  
-\end{itemize}
+Now a prior on arm means endows us with the structure of a Markov Decision Process (MDP) and none of the Bayesian algorithms alluded to above exploit this structure. This is especially surprising in light of the celebrated Gittins Index Theorem. That breakthrough result proved the optimality of a certain index policy for a {\em horizon dependent} variant of the Bayesian MAB. Specifically, imagine that we cared about the expected (Bayes) regret incurred over an exponentially distributed horizon, where the mean horizon length is known to the algorithm designer. This problem is nominally a high dimensional MDP. Gittins, however, proved that a simple to compute index rule was optimal for this task resolving a problem that had remained open for several decades \cite{}. Why does the Gittins Index Theorem not immediately help resolve the design of an optimal algorithm for the variant of the Bayesian MAB problem that is the subject of the approaches discussed in the preceding paragraph? As we will discus more carefully in our literature review, this is certainly not from lack of research effort. In fact, one must deal with several substantial challenges:
+\begin{enumerate}
+\item
+Dependence on Horizon: The notion of regret optimality as popularized by \cite{lai1985asymptotically} is `anytime'. Colloquially, this can be thought of as follows: we desire an algorithm that performs well for {\em any} time horizon. This fact is fundamentally at odds with Gittins' variant of the MAB problem that (via a discount factor) effectively specifies a (exponentially distributed) horizon. Gittins' result is intimately connected to this choice of horizon; even seemingly minor changes appear to render the problem intractable. For instance, it is known that a Gittins-like index strategy is sub-optimal for a fixed, finite-horizon \citep{berry1985bandit}. Algorithms for other notions of optimality that one may reasonably conjecture are better aligned with `anytime' regret optimality (such as, say, Cesaro-overtaking optimality) are similarly elusive \cite{katehakis}.  
+\item
+Computation: Ignoring the issues made in the previous point, consider the task of computing a Gittins index at every point in time. 
+The computation of a Gittins index can be reduced to the solution of a certain infinite horizon stopping problem. For the Bayesian MAB, the state space for this problem must describe all possible posteriors one may encounter on a given arm. Assuming conjugate priors, one may hope for a countable state space, but tractable computation will require some form of state-space truncation. This computation is far more onerous than any of the aforementioned indices. Furthermore, it stands to reason that as time progresses one may require increasingly more accurate estimates of the Gittins index, which further complicates computation.  
+\end{enumerate}
+
+Against this backdrop, the present paper makes the following contribution: {\em We show that picking arms according to a certain tractable approximation to their Gittins index, computed for a time dependent discount factor, constitutes a regret optimal bandit policy. The resulting index rule is both simple to compute and in computational experiments appears to outperform all of the aforementioned bandit algorithms by a material margin.} In greater detail, we outline our contributions as follows:
+
+\begin{enumerate}
+
+\item Optimistic Approximations: We propose a sequence of `optimistic' approximations to the Gittins index. These optimistic approximations can be interpreted as providing a tightening sequence of upper bounds on the optimal stopping problem defining a Gittins index, yielding the index itself in the limit. The computation associated with the simplest of these approximations is no more burdensome than the computation of indices for the Bayes UCB algorithm, and several orders of magnitude faster than the lowest regret alternative, IDS. 
+\item Regret Optimality: We establish that an arm selection rule that is greedy with respect to any optimistic approximation to the Gittins index achieves optimal regret in the sense of meeting the Lai-Robbins lower bound (including matching constants). A crucial ingredient required for this scheme to work is that as time progresses, the discount factor employed in computing the index must be increased at a certain rate which we characterize precisely. This implicitly resolves the challenge of horizon dependence. 
+\item Empirical Performance: We show empirically that even the simplest optimistic approximation to the Gittins index outperforms the state-of-the-art incumbent schemes discussed in this introduction by a non-trivial margin. The margin of improvement increases further as one employs successfully tighter optimistic approximations, at the cost of computational effort. We illustrate this performance improvement on an ensemble of problems considered by previous authors. We view this as a valuable contribution: the Bayesian MAB problem is fundamental, making the performance improvements we demonstrate important.  
+\end{enumerate}
+
+In summary, we propose a new index rule for the Baysian MAB problem that employs Gittins indices in a novel way. This new index rule enjoys the strongest possible data-depndent regret guarantees while also offering excellent empirical performance. 
+
+%The ultimate motivation for these algorithms appears to be two-fold: superior empirical performance and light computational burden. The strongest performance results available for these algorithms establish regret lower bounds that match the Lai-Robbins lower bound \citep{lai1985asymptotically}.  Even among this set of recently proposed algorithms, there is a wide spread in empirically observed performance. Table~\ref{table:intro_algorithm_summary} lists well-known algorithms in the literature and what is known about them.
+
+%\begin{table}
+%	\centering
+%	\begin{tabular}{@{}llll}\toprule
+%		Algorithm & Bayes/Frequentist & Regret Optimal & Framework \\ \midrule
+%		KL-UCB & Frequentist & Yes & Index-based \\
+%		UCB & Frequentist & Unknown & Index-based \\
+%		MOSS & Frequentist & Unknown & Index-based \\
+%		Thompson Sampling &Bayes & Yes & Posterior Sampling \\
+%		Bayes UCB & Bayes & Yes & Index-based \\
+%		IDS & Bayes & Unknown  & Mixed \\
+%		Gittins Index & Bayes & No & Index-based \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{Summary of some famous bandit policies and their properties.}
+%	\label{table:intro_algorithm_summary}
+%\end{table}
+
+%Interestingly, the design of the index policies referenced above has been somewhat ad-hoc as opposed to having emerged from a principled analysis of the underlying Markov Decision Process. Now if in contrast to requiring `small' regret for all sufficiently large time horizons, we cared about minimizing Bayesian regret over an infinite horizon, discounted at a fixed, pre-specified rate (or equivalently, maximizing discounted infinite horizon rewards), the celebrated Gittin's index theorem provides an {\em optimal, efficient} solution. Importing this celebrated result to the fundamental problem of designing algorithms that achieve low regret (either frequentist or Bayesian) simultaneously over all sufficiently large time horizons runs into two substantial challenges:
+
+%\noindent {\em High-Dimensional State Space: }Even minor `tweaks' to the discounted infinite horizon objective appear to render the corresponding Markov Decision problem for the Bayesian MAB problem intractable. For instance, it is known that a Gittins-like index strategy is sub-optimal for a fixed, finite-horizon \citep{berry1985bandit}. Moreover, the problem of minimizing regret simultaneously over all sufficiently large horizons is not well understood.
+%\newline
+%\newline
+%\noindent {\em Computational Burden: }Even in the context of the discounted infinite horizon problem, the computational burden of calculating a Gittins index is substantially larger than that required for any of the index schemes for the multi-armed bandit discussed thus far. 
+
+%The present paper attempts to make progress on these challenges. Specifically, we make the following contributions:
+%\begin{itemize}
+%	\item We propose a class of `optimistic' approximations to the Gittins index that can be computed with significantly less effort. In fact, the computation of the simplest of these approximations is no more burdensome than the computation of indices for the Bayes UCB algorithm, and several orders of magnitude faster than the nearest competitor, IDS. 
+%	\item We establish that an arm selection rule that is greedy with respect to the simplest of these optimistic approximations achieves optimal regret in the sense of meeting the Lai-Robbins lower bound (including matching constants) provided the discount factor is increased at a certain rate.
+%	\item We show empirically that even the simplest optimistic approximation to the Gittins index proposed here {\em outperforms the state-of-the-art incumbent schemes discussed in this introduction by a non-trivial margin}. We view this as our primary contribution -- the Bayesian MAB problem is fundamental making the performance improvements we demonstrate important.  
+%\end{itemize}
+
+
 
 \subsection{Relevant Literature}
+
+{\color{red} TODO: More through review. Worth looking at the reviews in the Agrawal, Chapelle, and Kaufffman papers for instance. Also, organize the review a bit better around `themes'. There are at least three here: regret optimality and the bandit problem, bayesian algorithms for the bandit problem, gittins indices.}
 Thompson Sampling \cite{thompson1933likelihood} was proposed as a heuristic to the MAB problem in 1933, but was largely ignored until the last decade. An empirical study by Chapelle and Li \cite{chapelle2011empirical} highlighted Thompson Sampling's superior performance and led to a series of strong theoretical guarantees for the algorithm being proved in \cite{agrawalanalysis,agrawal2013further,kaufmann2012thompson} (for specific cases when Gaussian and Beta priors are used). Recently, these proofs were generalized to the 1D exponential family of distributions in \cite{korda2013thompson}. A few decades after Thompson Sampling was introduced, Gittins \cite{gittins1979bandit} showed that an index policy was optimal for the infinite horizon discounted MAB problem. Several different proofs for the optimality of Gittins index, were shown in \cite{tsitsiklis1994short,weber1992gittins,whittle1980multi,bertsimas1996conservation}. Inspired by this breakthrough, \cite{lai1985asymptotically,lai1987adaptive}, while ignoring the original MDP formulation, proved an asymptotic lower bound on achievable (non-discounted) regret and suggested policies that attained it.
 
 Simple and  efficient UCB algorithms were later developed in \cite{agrawal1995sample,auer2002finite,audibert2010regret}, with finite time regret bounds. These were followed by the KL-UCB (\cite{garivier2011kl}) and Bayes UCB (\cite{kaufmann2012thompson}) algorithms. The Bayes UCB paper drew attention to how well Bayesian algorithms performed in the frequentist setting. In that paper, the authors also demonstrated that a policy using indices similar to Gittins' had the lowest regret. The use of Bayesian techniques for bandits was explored further in \cite{russo2014learning} where the authors propose Information Directed Sampling, an algorithm that exploits complex information structures arising from the prior. There is also a very recent paper, \cite{lattimore2016regret}, which also focuses on regret minimization using approximated Gittins Indices. However, in that paper, the time horizon is assumed to be known and fixed, which is different from the focus in this paper on finding a policy that has low regret over all sufficiently long horizons.
