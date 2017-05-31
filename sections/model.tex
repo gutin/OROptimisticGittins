@@ -1,6 +1,6 @@
 \section{Model and Preliminaries} \label{sec:model_and_prelim}
 
-The multi-armed bandit problem is described via a handful of primitives. These include the notion of an `arm', the concept of an arm selection rule or policy and the notion of regret. This section seeks to formalize each of these notions. 
+The multi-armed bandit problem is described via a handful of primitives. These include the notion of an `arm', the concept of an arm selection rule or policy and the notion of regret. This section seeks to formalize each of these notions. {\color{red} TODO: my comments on what is countable/ not may need to be edited.}
 
 \noindent\textbf{\textsf{Arms:}}
 We consider a multi-armed bandit problem with $A > 1$ arms. We index arms by $i$ and denote by $\Ascr$ the set of all arm indices, $\{1,\ldots,A\}$. At each point in time, $t \in \N$, we are permitted to select or `pull' a single arm. We denote by $N_i(t)$ the cumulative number of pulls of arm $i$ up to and including time $t$. If arm $i$ were pulled at time $t$, we collect a reward  $X_{i,N_i(t)} \in \R$. 
@@ -29,12 +29,14 @@ We require that the process $\pi_t$ be $\mathcal{F}_t$-adapted,\footnote{in orde
 \noindent\textbf{\textsf{Frequentist Regret and Regret Optimality:}} Over time, the agent accumulates rewards, and we denote by 
 \[
 V(\pi, T, \theta) := 
-\E_\theta \left[
+\E \left[
 	\sum_{t=1}^T
 	X_{
 		\pi_t,
 		N_{\pi_t}(t)
 	}
+\Bigg |
+\theta
 \right]
 \] 
 the reward accumulated up to time $T$ when using policy $\pi$. Denote by $\mu^*(\theta)$ the maximum expected reward across arms for a given $\theta$:  $\mu^*(\theta) \triangleq \max_i \mu(\theta_i)$. The frequentist regret of a policy over $T$ time periods, for a given $\theta \in \Theta^A$, is the expected shortfall against always pulling the optimal arm for that $\theta$, namely
@@ -55,7 +57,7 @@ In a seminal paper, \cite{lai1985asymptotically} established a lower bound on ac
 }
 \geq
 \sum_{i}
-\frac{\mu^*(\theta) - \mu_i(\theta_i)}{d_{\rm KL}\left(p_{\theta_i},p_{\theta_{i^*}} \right)}
+\frac{\mu^*(\theta) - \mu(\theta_i)}{d_{\rm KL}\left(p_{\theta_i},p_{\theta_{i^*}} \right)}
 \end{equation}
 where $d_{\rm KL}$ is the Kullback-Liebler divergence. A policy $\pi'$ that achieves this lower bound is considered {\em regret optimal}. Specifically, $\pi'$ is regret optimal iff 
 \[
@@ -68,7 +70,7 @@ where $d_{\rm KL}$ is the Kullback-Liebler divergence. A policy $\pi'$ that achi
 }
 \leq
 \sum_{i}
-\frac{\mu^*(\theta) - \mu_i(\theta_i)}{d_{\rm KL}\left(p_{\theta_i},p_{\theta_{i^*}} \right)}
+\frac{\mu^*(\theta) - \mu(\theta_i)}{d_{\rm KL}\left(p_{\theta_i},p_{\theta_{i^*}} \right)}
 \]
 
 \noindent\textbf{\textsf{Bayesian Bandits: }}A {\em Bayesian} MAB problem is endowed with additional structure: we are given a prior on $\theta$. Specifically, we suppose that each $\theta_i$ is, in fact, an independent draw according to some prior distribution $q$ that is supported on $\Theta$. We assume that $q$ is conjugate to $p_{\theta_i}$ and with a minor abuse of notation, denote by $y$ the sufficient statistic specifying $q$. We denote by $\Yscr$ the set of all possible values of $y$. 
@@ -77,38 +79,53 @@ An algorithm that leverages knowledge of $q$ will frequently maintain a posterio
 
 Now, one can define a notion of regret that depends on the prior $q$. Specifically, the Bayes' risk (or Bayesian regret) for any policy $\pi$ is simply the expected regret over draws of $\theta$ according to the prior $q$:
 \[
-\Regret{\pi, T} := \int_\theta \Regret{\pi, T, \theta} q_i(\theta_i)d\theta_i
+\Regret{\pi, T} := \int_\Theta \Regret{\pi, T, \theta} q^A\left(d\theta\right)
 \]
+In yet another landmark paper, \cite{lai1985asymptotically} showed that for a restricted class of priors $q$ a similar class of algorithms to those found to be regret optimal in \cite{lai1985asymptotically} were also Bayes optimal. Interestingly, however, this class of algorithms ignores information about the prior altogether -- i.e. they do not require knowledge of $q$. A number of algorithms that {\em do} exploit prior information have in recent years received a good deal of attention; these include Thompson sampling \cite{thompson1933likelihood}, Bayes-UCB \cite{kaufmann2012thompson}, KL-UCB \cite{garivier2011kl}, and Information Directed Sampling \cite{russo2014learning}. All of these algorithms maintain a posterior on the mean of an arm, but leverage this posterior in different ways. It has been empirically observed that these approaches offer excellent performance, even in a frequentist sense. In fact, Thompson sampling \cite{thompson1933likelihood}, Bayes-UCB \cite{kaufmann2012thompson} and KL-UCB \cite{garivier2011kl} have each been shown to be regret optimal in the sense of meeting the lower bound  \eqref{eq:lai_robbins_lb}. 
  
-
-
-
-
-We write $V(\pi,T) := \E{V(\pi,T,\theta)}$. 
-
-The regret of a policy over $T$ time periods, for a given $\theta \in \Theta^A$, is the expected shortfall against always pulling the optimal arm, namely
+\noindent\textbf{\textsf{The Discounted Infinite Horizon Objective: }}Assuming the structure afforded by the Bayesian setting, i.e. the prior $q$, one may consider a distinct objective to Bayesian regret. Specifically, given some fixed discount factor $\gamma < 1$, one could consider the problem of maximizing discounted infinite horizon rewards. Assume we start with a prior q on the mean of any arm; and as before denote by $y$ the sufficient statistic corresponding to this prior. In the parlance of Markov Decisions Processes, we might refer to this as starting with ever arm in state $y$. For a given policy $\pi$, we define the expected discounted infinite horizon reward under that policy according to
 \[
-\Regret{\pi, T, \theta} := 
-T \mu^*(\theta) -
-V(\pi, T, \theta)
-\]
-
-
-
-We denote by $\mu^*(\theta)$ the maximum expected reward across arms;  $\mu^*(\theta) := \max_i \mu_i(\theta_i)$ and let $i^*$ be an optimal arm. The present paper will focus on the Bayesian setting, and so we suppose that each $\theta_i$ is an independent draw from some prior distribution $q$ over $\Theta$. 
-
-We define a policy, $\pi := (\pi_t, t \in \mathbb{N})$, to be a stochastic process taking values in $\mathcal{A}$. We require that $\pi$ be adapted to the filtration $\mathcal{F}_t$ generated by the history of arm pulls and their corresponding rewards up to and including time $t-1$.
-
-In yet another landmark paper, \cite{lai1985asymptotically} showed that for a restricted class of priors $q$ a similar class of algorithms to those found to be regret optimal in \cite{lai1985asymptotically} were also Bayes optimal. Interestingly, however, this class of algorithms ignores information about the prior altogether. A number of algorithms that {\em do} exploit prior information have in recent years received a good deal of attention; these include Thompson sampling \cite{thompson1933likelihood}, Bayes-UCB \cite{kaufmann2012thompson}, KL-UCB \cite{garivier2011kl}, and Information Directed Sampling \cite{russo2014learning}. 
-
-The Bayesian setting endows us with the structure of a (high dimensional) Markov Decision process. An alternative objective to minimizing Bayes risk, is the maximization of the cumulative reward discounted over an infinite horizon. Specifically, for any positive discount factor $\gamma < 1$, define
-\[
-V_\gamma(\pi) := 
-\E_q \left[
+V^\pi_\gamma(\mathbf{y}) 
+=
+\E_{\mathbf{y}}
+\left[
 	\sum_{t=1}^\infty \gamma^{t-1} X_{\pi_t,N_{\pi_t}(t)}
-\right].
+\right]
 \]
-The celebrated Gittin's index theorem provides an {\em optimal, efficient} solution to this problem that we will describe in greater detail shortly; unfortunately as alluded to earlier even a minor `tweak' to the objective above -- such as maximizing cumulative expected reward over a finite horizon renders the Gittins index sub-optimal \cite{nino2011computing}. 
+where $\mathbf{y}$ is an $A$-tuple all of with every entry equal to $y$. The subscript on the expectation indicates that $\theta_i$ is drawn according to a prior with sufficient statistic $y$ for each arm $i$. An optimal such policy must solve the problem
+\[
+V^*_\gamma(\mathbf{y}) 
+\triangleq 
+\max_{\pi \in \Pi} V^\pi_\gamma(\mathbf{y}) 
+\]
+This is, of course a challenging MDP in that it has a high dimensional state space ($\Yscr^A$). The celebrated Gittins index theorem (which we present in the next section) provides an approach to computing an optimal policy by instead simply solving a dynamic program on the state space $\Yscr$. 
 
-As a final point of notation, every scheme we consider will maintain a posterior on the mean of an arm at every point in time. We denote by $q_{i,s}$ the posterior on the mean of the $i$th arm after $s-1$ pulls of that arm; $q_{i,1} := q$. Since our prior on $\theta_i$ will frequently be conjugate to the distribution of the reward $X_i$, $q_{i,s}$ will permit a succinct description via a sufficient statistic we will denote by $y_{i,s}$; denote the set of all such sufficient statistics $\mathcal{Y}$. We will thus use $q_{i,s}$ and $y_{i,s}$ interchangeably and refer to the latter as the `state' of the $i$th arm after $s-1$ pulls.  
 
+%We write $V(\pi,T) := \E{V(\pi,T,\theta)}$. 
+%
+%The regret of a policy over $T$ time periods, for a given $\theta \in \Theta^A$, is the expected shortfall against always pulling the optimal arm, namely
+%\[
+%\Regret{\pi, T, \theta} := 
+%T \mu^*(\theta) -
+%V(\pi, T, \theta)
+%\]
+%
+%
+%
+%We denote by $\mu^*(\theta)$ the maximum expected reward across arms;  $\mu^*(\theta) := \max_i \mu_i(\theta_i)$ and let $i^*$ be an optimal arm. The present paper will focus on the Bayesian setting, and so we suppose that each $\theta_i$ is an independent draw from some prior distribution $q$ over $\Theta$. 
+%
+%We define a policy, $\pi := (\pi_t, t \in \mathbb{N})$, to be a stochastic process taking values in $\mathcal{A}$. We require that $\pi$ be adapted to the filtration $\mathcal{F}_t$ generated by the history of arm pulls and their corresponding rewards up to and including time $t-1$.
+%
+%
+%
+%The Bayesian setting endows us with the structure of a (high dimensional) Markov Decision process. An alternative objective to minimizing Bayes risk, is the maximization of the cumulative reward discounted over an infinite horizon. Specifically, for any positive discount factor $\gamma < 1$, define
+%\[
+%V_\gamma(\pi) := 
+%\E_q \left[
+%	\sum_{t=1}^\infty \gamma^{t-1} X_{\pi_t,N_{\pi_t}(t)}
+%\right].
+%\]
+%The celebrated Gittin's index theorem provides an {\em optimal, efficient} solution to this problem that we will describe in greater detail shortly; unfortunately as alluded to earlier even a minor `tweak' to the objective above -- such as maximizing cumulative expected reward over a finite horizon renders the Gittins index sub-optimal \cite{nino2011computing}. 
+%
+%As a final point of notation, every scheme we consider will maintain a posterior on the mean of an arm at every point in time. We denote by $q_{i,s}$ the posterior on the mean of the $i$th arm after $s-1$ pulls of that arm; $q_{i,1} := q$. Since our prior on $\theta_i$ will frequently be conjugate to the distribution of the reward $X_i$, $q_{i,s}$ will permit a succinct description via a sufficient statistic we will denote by $y_{i,s}$; denote the set of all such sufficient statistics $\mathcal{Y}$. We will thus use $q_{i,s}$ and $y_{i,s}$ interchangeably and refer to the latter as the `state' of the $i$th arm after $s-1$ pulls.  
+%
