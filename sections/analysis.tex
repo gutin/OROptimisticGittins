@@ -1,5 +1,5 @@
 \section{Analysis and Regret bounds} \label{sec:analysis_of_regret}
-We establish a regret bound for Optimistic Gittins Indices when the algorithm is given the parameter $K = 1$, the prior distribution $q$ is uniform and arm rewards are Bernoulli. The result shows that the algorithm, in that case, meets the Lai-Robbins lower bound and is thus asymptotically optimal, in both a frequentist and Bayesian sense. After stating the main theorem, we briefly discuss two generalizations to the algorithm.
+We establish a regret bound for Optimistic Gittins Indices when the prior distribution $q$ is uniform and arm rewards are Bernoulli. The result shows that the algorithm, in that case, meets the Lai-Robbins lower bound and is thus asymptotically optimal, in both a frequentist and Bayesian sense. After stating the main theorem, we briefly discuss two generalizations to the algorithm.
 
 In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x,y) := d_{\rm KL}(\text{Ber}(x),\text{Ber}(y))$. Also, we will refer to the Optimistic Gittins Index policy as $\pi^{\rm OG}$ and let the look-ahead parameter $K$ be any positive integer. Moreover, we denote the Optimistic Gittins Index of the $i$\textsuperscript{th} arm as $v^K_{i,t} := v^K_{1-1/t}(y_{i,t})$. Now we state the main result:
 \begin{theorem} \label{thm:frequentist_optimal_bound}
