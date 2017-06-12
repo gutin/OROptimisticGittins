@@ -64,7 +64,7 @@ To understand how Bayes' regret grows in the long run, we simulate Bernoulli and
 		\caption{Bernoulli experiment}
 		\label{fig:sub2}
 	\end{subfigure}%
-	\caption{Bayesian regret. In the legend, OGI($K$)-$\alpha$ is the format used to indicate parameters $K$ and $\alpha$. The OGI Appox policy uses the approximation to the Gittins index from \cite{powell2012optimal}.}
+	\caption{Bayesian regret. In the legend, OGI($K$)-$\alpha$ is the format used to indicate parameters $K$ and $\alpha$. The OGI Approx policy uses the approximation to the Gittins index from \cite{powell2012optimal}.}
 	\label{fig:bayesian_regret}
 \end{figure}
 
@@ -81,11 +81,11 @@ These experiments are motivated by similar ones in \cite{chapelle2011empirical}.
 	\label{fig:chapelle_and_li}
 \end{figure}
 
-We make a few observations from these results. The first being that, for all three algorithms, regret grows at a sublinear rate in $A$, which suggests that all algorithms can handle problems with a large number of arms. Secondly, the OGI scheme consistently dominates the other two and the margin by which OGI outperforms the others appears to grow with $A$, when $T$ is large enough. We notice that the improvement in regret, over the nearest competitor Thompson Sampling, is 3\% when there are 10 arms but this improvement increases to almost 18\% with 100 arms. Therefore our method appears to be especially effective when there is large number of arms relative to the horizon.
+We make a few observations from these results. The first being that, for all three algorithms, regret grows at a sub-linear rate in $A$, which suggests that all algorithms can handle problems with a large number of arms. Secondly, the OGI scheme consistently dominates the other two and the margin by which OGI outperforms the others appears to grow with $A$, when $T$ is large enough. We notice that the improvement in regret, over the nearest competitor Thompson Sampling, is 3\% when there are 10 arms but this improvement increases to almost 18\% with 100 arms. Therefore our method appears to be especially effective when there is large number of arms relative to the horizon.
 \subsection{Bandits with multiple arm pulls}
 We evaluate the heuristics outlined in Section~\ref{sec:multiple_pulls}, for the case when $m$ simultaneous arm pulls are allowed, and compare them against Thompson Sampling and IDS. Since this problem is a specific instance of the more general linear bandit problem (where each arm is an element of $\{0,1\}^A$), we implement the corresponding IDS algorithm for it.
 
-For this experiment we simulate $A = 6$ binary arms with uniformly distributed biases and fix $m =3$. The results, taken from 1000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. We notice a significant spread in the performance between the ``OGI-inspired" heuristics and both Thompson Sampling and IDS. The main computational bottleneck in using Whittle's heuristic comes from solving the OGI stopping problem, and this can be difficult if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters. By contrast, IDS is the slowset algorithm because it needs to generate hundreds of Monte Carlo samples per iteration.
+For this experiment we simulate $A = 6$ binary arms with uniformly distributed biases and fix $m =3$. The results, taken from 1000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. We notice a significant spread in the performance between the ``OGI-inspired" heuristics and both Thompson Sampling and IDS. The main computational bottleneck in using Whittle's heuristic comes from solving the OGI stopping problem, and this can be difficult if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters. By contrast, IDS is the slowest algorithm because it needs to generate hundreds of Monte Carlo samples per iteration.
 \begin{figure}
 	\centering
 	\input{plots/multiple_pulls.pgf}
