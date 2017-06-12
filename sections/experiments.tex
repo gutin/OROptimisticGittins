@@ -105,19 +105,18 @@ The results, produced from 1000 independent trials, are summarized in Figure~\re
 
 \begin{table}
 	\centering
-	\begin{tabular}{lcccccc}
+	\begin{tabular}{lrrrr}
 		\toprule
-		{} &  \textbf{Bertsimas(3)} &  \textbf{Bertsimas(4)} &   \textbf{IDS} &  \textbf{TS} &  \textbf{Whittle(1)} &  \textbf{Whittle(3)} \\
+		{} &   IDS &  Thompson &  Whittle(3) &  Whittle(4) \\
 		\midrule
-		Mean      &         11.96 &         11.78 & 15.50 &     15.12 &       11.07 &       11.23 \\
-		SD       &         18.41 &         18.30 & 22.14 &     13.08 &       14.85 &       14.71 \\
-		25\% &         -0.11 &         -0.11 &  1.32 &      6.02 &        1.02 &        1.08 \\
-		50\%    &          8.98 &          9.29 & 10.75 &     14.86 &        9.65 &        9.85 \\
-		75\% &         20.15 &         19.87 & 24.65 &     23.12 &       20.00 &       19.97 \\
-		Time (s)  &          0.28 &          0.45 &  1.27 &      0.01 &        0.10 &        0.17 \\
+		Mean      & 15.50 &     15.12 &       11.07 &       11.23 \\
+		SD       & 22.14 &     13.08 &       14.85 &       14.71 \\
+		25\% &  1.32 &      6.02 &        1.02 &        1.08 \\
+		50\%    & 10.75 &     14.86 &        9.65 &        9.85 \\
+		75\% & 24.65 &     23.12 &       20.00 &       19.97 \\
 		\bottomrule
 	\end{tabular}
 	
-	\caption{Regret statistics from the multiple arm pulls experiment. ``Whittle($K$)" refers to the Whittle heuristic-like policy described in Section~\ref{sec:multiple_pulls}, using $K$ look-ahead steps. ``Bertsimas($K$)" refers to the alternative heuristic from the same section using the same number of look-ahead steps. The last row shows the average runtime per iteration.}
+	\caption{Regret from the multiple arm pulls experiment. ``OGI($K$)" refers to the Whittle heuristic-like policy, using $K$ look-ahead steps.}
 	\label{table:restless1_summary}
 \end{table}
