@@ -1,11 +1,11 @@
 \section{Model and Preliminaries} \label{sec:model_and_prelim}
 
-The multi-armed bandit problem is described via a handful of primitives. These include the notion of an `arm', the concept of an arm selection rule or policy and the notion of regret. This section seeks to formalize each of these notions. {\color{red} TODO: my comments on what is countable/ not may need to be edited.}
+The multi-armed bandit problem is described via a handful of primitives. These include the notion of an `arm', the concept of an arm selection rule or policy and the notion of regret. This section seeks to formalize each of these notions.
 
 \noindent\textbf{\textsf{Arms:}}
 We consider a multi-armed bandit problem with $A > 1$ arms. We index arms by $i$ and denote by $\Ascr$ the set of all arm indices, $\{1,\ldots,A\}$. At each point in time, $t \in \N$, we are permitted to select or `pull' a single arm. We denote by $N_i(t)$ the cumulative number of pulls of arm $i$ up to and including time $t$. If arm $i$ were pulled at time $t$, we collect a reward  $X_{i,N_i(t)} \in \R$. 
 
-All random variables are generated on a common probability space $\left(\Omega, \Fscr, \mathbb{P}\right)$. For a given arm $i$, $(X_{i,s}, s \in \N)$ is assumed to be an i.i.d. sequence of random variables, each distributed according to a distribution $p_{\theta_i}(\cdot)$. Denote by $\mu(\theta_i)$ the mean of this distribution. Thus, $\theta_i$ is a parameter specifying the reward distribution for arm $i$ and we denote by $\Theta$ a countable set of all possible values of $\theta_i$. 
+All random variables are generated on a common probability space $\left(\Omega, \Fscr, \mathbb{P}\right)$. For a given arm $i$, $(X_{i,s}, s \in \N)$ is assumed to be an i.i.d. sequence of random variables, each distributed according to a distribution $p_{\theta_i}(\cdot)$. Denote by $\mu(\theta_i)$ the mean of this distribution. Thus, $\theta_i$ is a parameter specifying the reward distribution for arm $i$ and we denote by $\Theta$ the set of all possible values of $\theta_i$. 
 We let 
 \[
 \theta \triangleq \left(\theta_1,\theta_2, \dots, \theta_A\right)
@@ -45,7 +45,7 @@ the reward accumulated up to time $T$ when using policy $\pi$. Denote by $\mu^*(
 T \mu^*(\theta) -
 V(\pi, T, \theta)
 \]
-In a seminal paper, \cite{lai1985asymptotically} established a lower bound on achievable regret. {\color{red} CHECK: They considered the class of policies under which for {\em any} choice of $\theta$ and positive constant $a$, any policy in the class achieves $o(n^a)$ regret.} They showed that for any policy $\pi \in \Pi$, and any $\theta$ such that the set of arms with expected reward $\mu^*(\theta)$ is a singleton, we must have
+In a seminal paper, \cite{lai1985asymptotically} established a lower bound on achievable regret. They considered the class of policies under which for {\em any} choice of $\theta$ and positive constant $a$, any policy in the class achieves $o(n^a)$ regret. They showed that for any policy $\pi \in \Pi$, and any $\theta$ such that the set of arms with expected reward $\mu^*(\theta)$ is a singleton, we must have
 \begin{equation}
 \label{eq:lai_robbins_lb}
 \liminf_T

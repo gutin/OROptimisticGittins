@@ -411,3 +411,101 @@ The next Lemma will be the final property for the function $V_K$ that we prove. 
 	\end{align}
 \end{proof}
 The bound \eqref{bound:cf_thm} follows from the Chernoff-Hoeffding theorem and that $S_2(\tau_{\ell+1}) \sim \text{Binomial}(N_1(\ell+1), \theta_2) \sim \text{Binomial}(\ell, \theta_2)$.
+
+\section{Further experiment results} \label{sec:further_exp}
+\subsection{Bayes UCB experiment} \label{exp:bayes_ucb}
+This experiment is motivated by \cite{kaufmann2012thompson} and in it we simulate the Bernoulli bandit problem with a $T = 500$ and two arms. Since we are interested in measuring expected regret over the prior, we draw the arms' mean rewards at random from the uniform distribution. There are 5,000 independent trials and we show the results in Figures~\ref{fig:kaufmann_regret}. OGI offers notable performance improvements over both Thompson Sampling and IDS for this modest horizon.
+\begin{figure}[h!]
+	\centering
+	\input{plots/kaufmann_fig1.pgf}
+	\caption{Frequentist regret. The OGI policy is configured $K=1$ and $\alpha=100$.}
+	\label{fig:kaufmann_regret}
+\end{figure}
+
+\subsection{Additional tables for Section~\ref{sec:experiments}}
+\begin{table}
+	\centering
+	\begin{tabular}{rrrrrr} 
+		\toprule
+		{}    $\alpha$ &   $\beta$ &  OGI(1) &  OGI(3) &  OGI(5) &  Gittins \\
+		\midrule
+		   1 & 1 &   0.760 &   0.721 &   0.712 &    0.703 \\
+		   1 & 2 &   0.571 &   0.522 &   0.511 &    0.500 \\
+		   1 & 3 &   0.452 &   0.401 &   0.389 &    0.380 \\
+		   1 & 4 &   0.374 &   0.321 &   0.312 &    0.302 \\
+		  2 & 1 &   0.853 &   0.818 &   0.809 &    0.800 \\
+		  2 & 2 &   0.702 &   0.657 &   0.646 &    0.635 \\
+		  2 & 3 &   0.591 &   0.543 &   0.530 &    0.516 \\
+		  2 & 4 &   0.508 &   0.458 &   0.445 &    0.434 \\
+		  3 & 1 &   0.893 &   0.864 &   0.855 &    0.845 \\
+		  3 & 2 &   0.771 &   0.729 &   0.719 &    0.707 \\
+		  3 & 3 &   0.671 &   0.626 &   0.613 &    0.601 \\
+		  3 & 4 &   0.592 &   0.545 &   0.532 &    0.518 \\
+		 4 & 1 &   0.916 &   0.890 &   0.882 &    0.872 \\
+		  4 & 2 &   0.813 &   0.776 &   0.765 &    0.754 \\
+		  4 & 3 &   0.724 &   0.682 &   0.670 &    0.658 \\
+		  4 & 4 &   0.651 &   0.607 &   0.593 &    0.581 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Optimistic and exact Gittins Indices when $\gamma = 0.9$ for different Beta-Bernoulli parameters}
+	\label{table:ogi_table_for_gamma_9}
+\end{table}
+
+\begin{table}
+	\centering
+	\begin{tabular}{rrrrrr}
+		\toprule
+		{}    $\alpha$ &   $\beta$ &  OGI(1) &  OGI(3) &  OGI(5) &  Gittins \\
+		\midrule
+		 1.0 & 1.0 &   0.817 &   0.784 &   0.774 &    0.761 \\
+		 1.0 & 2.0 &   0.637 &   0.590 &   0.577 &    0.560 \\
+		 1.0 & 3.0 &   0.514 &   0.463 &   0.449 &    0.433 \\
+		 1.0 & 4.0 &   0.430 &   0.376 &   0.364 &    0.348 \\
+		 2.0 & 1.0 &   0.890 &   0.860 &   0.851 &    0.838 \\
+		 2.0 & 2.0 &   0.752 &   0.710 &   0.698 &    0.681 \\
+		 2.0 & 3.0 &   0.643 &   0.596 &   0.581 &    0.562 \\
+		2.0 & 4.0 &   0.558 &   0.509 &   0.494 &    0.475 \\
+		 3.0 & 1.0 &   0.921 &   0.896 &   0.887 &    0.874 \\
+		3.0 & 2.0 &   0.811 &   0.773 &   0.762 &    0.744 \\
+		 3.0 & 3.0 &   0.715 &   0.672 &   0.658 &    0.639 \\
+		 3.0 & 4.0 &   0.637 &   0.591 &   0.575 &    0.556 \\
+		4.0 & 1.0 &   0.938 &   0.916 &   0.908 &    0.895 \\
+		4.0 & 2.0 &   0.847 &   0.812 &   0.801 &    0.784 \\
+		4.0 & 3.0 &   0.763 &   0.722 &   0.709 &    0.690 \\
+		4.0 & 4.0 &   0.691 &   0.648 &   0.633 &    0.613 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Optimistic and exact Gittins Indices when $\gamma = 0.95$ for different Beta-Bernoulli parameters}
+	\label{table:ogi_table_for_gamma_95}
+\end{table}
+\begin{table}
+	\centering
+	\begin{tabular}{llrrrrr}
+		\toprule
+		&       &  Diff. B-UCB &  Diff. TS &    OGI &  Thompson &  Bayes UCB \\
+		\midrule
+		& mean &           28.9 &            3.0 &    99.7 &      102.7 &      128.5 \\
+		& SD &          407.2 &          410.6 &   493.8 &      297.5 &      302.3 \\
+		$A = 10$& 25\% &           20.0 &           12.0 &   -79.7 &      -62.6 &      -43.5 \\
+		& 50\% &           33.0 &           22.0 &    57.3 &       70.4 &       86.5 \\
+		& 75\% &           59.0 &           34.0 &   228.2 &      244.9 &      270.1 \\ \hline
+		& mean &           48.4 &           20.8 &   184.1 &      205.0 &      232.5 \\
+		& SD &          540.8 &          556.9 &   565.2 &      237.7 &      214.0 \\
+		$A = 40$& 25\% &           46.0 &           31.0 &    37.4 &       79.7 &       92.8 \\
+		& 50\% &           87.0 &           67.0 &   119.6 &      159.8 &      183.1 \\
+		& 75\% &          127.0 &           91.0 &   236.1 &      286.9 &      324.0 \\ \hline
+		& mean &           75.2 &           42.4 &   239.4 &      281.7 &      314.5 \\
+		& SD &          443.2 &          438.3 &   451.8 &      181.4 &      203.1 \\
+		$A = 70$ & 25\% &           50.0 &           37.0 &    98.9 &      157.5 &      170.3 \\
+		& 50\% &          124.0 &           97.0 &   180.3 &      241.0 &      265.7 \\
+		& 75\% &          182.0 &          139.0 &   276.6 &      366.0 &      412.3 \\ \hline
+		& mean &           93.6 &           60.6 &   287.1 &      347.7 &      380.7 \\
+		& SD &          448.3 &          442.7 &   447.2 &      184.3 &      208.8 \\
+		$A = 100$  & 25\% &           57.0 &           41.0 &   149.3 &      217.9 &      234.0 \\
+		& 50\% &          144.0 &          121.5 &   228.5 &      309.0 &      334.5 \\
+		& 75\% &          232.0 &          182.0 &   325.4 &      434.0 &      483.7 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Summary statistics (mean, standard deviation, lower, median and upper quartiles) for regret in the \cite{chapelle2011empirical} inspired experiment. For each value of $A$ we simulated 5,000 trials. The first two columns show statistics for the absolute difference in realized regret between the two competing algorithms and OGI.}
+	\label{table:additional_cli_table}
+\end{table}
