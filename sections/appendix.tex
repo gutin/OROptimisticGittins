@@ -1,5 +1,72 @@
 \appendix
-
+\section{Proof of Lemma~\ref{le:linearregret}} \label{proof:linearregret}
+\begin{myproof}[Proof.]
+	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha)$ prior where $\alpha$ is a parameter we set later. Then, it is simple to check that $\pi^{G,\gamma}$ must pull arm $2$ at the first time period. With probability $1/2$, we receive a reward of $0$, so that the posterior on arm $2$ is given by a {\rm Beta}$(\alpha,\alpha+1)$ prior. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
+	\[
+	\frac{\alpha}{1+\alpha}
+	+
+	\frac{
+		\gamma
+		\E
+		\left[
+		\max\left(
+		R(y_{2,1}),1/2
+		\right)
+		\Big| y_{2,1} = \left(\alpha, \alpha+1 \right)
+		\right]
+	}
+	{
+		1-\gamma
+	}.
+	\]
+	It follows that any optimal policy must pull arm $1$ if
+	\[
+	\frac{1/2}{1-\gamma}
+	>
+	\frac{\alpha}{1+\alpha}
+	+
+	\frac{
+		\gamma
+		\E
+		\left[
+		\max\left(
+		R(y_{2,1}),1/2
+		\right)
+		\Big| y_{2,1} = \left(\alpha, \alpha+1 \right)
+		\right]
+	}
+	{
+		1-\gamma
+	},
+	\]
+	an inequality which in turn is satisfied if
+	\[
+	1/2
+	>
+	\frac{\alpha}{1+\alpha}
+	+
+	\frac{
+		\gamma
+		\P{
+			R(y_{2,1})>1/2 \
+			\Big| y_{2,1} = \left(\alpha, \alpha+1 \right)
+		}
+	}
+	{
+		1-\gamma
+	},
+	\]
+	But the right hand side of the above expression goes to $0$ as $\alpha \tends 0$. Consequently, we can choose an $\alpha$ such that any optimal policy (for the discounted infinite horizon problem) chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. Consequently, $\pi^{G,\gamma}$ must incur $T$-period regret lower bounded by 
+	$\frac{T}{2}
+	\E
+	\left[
+	(
+	R((\alpha^*,\alpha^*+1)) - 1/2
+	)^+
+	\right].
+	$
+	The result follows. 
+\end{myproof}
 \section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
 \begin{myproof}[Proof.]
 	First, letting $\gamma_n = 1 - 1/n$, we show that
@@ -74,7 +141,7 @@
 	\end{align}
 	where \eqref{eqn:proof_lemma2_toer_prop} is the tower property and \eqref{ineq:proof_lem_2_use_of_first_bound} follows from the bound in \eqref{ineq:fundamntal_bound_for_lemma_2} because $\tau^\star_K \le \tau^\star$, almost surely. Equation \eqref{ineq:obvious_step} follows from statement \eqref{eqn:dist_equal_theta_i} and that the event $\tau^\star \ge K + 1$ is $\mathcal{F}_K$-measurable (we can decide whether to pull arm $i$ or retire based on prior information). Finally equation \eqref{eqn:use_of_def_of_R} is derived by substituting in the definition of $R_{\lambda,K}$ (as given in Section~\ref{sec:gittins_and_approx}) and noting that $\tau^\star_K = K+1$.
 	
-	We now condition on the complement of the previous event we considered, namely, $\tau^\star < (K+1)$. Under that event, $\tau^\star$ occured early enough before time $K+1$ and thus $\tau^\star_K = \tau^\star$. Therefore, it follows that
+	We now condition on the complement of the previous event we considered, namely, $\tau^\star < (K+1)$. Under that event, $\tau^\star$ occurred early enough before time $K+1$ and thus $\tau^\star_K = \tau^\star$. Therefore, it follows that
 	\begin{align} 
 	&\E\left[\sum_{t=\tau_K^\star}^{\tau^\star-1}\gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1} \frac{\lambda}{1-\gamma}
 	\given[\Bigg] \tau^\star < (K+1), \;y_{i,\tau^\star_K-1} \right] \nonumber  \\
@@ -182,7 +249,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 \section{Optimistic Gittins Index results.} \label{sec:amgi_results}
 For this section it is useful to define the value of a stopping problem used in the calculation of the Optimistic Gittins Index. For any fixed arm $i$, we write
 \begin{align*}
-V_K(y; x, \gamma) & := \sup_{1 < \tau \le K} \Ee{\sum_{t=1}^{\tau-1} (1-\gamma)X_{i,t} + \gamma^{\tau-1} R_{x, K}(\tau, y_{i,\tau})	\given y_{i,1} = y}.
+V_K(y; x, \gamma) & := \sup_{1 < \tau \le K} \Ee{\sum_{t=1}^{\tau-1} (1-\gamma)X_{i,t} + \gamma^{\tau-1} R_{x, K}(\tau, y_{i,\tau-1})	\given y_{i,1} = y}.
 \end{align*}
 Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamma$, is the solution in $x$ to $V_K(y; x, \gamma) = x$. We show some key properties of $V_K$, which we exploit later on. For fixed $y$, $K$ and $\gamma$, we will call $V(x) \defeq V(y; x, \gamma)$.
 \begin{fact}
@@ -192,21 +259,21 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 	We prove this by induction. For $K = 1$, we have $\tau = 2$ almost surely and so
 	\begin{align*}
 	V(x) & = V_1(y; x, \gamma) \\
-	& = (1-\gamma_t)\Ee{X_{i,1} \given y_{i,1 = y}} + \gamma_t \Ee{R_{x, 1}(2, y_{i,1}) \given y_{i,1} = y} \\
-	& = (1-\gamma_t)\Ee{X_{i,1} \given y_{i,1 = y}} + \gamma_t \Ee{\max(x, \E{X_{i,1}}) \given y_{i,1} = y}
+	& = (1-\gamma)\E_y\left[X_{i,1}\right] + \gamma \E_y\left[R_{x, 1}(2, y_{i,1})\right] \\
+	& = (1-\gamma)\E_y\left[X_{i,1} \right] + \gamma \E_y\left[\max(x, \Ee{X_{i,1}})\right].
 	\end{align*}
-	The function is convex because for any random variable $Z$ the term $\max(g, Z)$ is convex and taking expectations preserves convexity. Also, we verify through the bounded convergence theorem that $V(x)$ is differentiable and the event $\{\E X_{i,1}=z \given y_{i,1} = y\}$, at which $V$ is not differentiable, has measure zero.
+	The function is convex because for any random variable $Z$ the term $\max(g, Z)$ is convex and taking expectations preserves convexity. Also, we verify through the bounded convergence theorem that $V(x)$ is differentiable and the event $\{\E\left[ X_{i,1}\given y\right]= x\}$, at which the function is not differentiable, has measure zero.
 	
-	For $K > 1$, assume that $V_{K-1}$ is convex and differentiable. By writing the Bellman equation
+	For $K > 1$, assume that $V_{K-1}$ is convex and differentiable. By writing the Bellman equation,
 	\begin{align*}
-		V_K(y; x, \gamma) & = (1-\gamma_t)\Ee{X_{i,1} \given y_{i,1}=y} + \Ee{\gamma_t \max(x, V_{K-1}(y_{i,t+1}; x, \gamma)) \given y_{i,1} = y}
+		V_K(y; x, \gamma) & = (1-\gamma)\E_y\left[X_{i,1}\right] + \E\left[\gamma \max(x, V_{K-1}(y_{i,t+1}; x, \gamma)) \right],
 	\end{align*}
 	we again notice a maximum of convex functions in $x$. This form for $V_K$ implies that it is convex and differentiable.
 \end{myproof}
 \begin{lemma} \label{eq:important_fact}
 	Let $\gamma \in (0,1)$ and
 	\begin{equation} \label{eq:def_lambda_in_important_equiv}
-	\lambda = \sup\{ x \in [0,1] : V(x) \ge x\}
+	\lambda = \sup\{ x \in [0,1] : V(x) \ge x\}.
 	\end{equation} 
 	For all $x \in (0,1)$, the following equivalence holds
 	\begin{equation} \label{eq:equivlance_lambda1}
@@ -239,35 +306,35 @@ Therefore the Optimistic Gittins Index, in state $y$ with discount factor $\gamm
 	This completes the proof.
 \end{myproof}
 \begin{corollary} \label{cor:equivalent_event}
-	Let $v_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $x \in (0,1)$. The following equivalence holds
+	Let $v^K_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $x \in (0,1)$. The following equivalence holds
 	\[
 	\{v^K_{i,t} < x \} = \{V_K(y_{i,t}; x, \gamma_t) < x\}\]
 	where $y_{i,t}$ is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$.
 \end{corollary}
 \begin{myproof}[Proof.]
-	By the definition in Equation~\eqref{eqn:ogi_k1}, $v^K_{i,t}$ can be characterized with the relation 
+	By the definition in Equation~\eqref{eqn:ogi_k1} and because $V_K(y_{i,t}; x, \gamma_t)$ is convex and increasing in $x$, $v^K_{i,t}$  can be characterized with the relation 
 	\begin{equation*}% \label{eq:form4}
-	v_{i,t} = \sup\left\{ x \in [0,1] : x \le V_K(y_{i,t}; x, \gamma_t)  \right\}.
+	v^K_{i,t} = \sup\left\{ x \in [0,1] : x \le V_K(y_{i,t}; x, \gamma_t)  \right\}.
 	\end{equation*}
 	The conclusion then follows from Lemma~\ref{eq:important_fact}.
 \end{myproof}
 The next Lemma will be the final property for the function $V_K$ that we prove. This will subsequently be used in the proof of Lemma~\ref{lemma:underestimation}.
 \begin{lemma} \label{lemma:vk_bound}
-	Let $i$ be any arm. For any state $y$, look-ahead parameter $K \in \mathbb{Z}_+$ and $\gamma, \eta \in [0,1]$, we have
+	Let $i$ be any arm. For any look-ahead parameter $K \in \mathbb{Z}_+$ and $\gamma, \eta \in [0,1]$, we have
 	\begin{equation*}
-		\Ee{V_K(y'; \gamma, \eta) \given y} \ge V_K(y; \gamma, \eta)
+		\E_y\left[V_K(y_{i,2}; \gamma, \eta) \right] \ge V_K(y; \gamma, \eta)
 	\end{equation*}
-	where $y'$ is the next state (posterior) for that arm.
+	where we recall that $y_{i,2}$ is the summary statistic corresponding to the posterior obtained from pulling arm $i$ once.
 \end{lemma}
 \begin{myproof}[Proof.]
-	Let $\tau^\star(y)$ be the optimal stopping time for an initial state $y$ in the problem for computing $V_K$. Then
+	For any $\hat y \in \mathcal{Y}$, let $\tau^\star(\hat y)$ be the optimal stopping time for the problem (involving computing $V_K$) whose initial state is $y_{i,1} = \hat y$. With this notation in hand, we are able to say that
 	\begin{align}
-		\Ee{V_K(y'; \gamma, \eta) \given y} & = \Ee{\Ee{\sum_{s=1}^{\tau^\star(y')-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y')-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y')})}{1-\gamma} \given[\Bigg] y_{i,1} = y'} \given[\Bigg] y} \nonumber \\
-		& \ge  \Ee{\Ee{\sum_{s=1}^{\tau^\star(y)-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y)-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y)})}{1-\gamma} \given[\Bigg] y_{i,1} = y'} \given[\Bigg] y} \label{ineq:subopt_of_y}\\
-		& = \Ee{\sum_{s=1}^{\tau^\star(y)-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y)-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y)})}{1-\gamma} \given[\Bigg] y_{i,1} = y} \label{eq:tower_prop} \\
+		\E_y \left[V_K(y_{i,2}; \gamma, \eta) \right] & = \E_y\left[\E_{y_{i,2}}\left[\sum_{s=1}^{\tau^\star(y_{i,2})-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y')-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y')-1})}{1-\gamma} \right]\right]\nonumber \\
+		& \ge  \E_y\left[\E_{y_{i,2}}\left[\sum_{s=1}^{\tau^\star(y)-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y)-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y)})}{1-\gamma}\right] \right] \label{ineq:subopt_of_y}\\
+		& = \E_y\left[\sum_{s=1}^{\tau^\star(y)-1} \gamma^{s-1} X_{i,s} + \frac{\gamma^{\tau^\star(y)-1} R_{\eta, K}(\tau, y_{i,\tau^\star(y)})}{1-\gamma}\right] \nonumber \\
 		& = V_K(y; \gamma, \eta). \nonumber
 	\end{align}
-	The bound \eqref{ineq:subopt_of_y} is due to the sub-optimality of $\tau^\star(y)$ when the actual starting state is $y'$ and equation \eqref{eq:tower_prop} is the tower property.
+	The bound \eqref{ineq:subopt_of_y} is due to the sub-optimality of $\tau^\star(y)$ when the actual starting state is $y_{i,2}$.
 \end{myproof}
 \subsection{Proof of Lemma~\ref{lemma:underestimation}} \label{proof:underestimation_proof}
 \begin{myproof}[Proof.]
@@ -277,9 +344,9 @@ The next Lemma will be the final property for the function $V_K$ that we prove. 
 		\[
 		\P{v^1_{1,t} < \eta} = \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right)
 		\]
-		where $h$ is a positive yet decreasing function of $\eta$.
+		where $h$ is a positive, continuous, yet decreasing function of $\eta$.
 	\end{lemma}
-	Now we show the induction step. Suppose that for $K \ge 2$, it holds that
+	The main idea behind the induction step is that because $\gamma_t$ approaches $1$, asymptotically there is going to be a negligible difference between Optimistic Gittins indices with parameters $K$ and $K-1$, so that their respective probabilities of being below $\eta$ are very close. Now, suppose that for $K \ge 2$, it holds that
 	\[
 	\P{v^{K-1}_{1,t} < \eta} = \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right).
 	\]
@@ -291,9 +358,11 @@ The next Lemma will be the final property for the function $V_K$ that we prove. 
 	& \le \P{\frac{1}{t}\Ee{X_{1,t} \given y_{1,t}} + \left(1-\frac{1}{t}\right) \Ee{V_{K-1}(y_{1,t+1}; \eta, \gamma_{t}) \given y_{1,t} }< \eta} \nonumber \\
 	& \le \P{\frac{1}{t}\Ee{X_{1,t} \given y_{1,t}} + \left(1-\frac{1}{t}\right) V_{K-1}(y_{1,t}; \eta, \gamma_{t})< \eta} \label{ineq:missing_step} \\
 	& \le \P{ V_{K-1}(y_{1,t}; \eta, \gamma_{t})< \eta \left(\frac{t}{t-1}\right)} \nonumber \\
-	& \le \mathcal{O}\left(\frac{1}{t^{1 + h(\eta t/(t-1))}}\right) =  \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right) \nonumber
+	&  = \P{v^{K-1}_{1,t} < \eta\left(\frac{t}{t-1}\right)} \label{eqn:another_appl_of_lemma_9} \\
+	& = \mathcal{O}\left(\frac{1}{t^{1 + h(\eta t/(t-1))}}\right) \label{eqn:ind_hyp}\\
+	& =  \mathcal{O}\left(\frac{1}{t^{1 + h(\eta)}}\right) \label{eqn:continuity_of_h},
 	\end{align}
-	where \eqref{eq:appl_of_lemma_9} follows from Lemma~\ref{cor:equivalent_event} and \eqref{ineq:appl_jensens} uses Jensen's inequality. Lemma~\ref{lemma:vk_bound} give us \eqref{ineq:missing_step}.
+	where \eqref{eq:appl_of_lemma_9} and \eqref{eqn:another_appl_of_lemma_9} follows from Lemma~\ref{cor:equivalent_event}. Bound \eqref{ineq:appl_jensens} uses Jensen's inequality. Lemma~\ref{lemma:vk_bound} give us \eqref{ineq:missing_step}. Finally, equation \eqref{eqn:ind_hyp} uses the induction hypothesis and \eqref{eqn:continuity_of_h} relies on $h$ being a continuous positive function.
 	
 	We finish the proof by using the following asymptotic argument. Take $M$ to be a large enough integer, then we have, using the result of the induction proof,
 	\begin{align*}
@@ -375,7 +444,7 @@ The next Lemma will be the final property for the function $V_K$ that we prove. 
 	\sum_{t=1}^T \mathbb{P}(v_{2,t} & \ge \eta_3 ,\; N_2(t) \ge L,\; \pi^{\rm OG}_t = 2) \nonumber \\
 	& = \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) < \floor{N_2(t) \eta_1}, \; \pi^{\rm OG}_t = 2} \nonumber \\
 	& \qquad + \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) \ge \floor{N_2(t) \eta_1},\; \pi^{\rm OG}_t = 2} \nonumber \\
-	& \le \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) < \floor{N_2(t) \eta_1}} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; S_2(t) \ge \floor{N_2(t) \eta_1}} \label{eqn:splitting_not_underestimate}
+	& \le \sum_{t=1}^T \P{v_{2,t} \ge \eta_3 ,\; N_2(t) \ge L, \; S_2(t) < \floor{N_2(t) \eta_1}} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; S_2(t) \ge \floor{N_2(t) \eta_1}} \label{eqn:splitting_not_underestimate}.
 	\end{align}
 	Let $V_t \sim \text{Beta}(S_2(t) + 1, N_2(t)- S_2(t) + 1)$ denote the agent's posterior on the second arm at time $t$, then
 	\begin{align}

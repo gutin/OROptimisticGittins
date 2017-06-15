@@ -12,7 +12,7 @@ One way to compute the Gittins Index $v_\gamma(y)$ for an arm in state $y$ is vi
 %	\given y_{i,1} = y
 \right],
 \end{equation}
-where the subscript on the expectation indicates that the prior on the (say, $i$th) arm's mean at time $t=1$, $y_{i,1}$, equals $y$. If one thought of the notion of retiring as receiving a deterministic reward $\lambda$ in every period, then the value of $\lambda$ that solves the above equation could be interpreted as the per-period retirement reward that makes us indifferent between retiring immediately (i.e. at $t=1$), and the option of continuing to play arm $i$ with the potential of retiring at some future time. {\color{red} CHECK: The index is well defined provided $\P{R(y) > x}  \tends 0$ as $x \tends \infty$}. The Gittins index policy itself, which we denote by $\pi^{G,\gamma}$, can succinctly be stated as follows: 
+where the subscript on the expectation indicates that the prior on the (say, $i$th) arm's mean at time $t=1$, $y_{i,1}$, equals $y$. If one thought of the notion of retiring as receiving a deterministic reward $\lambda$ in every period, then the value of $\lambda$ that solves the above equation could be interpreted as the per-period retirement reward that makes us indifferent between retiring immediately (i.e. at $t=1$), and the option of continuing to play arm $i$ with the potential of retiring at some future time. The Gittins index policy itself, which we denote by $\pi^{G,\gamma}$, can succinctly be stated as follows: 
 \begin{center}
 {\em At time $t$, play an arm in the set 
 $\argmax_{i} v_\gamma
@@ -21,7 +21,7 @@ y_{i,N_i(t)}
 \right)$.
 } 
 \end{center}
-Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\gamma}$ to be regret optimal. In fact, as the result below indicates, one cannot even hope for such a policy to be consistent in the sense of \cite{lairobbins85}:
+Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\gamma}$ to be regret optimal. In fact, as the result below indicates, one cannot even hope for such a policy to be consistent in the sense of \cite{lai1985asymptotically}:
 \begin{lemma}
 \label{le:linearregret}
 	For any $\gamma > 0$, there exists an instance of the multi armed bandit problem for which 
@@ -33,77 +33,7 @@ Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\ga
 	\Omega(T).
 	\]
 \end{lemma}
-\begin{myproof}[Proof.]
-{\color{red} TODO: Move this proof to the appendix}
-Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha)$ prior where $\alpha$ is a parameter we set later. Then, it is simple to check that $\pi^{G,\gamma}$ must pull arm $2$ at the first time period. With probability $1/2$, we receive a reward of $0$, so that the posterior on arm $2$ is given by a {\rm Beta}$(\alpha,\alpha+1)$ prior. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
-\[
-\frac{\alpha}{1+\alpha}
-+
-\frac{
-\gamma
-\E
-\left[
-\max\left(
-R(y_{2,2}),1/2
-\right)
-\Big| y_{2,1} = \left(\alpha, \alpha+1 \right)
-\right]
-}
-{
-1-\gamma
-}.
-\]
-It follows that any optimal policy must pull arm $1$ if
-\[
-\frac{1/2}{1-\gamma}
->
-\frac{\alpha}{1+\alpha}
-+
-\frac{
-\gamma
-\E
-\left[
-\max\left(
-R(y_{2,2}),1/2
-\right)
-\Big| y_{2,1} = \left(\alpha, \alpha+1 \right)
-\right]
-}
-{
-1-\gamma
-},
-\]
-an inequality which in turn is satisfied if
-\[
-1/2
->
-\frac{\alpha}{1+\alpha}
-+
-\frac{
-\gamma
-\P{
-R(y_{2,2})>1/2 \
-\Big| y_{2,1} = \left(\alpha, \alpha+1 \right)
-}
-}
-{
-1-\gamma
-},
-\]
-
-But the right hand side of the above expression goes to $0$ as $\alpha \tends 0$. Consequently, we can choose an $\alpha$ such that any optimal policy (for the discounted infinite horizon problem) chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. Consequently, $\pi^{G,\gamma}$ must incur $T$-period regret lower bounded by 
-$\frac{T}{2}
-\E
-\left[
-(
-R((\alpha^*,\alpha^*+1)) - 1/2
-)^+
-\right].
-$
-The result follows. 
-%	\cite{berry1985bandit} show that the Gittins index is, in general, sub-optimal for bandit problems without both geometric discounting and an infinite horizon.
-\end{myproof}
-The proof above rests on the simple fact that for any fixed discount factor, if the posterior means on the two arms are sufficiently apart, the Gittins index policy will pick the arm with the larger posterior mean. The threshold beyond which the Gittins policy `exploits' depends on the discount factor and with a fixed discount factor there is a positive probability that the superior arm is never explored sufficiently so as to establish that it is, in fact, the superior arm. 
+The proof, given in Appendix~\ref{proof:linearregret}, rests on the simple fact that for any fixed discount factor, if the posterior means on the two arms are sufficiently apart, the Gittins index policy will pick the arm with the larger posterior mean. The threshold beyond which the Gittins policy `exploits' depends on the discount factor and with a fixed discount factor there is a positive probability that the superior arm is never explored sufficiently so as to establish that it is, in fact, the superior arm. 
 
 \subsection{Increasing Discount Factors yield sub-linear Bayesian Regreat}
 
