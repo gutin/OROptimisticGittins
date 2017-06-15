@@ -44,31 +44,67 @@
 
 \subsection{Proof of Lemma~\ref{lemma:approx_bound}} \label{prf:approx_bound}
 \begin{myproof}[Proof.]
-	Fix $\lambda > 0$ and an arm $i$. Let $V_\lambda(y)$ be the value of the RHS of \eqref{eqn:gittins_index} with the per-period reward  of $\lambda$, and define $\hat V^K_\lambda(y)$, similarly, for problem \eqref{eqn:ogi_general} (where $y$ is, as before, the state of an arm). Notice that because rewards are generated according to an unknown parameter $\theta_i$, which needs to be learned, that if we condition on a fixed $\theta_i$, we have for any stopping time $\tau$ that
+	We begin with a fundamental step. Let $\tau_1$ and $\tau_2$ be any stopping times such that $\tau_1$ precedes $\tau_2$ almost surely, that is $\tau_1 \le \tau_2$. Recall that the expected reward of the $i$th arm satisfies $\Ee{X_{i,t} \given \theta_i} = \mu(\theta_i)$ for all $t$. Let $\hat \theta_i \in \Theta$ denote a realization of the random variable $\theta_i$ and let us suppose first that $\lambda > \mu(\hat \theta_i)$. In this case, we have that
+	\begin{align*}
+	\Ee{\sum_{t=\tau_1}^{\tau_2-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2-1}\frac{\lambda}{1 - \gamma} \given[\Bigg] \theta_i = \hat \theta_i} & =\mu(\hat \theta_i) \Ee{ \sum_{t=\tau_1}^{\tau_2-1} \gamma^{t-1}  \given[\Bigg] \theta_i = \hat \theta_i} + \Ee{\frac{\gamma^{\tau_2-1}}{1-\gamma}\given[\Bigg] \theta_i = \hat \theta_i}\lambda \\
+	& =\mu(\hat \theta_i) \Ee{ \sum_{t=\tau_1}^{\tau_2-1} \gamma^{t-1} \given[\Bigg] \theta_i = \hat \theta_i } + \Ee{\sum_{t=\tau_2}^{\infty} \gamma^{t-1} \given[\Bigg] \theta_i = \hat \theta_i}\frac{\lambda}{1 - \gamma} \\
+	& \le \Ee{\gamma^{\tau_1-1} \given \theta_i = \hat \theta_i} \frac{\lambda}{1-\gamma} \\
+	& = \Ee{\gamma^{\tau_1-1} \given \theta_i = \hat \theta_i}  \frac{\max(\lambda, \mu(\hat \theta_i))}{1-\gamma}
+	\end{align*}
+	where the inequality is tight for $\tau_2 = \tau_1$. The same bound, for the other case when $\lambda \le \mu(\hat \theta_i)$, can be shown in a similar way. Thus we conclude, because $\hat \theta_i$ was arbitrary, that almost surely,
+	\begin{equation} \label{ineq:fundamntal_bound_for_lemma_2}
+	\Ee{\sum_{t=\tau_1}^{\tau_2-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2-1}\frac{\lambda}{1 - \gamma} \given[\Bigg] \theta_i}  \le \Ee{\gamma^{\tau_1-1} \given \theta_i }  \frac{\max(\lambda, \mu(\theta_i))}{1-\gamma}.
+	\end{equation}
+	Let $\tau^\star$ be a stopping time that achieves the supremum in the RHS of \eqref{eqn:gittins_index} and define the stopping time $\tau^\star_K \defeq (K+1) \wedge \tau^\star$. Consider the (conditional) cumulative rewards in the Gittins problem, from time $\tau^\star_K$ onwards, given the sufficient statistic observed at time $\tau_K^\star - 1$, that is, $\E\left[\sum_{t=\tau_K^\star}^{\tau^\star}  \gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1} \lambda/(1-\gamma)
+	\given[\Bigg] y_{i,\tau_K^\star-1} \right]$. We upper bound this random variable as follows. Firstly, we note that, at any time $s$ and for any statistic $\hat y \in \mathcal{Y}$, the following statement holds
+	\begin{equation}\label{eqn:dist_equal_theta_i}
+	\P{R(\hat y_{i,s}) \le r} = \P{\mu(\theta_i) \le r \given y_{i,s} = \hat y}, \qquad \forall r \in \Re
+	\end{equation}
+	meaning that the posterior distribution of the arm's expected reward $R(y_{i,s})$ is the same as $\mu(\theta_i)$ \emph{conditioned} on having observed statistic $\hat y$ about the arm. This is true by definition, but we emphasize the point here.
+	
+	Now, let us condition on the event $\tau^\star \ge (K+1)$. In that case we have $\tau^\star_K = K+1$ and therefore
 	\begin{align} 
-	\Ee{ \sum_{t=1}^{\tau-1} \gamma^{t-1}X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i} & \le  \Ee{ \sum_{t=1}^{\tau-1} \gamma^{t-1}\mu(\theta_i) + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i} \label{bound:perfect_info}
+	&\E\left[\sum_{t=\tau_K^\star}^{\tau^\star-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1} \frac{\lambda}{1-\gamma}
+	\given[\Bigg] \tau^\star \ge (K+1), \;y_{i,\tau^\star_K-1} \right] \nonumber \\
+	&\qquad = \E\left[ \Ee{\sum_{t=(K+1)}^{\tau^\star-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1}\frac{\lambda}{1 - \gamma} \given[\Bigg] \theta_i} 
+	\given[\Bigg]\tau^\star \ge (K+1), \; y_{i,\tau^\star_K-1} \right] \label{eqn:proof_lemma2_toer_prop} \\
+	&\qquad \le \E\left[ \gamma^{\tau^\star_K - 1} \frac{\max(\mu(\theta_i), \lambda)}{1 - \gamma}\given[\Bigg] \tau^\star \ge (K+1), \; y_{i,\tau^\star_K-1}  \right]  \label{ineq:proof_lem_2_use_of_first_bound} \\
+	&\qquad = \E\left[ \gamma^{\tau^\star_K - 1} \frac{\max(R(y_{i,\tau^\star_K-1}), \lambda)}{1 - \gamma}\given[\Bigg] \tau^\star \ge (K+1), \; y_{i,\tau^\star_K-1}  \right]  \label{ineq:obvious_step} \\
+	&\qquad = \Ee{\frac{\gamma^{\tau^\star_K-1}R_{\lambda,K}(\tau^\star_K, y_{i,\tau^\star_K-1})}{1-\gamma} \given[\Bigg]  \tau^\star \ge (K+1), \; y_{i,\tau^\star_K-1}} \label{eqn:use_of_def_of_R}
 	\end{align}
-	where the expectation is also taken over the agent's prior on $\theta_i$. Simply put, the best performance in the bandit game can be achieved if the parameter governing expected rewards is known from the beginning by the agent. Now recall that $R(y_{i,t})$ is a random variable drawn from the prior on the arm's mean reward at time $t$. We also define the function 
-	\[
-	r_{\lambda,K}(t,x) = \begin{cases}
-	\lambda & t < K \\
-	\max(x,\lambda) & \text{otherwise}
-	\end{cases}
-	\] 
-	Let $\tau$ be the stopping time at which the agent retires and define $\tau_K = \tau \wedge (K+1)$. We then bound $V_\lambda(y)$,
+	where \eqref{eqn:proof_lemma2_toer_prop} is the tower property and \eqref{ineq:proof_lem_2_use_of_first_bound} follows from the bound in \eqref{ineq:fundamntal_bound_for_lemma_2} because $\tau^\star_K \le \tau^\star$, almost surely. Equation \eqref{ineq:obvious_step} follows from statement \eqref{eqn:dist_equal_theta_i} and that the event $\tau^\star \ge K + 1$ is $\mathcal{F}_K$-measurable (we can decide whether to pull arm $i$ or retire based on prior information). Finally equation \eqref{eqn:use_of_def_of_R} is derived by substituting in the definition of $R_{\lambda,K}$ (as given in Section~\ref{sec:gittins_and_approx}) and noting that $\tau^\star_K = K+1$.
+	
+	We now condition on the complement of the previous event we considered, namely, $\tau^\star < (K+1)$. Under that event, $\tau^\star$ occured early enough before time $K+1$ and thus $\tau^\star_K = \tau^\star$. Therefore, it follows that
+	\begin{align} 
+	&\E\left[\sum_{t=\tau_K^\star}^{\tau^\star-1}\gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1} \frac{\lambda}{1-\gamma}
+	\given[\Bigg] \tau^\star < (K+1), \;y_{i,\tau^\star_K-1} \right] \nonumber  \\
+	&\qquad = \E\left[\gamma^{\tau^\star-1}  \frac{\lambda}{1-\gamma}
+	\given[\Bigg]\tau^\star < (K+1), \; y_{i,\tau^\star_K-1} \right] \nonumber \\
+	&\qquad = \E\left[\gamma^{\tau^\star_K-1}  \frac{R_{\lambda,K}(\tau^\star_K, y_{i,\tau^\star_K-1})}{1-\gamma}
+	\given[\Bigg]\tau^\star < (K+1), \; y_{i,\tau^\star_K-1} \right] \label{eqn:proof_lem_2_second_use_of_R_def}
+	\end{align}
+	where \eqref{eqn:proof_lem_2_second_use_of_R_def} is obtained by using the definition of $R_{\lambda,K}$ and the fact that we conditioned on $\tau^\star < (K+1)$. Thus, by the law of total expectation and \eqref{eqn:use_of_def_of_R}, \eqref{eqn:proof_lem_2_second_use_of_R_def}, we establish that
+	\begin{equation} \label{ineq:proof_lem_2_main_bound_in_proof}
+	\E\left[\sum_{t=\tau_K^\star}^{\tau^\star-1}\gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1} \frac{\lambda}{1-\gamma}
+	\given[\Bigg] \;y_{i,\tau^\star_K-1} \right] \le \Ee{\gamma^{\tau^\star_K-1}  \frac{R_{\lambda,K}(\tau^\star_K, y_{i,\tau^\star_K-1})}{1-\gamma} \given[\Bigg] y_{i,\tau^\star_K-1}}.
+	\end{equation}
+	We are ready to complete our main argument in this proof by using the above bound and `breaking up' the RHS of \eqref{eqn:gittins_index} into rewards from times before $\tau_K^\star$ and after (and bounding the latter terms). More precisely, we obtain that
 	\begin{align}
-	V_\lambda(y) & =  \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma}
-		\given[\Big] y_{i,1} = y} \nonumber \\
-	& = \sup_{\tau > 1}\Ee{\Ee{\sum_{t=1}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma}
-			\given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \nonumber \\
-	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} + \Ee{\sum_{t=\tau_K}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \nonumber \\
-	& \le \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} + \Ee{\sum_{t=\tau_K}^{\tau-1} \gamma^{t-1} \mu(\theta_i) + \gamma^{\tau-1} \frac{\lambda}{1-\gamma} \given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \label{bound:appl_of_perfect_info} \\
-	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \Ee{ \gamma^{\tau_K - 1} \frac{r_{\lambda,K}(\tau_K, \mu(\theta_i))}{1-\gamma} \given[\Big] \theta_i}\given[\Big] y_{i,1} = y} \nonumber \\
-	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \frac{\gamma^{\tau_K - 1}}{1-\gamma}\Ee{\Ee{  r_{\lambda,K}( \tau_K, \mu(\theta_i)) \given[\Big] \theta_i} \given[\Big] \mathcal{F}_{\tau_K-1}}} \nonumber \\
-	& = \sup_{\tau > 1}\Ee{\sum_{t=1}^{\tau_K-1} \gamma^{t-1} X_{i,t} +  \frac{\gamma^{\tau_K - 1}}{1-\gamma}\underbrace{\Ee{  r_{\lambda,K}( \tau_K, R(y_{i,\tau_K}))}}_{ = R_{\lambda,K}(\tau_K, y_{i,\tau_K})}\given[\Big] y_{i,1} = y} \nonumber \\
-	& = \sup_{1 < \tau \le K+1}\Ee{\sum_{t=1}^{\tau} \gamma^{t-1} X_{i,t} +  \gamma^{\tau - 1} \frac{ R_{\lambda,K}(\tau, y_{i,\tau})}{1-\gamma}\given[\Big] y_{i,1} = y}  = \hat V^K_\lambda(y). \nonumber
+	\E_{y}\left[\sum_{t=1}^{\tau^\star-1}\gamma^{t-1} X_{i,t} + \gamma^{\tau^\star-1}\frac{\lambda}{1-\gamma}\right] & = \E_{y}\left[\sum_{t=1}^{\tau^\star_K-1}\gamma^{t-1} X_{i,t} + \sum_{t'=\tau^\star_K}^{\tau^\star-1}\gamma^{t'-1} X_{i,t'} +  \gamma^{\tau^\star-1}\frac{\lambda}{1-\gamma}\right] \nonumber \\
+	& = \E_{y}\left[\sum_{t=1}^{\tau^\star_K-1}\gamma^{t-1} X_{i,t} + \Ee{\sum_{t'=\tau^\star_K}^{\tau^\star-1}\gamma^{t'-1} X_{i,t'} +  \gamma^{\tau^\star-1}\frac{\lambda}{1-\gamma} \given[\Bigg] y_{i,\tau^\star_K-1} }\right] \label{eqn:proof_lem_2_tower_prop_again} \\
+	& \le  \E_{y}\left[\sum_{t=1}^{\tau^\star_K-1}\gamma^{t-1} X_{i,t} + \Ee{\gamma^{\tau^\star_K-1}  \frac{R_{\lambda,K}(\tau^\star_K, y_{i,\tau^\star_K-1})}{1-\gamma} \given[\Bigg] y_{i,\tau^\star_K-1}}\right] \label{eqn:proof_lem2_using_the_main_argument} \\
+	& =  \E_{y}\left[\sum_{t=1}^{\tau^\star_K-1}\gamma^{t-1} X_{i,t} +  \gamma^{\tau^\star_K-1}  \frac{R_{\lambda,K}(\tau^\star_K, y_{i,\tau^\star_K-1})}{1-\gamma}\right] \label{eqn:proof_lem_2_tower_prop_yet_again} \\
+	& \le \sup_{1 < \tau \le (K+1)}  \E_{y}\left[\sum_{t=1}^{\tau-1}\gamma^{t-1} X_{i,t} +  \gamma^{\tau-1}  \frac{R_{\lambda,K}(\tau, y_{i,\tau-1})}{1-\gamma}\right] \nonumber
 	\end{align}
-	The main step in the above is \eqref{bound:appl_of_perfect_info} where we bound on the inner conditional expectation (in terms of $\theta_i$) by applying \eqref{bound:perfect_info}. We also used the fact that $\mu(\theta_i) \; | \; \mathcal F_{t-1} \sim R(y_{i,t})$ for all $t$. Finally observe that both $\hat V^K_\lambda(y)$ and $V_\lambda(y)$ are increasing in $\lambda$ for any fixed $y$. Therefore if $\lambda_1 = (1-\gamma) \hat V^K_{\lambda_1}(y)$ and $\lambda_2 = (1-\gamma) V_{\lambda_2}(y)$, then, because $V_{\lambda}(y) \le \hat V^K_{\lambda}(y)$ for any $\lambda$, it must be that  $\lambda_1 \ge \lambda_2$. A simple argument shows this, which we omit.
+	where Equations \eqref{eqn:proof_lem_2_tower_prop_again}, \eqref{eqn:proof_lem_2_tower_prop_yet_again} use the tower property and \eqref{eqn:proof_lem2_using_the_main_argument} is gotten immediately by using the bound of \eqref{ineq:proof_lem_2_main_bound_in_proof}. 
+	
+	Let us now use the shorthand $V^K_{\gamma}( y, \lambda) \defeq \sup_{1 < \tau \le (K+1)} \E_{y}\left[\sum_{t=1}^{\tau-1}\gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{R_{\lambda,K}(\tau, y_{\tau-1})}{1-\gamma}\right]$ and $V_{\gamma}(y, \lambda) \defeq \sup_{\tau > 1} \E_{y}\left[\sum_{t=1}^{\tau-1}\gamma^{t-1} X_{i,t} +  \gamma^{\tau-1} \frac{\lambda}{1-\gamma}\right]$. We have just shown that $V^K_{\gamma}( y, \lambda) \ge V_{\gamma}(y, \lambda)$ for all $K \ge 1$. 
+	
+	To finish the proof let us assume that $v^K_\gamma(y) < v_\gamma(y)$ in order to get a contradiction. As shown in \cite{gittins2011multi}, Chapter 2, the function $V_\gamma(y, \lambda) - \lambda/(1-\gamma)$ is convex and decreasing in $\lambda$, therefore it has a single root, which we know is $v_\gamma(y)$. Because $v^K_\gamma < v_\gamma(y)$, by our current assumption, we have that 
+	\begin{equation}
+		V_\gamma(y, v^K_\gamma(y)) > v^K_\gamma(y)/(1-\gamma) = V^K_\gamma(y, v^K_\gamma(y)),
+	\end{equation}
+	which contradicts what we just showed, that $V^K_{\gamma}( y, \lambda) \ge V_{\gamma}(y, \lambda)$ for all $\lambda$.
 \end{myproof}
 \subsection{Results for the frequentist regret bound proof}
 \subsubsection{Definitions and properties of Binomial distributions.}
