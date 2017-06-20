@@ -89,11 +89,12 @@ The problem above admits a simple, attractive interpretation: nature reveals the
 \begin{lemma} \label{lemma:approx_bound}
 	For all discount factors $\gamma$ and states $y \in \mathcal Y$, we have 
 	\[
-	v_\gamma^{K}(y) \geq v_\gamma(y) \quad \forall K.
+	v^1_\gamma(y) \geq v^2_\gamma(y) \ldots \geq v_\gamma^{K}(y) \geq v_\gamma(y) \quad \forall K,
 	\]
+	and, furthermore, $v^K_\gamma(y) \to v_\gamma(y)$ as $K \to \infty$.
 \end{lemma}
 \begin{myproof}[Proof]
-	See Appendix~\ref{prf:approx_bound}%.\halmos
+	See Appendix~\ref{prf:approx_bound}
 \end{myproof}
 
 Now, since we need to look ahead at most $K$ steps in solving the stopping problem implicit in the definition above, the computational burden in index computation is limited. In fact, we will see in a subsequent section that {\em even the choice of $K=1$} will make for a compelling policy. 
