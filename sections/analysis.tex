@@ -1,7 +1,7 @@
 \section{Analysis and Regret bounds} \label{sec:analysis_of_regret}
-We establish a regret bound for Optimistic Gittins Indices when the prior distribution $q$ is uniform and arm rewards are Bernoulli. The result shows that the algorithm, in that case, meets the Lai-Robbins lower bound and is thus asymptotically optimal, in both a frequentist and Bayesian sense. After stating the main theorem, we briefly discuss two generalizations to the algorithm.
+We establish a regret bound for the OGI algorithm that applies when the prior distribution $q$ is uniform and arm rewards are Bernoulli. The result shows that the algorithm, in that case, meets the Lai-Robbins lower bound and is thus asymptotically optimal in both a frequentist and Bayesian sense. After stating the main theorem, we briefly discuss two generalizations to the algorithm.
 
-In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x,y) := d_{\rm KL}(\text{Ber}(x),\text{Ber}(y))$. Also, we will refer to the Optimistic Gittins Index policy as $\pi^{\rm OG}$ and let the look-ahead parameter $K$ be any positive integer. Moreover, we denote the Optimistic Gittins Index of the $i$\textsuperscript{th} arm as $v^K_{i,t} := v^K_{1-1/t}(y_{i,t})$. Now we state the main result:
+In the sequel, we will simplify notation  and let $d(x,y) := d_{\rm KL}(\text{Ber}(x),\text{Ber}(y))$ denote the KL divergence between Bernoulli random variables with parameters $x$ and $y$. We will also refer to the OGI policy as $\pi^{\rm OG}$ and will write the Optimistic Gittins index of the $i$\textsuperscript{th} arm at time $t$ as $v^K_{i,t} \defeq v^K_{1-1/t}(y_{i,t})$. Therefore, we will suppress the index's dependence on $y_{i,t}$. We are ready to state the main result below.
 \begin{theorem} \label{thm:frequentist_optimal_bound}
 	Let $\epsilon > 0$. For the multi-armed bandit problem with Bernoulli rewards and any parameter vector $\theta \subset [0,1]^A$, there exists $T^* = T^*(\epsilon, \theta)$ and $C = C(\epsilon,\theta)$ such that for all $T \ge T^*$,
 	\begin{equation}
@@ -9,23 +9,21 @@ In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x
 	\end{equation}
 	where $C(\epsilon,\theta)$ is a constant that is only determined by $\epsilon$ and the parameter $\theta$.
 \end{theorem}
-\begin{myproof}[Proof.]
-	Because we prove frequentist regret, the first few steps of the proof will be similar to that of UCB and Thompson Sampling.
-	
-	Assume w.l.o.g that arm 1 is uniquely optimal, and therefore $\theta^* = \theta_1$. Fix an arbitrary sub-optimal arm, which for convenience we will say is arm 2. Let $N_i(t)$ denote the number of pulls of the $i$th arm, by (but not including) time $t$. Finally, we let $S_i(t)$ be the corresponding total reward accumulated from the $i$th arm from the $N_i(t)$ pulls. That is,
+\begin{myproof}[Proof.]	
+	Assume, without loss of generality, that the first arm is uniquely optimal so that $\theta^* = \theta_1$. Fix an arbitrary sub-optimal arm, which for convenience we will say is the second arm. Recall that $N_i(t)$ denotes the number of pulls of the $i$th arm, by time $t$. We similarly define the counting process $S_i(t)$ as the total rewards accumulated from the $i$th arm by time $t$ (from the $N_i(t)$ pulls). That is,
 	\[
-	N_i(t) = \sum_{t'=1}^{t-1} \ind{\pi^{\rm OG}_{t'} = i}, \qquad S_i(t) = \sum_{t'=1}^{N_i(t)} X_{i,t'}.
+	\qquad S_i(t) = \sum_{t'=1}^{N_i(t)} X_{i,t'}.
 	\]
-	Let $\eta_1,\eta_2,\eta_3 \in (\theta_2, \theta_1)$ be chosen such that $\eta_1 < \eta_2 < \eta_3$, $d(\eta_1, \eta_3) = \frac{d(\theta_2, \theta_1)}{1+\epsilon}$ and $d(\eta_2,\eta_3) =\frac{d(\eta_1, \eta_3)}{1+\epsilon} $. Next, we define $L(T) := \frac{\log T}{d(\eta_2,\eta_3)}$.
+	We will strategically fix three constants in between the expected rewards of the first and second arms, namely $\theta_1$ and $\theta_2$. In particular, we let $\eta_1,\eta_2,\eta_3 \in (\theta_2, \theta_1)$ be chosen such that $\eta_1 < \eta_2 < \eta_3$, $d(\eta_1, \eta_3) = \frac{d(\theta_2, \theta_1)}{1+\epsilon}$ and $d(\eta_2,\eta_3) =\frac{d(\eta_1, \eta_3)}{1+\epsilon} $. Next, we define the constant $L(T) := \frac{\log T}{d(\eta_2,\eta_3)}$ to be, intuitively, the optimal length of the exploration period.
 	
-	We upper bound the expected number of pulls of the second arm as follows,
+	The main step in this proof will be to upper bound the expected number of pulls of the second arm, as follows,
 	\begin{align}
 	\E[N_2(T)] & \le L(T) + \sum_{t=\floor{L(T)}+1}^T \P{\pi^{\rm OG}_t = 2, \; N_2(t) \ge L(T)} \nonumber \\
 	& \le L(T) +   \sum_{t=1}^T \P{v^K_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v^K_{1,t} \ge \eta_3, \; N_2(t) \ge L(T)} \nonumber \\
 	& \le L(T) +   \sum_{t=1}^T \P{v^K_{1,t} < \eta_3} + \sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\; v^K_{2,t} \ge \eta_3, \; N_2(t) \ge L(T)} \nonumber \\
-	& \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} + \underbrace{\sum_{t=1}^\infty \P{v^K_{1,t} < \eta_3}}_{A} + \underbrace{\sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\;v^K_{2,t} \ge \eta_3, \; N_2(t) \ge L(T)}}_{B} \label{bound:final_step_in_freq_regret}
+	& \le \frac{(1+\epsilon)^2 \log T}{d(\theta_2, \theta_1)} + \underbrace{\sum_{t=1}^\infty \P{v^K_{1,t} < \eta_3}}_{A} + \underbrace{\sum_{t=1}^T \P{\pi^{\rm OG}_t = 2,\;v^K_{2,t} \ge \eta_3, \; N_2(t) \ge L(T)}}_{B}. \label{bound:final_step_in_freq_regret}
 	\end{align}
-	All that remains is to show that terms $A$ and $B$ are bounded by constants. These bounds are given in Lemmas~\ref{lemma:underestimation} and \ref{lemma:overestimation} whose proofs we describe at a high-level with the details in the Appendix.
+	All that remains is to show that terms $A$ and $B$ are bounded by constants. These bounds are given in Lemmas~\ref{lemma:underestimation} and \ref{lemma:overestimation} whose proofs we will now describe at a high-level and defer the complete proofs to the Appendix.
 	\begin{lemma}[Bound on term A] \label{lemma:underestimation}
 		For any $\eta < \theta_1$, the following bounds holds for some constant $C_1 = C_1(\epsilon, \theta_1)$
 		\begin{equation*}
@@ -33,9 +31,10 @@ In the sequel, whenever $x,y \in (0,1)$, we will simplify notation  and let $d(x
 		\end{equation*}
 	\end{lemma}
 	\begin{myproof}[Proof outline]
-		The goal is to bound $\P{v^K_{1,t} < \eta}$ by an expression that decays fast enough in $t$ so that the series converges. To prove this, we express the event $\{v^K_{1,t} < \eta\}$ in the form $\{W_t < 1/t\}$ for some sequence of random variables $W_t$. It  turns out that for large enough $t$, $\P{W_t < 1/t} \le \P{c U^{1/(1+h)} < 1/t}$ where $U$ is a uniform random variable, $c, h > 0$ and therefore $\P{v^K_{1,t} < \eta} = O\left(\frac{1}{t^{1+h}}\right)$. The full proof is in Appendix~\ref{proof:underestimation_proof}.
+		The goal is to bound $\P{v^K_{1,t} < \eta}$ by an expression that decays fast enough in $t$ so that the series converges. Specifically, we show that there exists a positive constant $h$ so that $\P{v^K_{1,t} < \eta} = O\left(\frac{1}{t^{1+h}}\right)$ using an induction argument. Proving the base case requires using properties specific to Beta and Bernoulli random variables while the inductive step is more general.
+		The full proof is contained in Appendix~\ref{proof:underestimation_proof}.
 		
-		We remark that the core technique in the proof of Lemma~\ref{lemma:underestimation} is the use of the Beta CDF. As such, our analysis can, in some sense, improve the result for Bayes UCB. In the main theorem of \cite{kaufmann2012thompson}, the authors state that the quantile in their algorithm is required to be $1 - 1/(t \log^c T)$ for some parameter $c \ge 5$, however they show simulations with the quantile $1 -1/t$ and suggest that, in practice, it should be used instead. By utilizing techniques in our analysis, it is possible to prove that the use of $1-1/t$, as a discount factor, in Bayes UCB would lead to the same optimal regret bound. Therefore the `scaling' by $\log^c T$ is unnecessary.
+		We remark that the core steps in the proof of Lemma~\ref{lemma:underestimation}, at least in the base case of the induction, rely on properties of the Beta and Bernoulli variables. Because of this, we strongly suspect our analysis can strengthen a similar theoretical result for the Bayes UCB algorithm. In particular, the main theorem of \cite{kaufmann2012thompson} states that the quantile parameter in the algorithm should be $1 - 1/(t \log^c T)$ for some constant $c \ge 5$. However, what is perplexing is that their simulation experiments suggest that using a simpler sequence of quantiles, namely $1 -1/t$, practically results in a lower regret. By utilizing techniques in our analysis, it is possible to prove that the use of the quantiles $1-1/t$ would lead to the same optimal regret bound. Therefore the `scaling' by $\log^c T$ is both theoretically and practically unnecessary.
 	\end{myproof}
 	\begin{lemma}[Bound on term B] \label{lemma:overestimation}
 		There exists $T^* = T^*(\epsilon, \theta)$ sufficiently large and a constant $C_2 = C_2(\epsilon, \theta_1, \theta_2)$ so that for any $T \ge T^*$, we have
