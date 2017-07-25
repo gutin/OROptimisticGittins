@@ -8,20 +8,20 @@ The Gittins index theorem presents a surprisingly simple solution to the problem
 
 One way to compute the Gittins Index $v_\gamma(y)$ for an arm in state $y$ is via the so-called retirement value formulation \cite{whittle1980multi}. Specifically, $v_\gamma(y)$ is defined as the value of $\lambda$ that solves
 \begin{equation} \label{eqn:gittins_index}
-\frac{\lambda}{1-\gamma} = \sup_{\tau > 1}\E_{y}\left[\sum_{t=1}^{\tau-1} \gamma^{t-1} X_{i,t} + \gamma^{\tau-1} \frac{\lambda}{1-\gamma}
+\frac{\lambda}{1-\gamma} = \sup_{\tau > 0}\E_{y}\left[\sum_{t=1}^{\tau} \gamma^{t-1} X_{i,t} + \gamma^{\tau} \frac{\lambda}{1-\gamma}
 %	\given y_{i,1} = y
 \right],
 \end{equation}
-where the subscript on the expectation indicates that the prior on the (say, $i$th) arm's mean at time $t=1$, $y_{i,1}$, equals $y$. If one thought of the notion of retiring as receiving a deterministic reward $\lambda$ in every period, then the value of $\lambda$ that solves the above equation could be interpreted as the per-period retirement reward that makes us indifferent between retiring immediately (i.e. at $t=1$), and the option of continuing to play arm $i$ with the potential of retiring at some future time. The Gittins index policy itself, which we denote by $\pi^{G,\gamma}$, can succinctly be stated as follows: 
+where the subscript on the expectation indicates that the prior on the (say, $i$th) arm's mean at time $t=1$, $y_{i,0}$, equals $y$. If one thought of the notion of retiring as receiving a deterministic reward $\lambda$ in every period, then the value of $\lambda$ that solves the above equation could be interpreted as the per-period retirement reward that makes us indifferent between retiring immediately, and the option of continuing to play arm $i$ with the potential of retiring at some future time. The Gittins index policy itself, which we denote by $\pi^{G,\gamma}$, can succinctly be stated as follows: 
 \begin{center}
 {\em At time $t$, play an arm in the set 
 $\argmax_{i} v_\gamma
 \left(
-y_{i,N_i(t)}
-\right)$.
+y_{i,N_i(t-1)}
+\right)$,
 } 
 \end{center}
-Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\gamma}$ to be regret optimal. In fact, as the result below indicates, one cannot even hope for such a policy to be consistent in the sense of \cite{lai1985asymptotically}:
+where $N_i(0) \equiv 0$ and $y_{i,0}$ is understood to be the sufficient statistic corresponding to the prior on that arm. Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\gamma}$ to be regret optimal. In fact, as the result below indicates, one cannot even hope for such a policy to be consistent in the sense of \cite{lai1985asymptotically}:
 \begin{lemma}
 \label{le:linearregret}
 	For any $\gamma > 0$, there exists an instance of the multi armed bandit problem for which 
@@ -35,7 +35,7 @@ Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\ga
 \end{lemma}
 The proof, given in Appendix~\ref{proof:linearregret}, rests on the simple fact that for any fixed discount factor, if the posterior means on the two arms are sufficiently apart, the Gittins index policy will pick the arm with the larger posterior mean. The threshold beyond which the Gittins policy `exploits' depends on the discount factor and with a fixed discount factor there is a positive probability that the superior arm is never explored sufficiently so as to establish that it is, in fact, the superior arm. 
 
-\subsection{Increasing Discount Factors yield sub-linear Bayesian Regreat}
+\subsection{Increasing Discount Factors yield sub-linear Bayesian Regret}
 
 Lemma~\ref{le:linearregret} tells us that we cannot hope for sub-linear regret by applying the Gittins index policy with a constant discount factor. One may naturally wonder whether an increasing discount factor might fix this issue. Now observe that any schedule of increasing discount factors effectively implies a change in the trade-off between exploration and exploitation. With a fixed discount factor, we have already seen that once the priors between two arms are sufficiently far apart, the Gittins policy will not explore, thereby leading to the possibility of linear regret. As the discount factor increases, the `gap' between priors above which exploration is not justified goes up over time. If we increase this `gap' too fast, we might incur too much exploration. Too slow, and we might incur too little exploration. As such, the schedule at which we increase the discount factor is likely to play a significant role in determining the regret of the resulting policy. 
 
@@ -46,9 +46,9 @@ Consider employing discount factors that increase at roughly the rate $1 - 1/t$;
 \gamma_t = 
 1 - 
 \frac{1}
-{2^{\floor{\log_2 t}+1}}
+{2^{\floor{\log_2 t}}}%+1}}
 \]
-and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is within a factor of $\log T$ of the optimal Bayes risk. Specifically, we have:
+and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t-1)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is within a factor of $\log T$ of the optimal Bayes risk. Specifically, we have:
 \begin{proposition}
 	\label{prop:gittins_log3T}
 	\[
@@ -71,18 +71,18 @@ Consider the following alternative stopping problem that requires as input the p
 \[
 R_{\lambda,K}(s, y) = 
 \begin{cases}
-\lambda ,& \text{if } s < K+1\\
+\lambda ,& \text{if } s < K\\
 \max\left(\lambda, R(y) \right), & \text{otherwise}
 \end{cases}
 \]
 For a given $K$, the \emph{Optimistic Gittins Index} for arm $i$ in state $y$ is now defined as the value for $\lambda$ that solves
 \begin{equation} \label{eqn:ogi_general}
-\frac{ \lambda}{1-\gamma} = \sup_{1 < \tau \leq K+1}
+\frac{ \lambda}{1-\gamma} = \sup_{1 \le \tau \leq K}
 \E_y\left[
-	\sum_{s=1}^{\tau-1} \gamma^{s-1}X_{i,s} + \gamma^{\tau-1} \frac{R_{\lambda,K}(\tau, y_{i,\tau-1})}{1-\gamma}
+	\sum_{s=1}^{\tau} \gamma^{s-1}X_{i,s} + \gamma^{\tau} \frac{R_{\lambda,K}(\tau, y_{i,\tau-1})}{1-\gamma}
 \right],
 \end{equation}
-where we recall that the subscript on the expectation indicates that $y_{i,1} = y$. 
+where we recall that the subscript on the expectation indicates that $y_{i,0} = y$. 
 We denote the solution to this equation by $v_\gamma^{K}(y)$.
 The problem above admits a simple, attractive interpretation: nature reveals the {\em true} mean reward for the arm at time $K+1$ should we choose to not retire prior to that time, which enables the decision maker to then instantaneously decide whether to retire at time $K+1$ or else, never retire. In this manner one is better off than in the stopping problem inherent to the definition of the Gittins index, so that we use the moniker optimistic. The following Lemma formalizes this intuition
 
@@ -108,29 +108,33 @@ The discussion thus far suggests a simple class of bandit algorithms we dub the 
 \noindent The OGI algorithm may be summarized succinctly as follows:
 
 \begin{center}
-{\em At time $t$ play an arm in the set $\argmax_i v^K_{\gamma_t}(y_{i,t})$}
+{\em At time $t$ play an arm in the set $\argmax_i v^K_{\gamma_t}(y_{i,N_i(t-1)})$}
 \end{center}
 
 \noindent where $\gamma_t = 1 - \frac{1}{t}$. 
 
-The following Section will establish the surprising result that the algorithm above achieves the Lai-Robbins lower bound (and thus is regret optimal), for any finite $K$ (and thus, even for $K=1$!). We will establish this result for Beta priors. To appreciate the computation required for this algorithm in simplest case where $K=1$, we end this section with a few concrete examples. Note that for $K=1$, equation~\eqref{eqn:ogi_general} simplifies to
+The following Section will establish the surprising result that the algorithm above achieves the Lai-Robbins lower bound (and thus is regret optimal), for any finite $K$ (and thus, even for $K=1$!). We will establish this result for Beta priors. To appreciate the computation required for this algorithm in simplest case where $K=1$, we end this section with a few concrete examples. 
+
+First, note that when $K=1$, equation~\eqref{eqn:ogi_general} simplifies to
 \begin{equation} \label{eqn:ogi_k1}
-\lambda = \hat \mu(y) + \gamma \E[(\lambda - R(y))^+]
+\lambda = \E[R(y)] + \gamma \E[(\lambda - R(y))^+].
 \end{equation}
-where $\hat \mu(y) := \E[R(y)]$ is the mean reward under the prior given by $y$. The equation for $\lambda$ above can also be viewed as an upper confidence bound to an arm's expected reward. Solving equation~\eqref{eqn:ogi_k1} is often simple in practice, and we list a few examples to illustrate this:
+The equation for $\lambda$ above can also be viewed as an upper confidence bound to an arm's expected reward. 
+Solving equation~\eqref{eqn:ogi_k1} is often simple in practice, and we list a few examples to illustrate this.
 \begin{example}[Beta]
-	In this case $y$ is the pair $(a,b)$, which specifices a Beta prior distribution. The 1-step Optimistic Gittins Index, is the value of $\lambda$ that solves
+	In this case $y$ is the pair $(a,b)$, which specifies a Beta prior distribution. The 1-step Optimistic Gittins Index, is the value of $\lambda$ that solves
 	\begin{align*}
-	\lambda = \frac{a}{a+b} + \gamma \E[(\lambda - {\rm Beta}(a,b))^+] =  \frac{a}{a+b}(1 - \gamma F^\beta_{a+1,b}(\lambda)) + \gamma \lambda (1-F^\beta_{a,b}(\lambda))
+	\lambda & = \frac{a}{a+b} + \gamma \E[(\lambda - {\rm Beta}(a,b))^+] \\
+	 & =  \frac{a}{a+b}(1 - \gamma F^\beta_{a+1,b}(\lambda)) + \gamma \lambda (1-F^\beta_{a,b}(\lambda))
 	\end{align*}
 	where $F^\beta_{a,b}$ is the CDF of a Beta distribution with parameters $a, b$.
 \end{example}
 
 \begin{example}[Gaussian]
-	Here $y = (\mu,\sigma^2)$, which specifices a Gaussian prior and the corresponding equation is
+	Here $y = (\mu,\sigma^2)$, which specifies a Gaussian prior and the corresponding equation is
 	\begin{align*}
 	\lambda & = \mu  + \gamma \E[(\lambda - {\rm \mathcal{N}}(\mu,\sigma^2))^+]  \\
-	& = \mu + \gamma \left[( \lambda - \mu) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma\phi\left(\frac{\mu-\lambda}{\sigma}\right) \right]
+	& = \mu + \gamma \left[( \lambda - \mu) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma\phi\left(\frac{\mu-\lambda}{\sigma}\right)\right].
 	\end{align*}
 \end{example}
 
