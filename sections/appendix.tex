@@ -190,10 +190,9 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	where $y_{i,\Ntg{1}{t}}$ is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
 \end{lemma}
 \begin{myproof}[Proof.]
-	%Because $v^K_{i,t}$ is the solution in $\lambda$ to the equation $\lambda/(1-\gamma_t) = V^K_{\gamma_t}(y_{\Ntg{1}{t},t}, \lambda)$, we can substitute $x^* = v^K_{i,t}/(1-\gamma_t)$ and $x = \eta/(1-\gamma_t)$ in the statement of Lemma~\eqref{eq:important_fact} (using, of course, the particular discount factor $\gamma = \gamma_t$) and the result would follow.
 	First of all note that for any state $y$ and discount factor $\gamma$, the function
 	\begin{align*}
-	(1-\gamma)V^K_\gamma(y, \lambda) - \lambda&  = \sup_{1 \le \tau \le K}\E_y\left[\sum_{s=1}^\tau\gamma^{s-1}(1-\gamma_t)X_{i,s} + \ind{\tau = K}\gamma^\tau(R(y_{i,\tau-1}) - \lambda)^+\right],
+	(1-\gamma)V^K_\gamma(y, \lambda) - \lambda&  = \sup_{1 \le \tau \le K}\E_y\left[\sum_{s=1}^\tau\gamma^{s-1}(1-\gamma)X_{i,s} + \ind{\tau = K}\gamma^\tau(R(y_{i,\tau-1}) - \lambda)^+\right],
 	\end{align*}
 	is convex (from Fact~\ref{fact:v_is_convex}) yet decreasing in $\lambda$. Also notice that at $\lambda = 0$
 	\[
@@ -201,9 +200,9 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\]
 	because it is never optimal to retire in the stopping problem. Also, in the other extreme case when $\lambda = B$, the function in question evaluates to
 	\[
-		V^K_{\gamma}(y, B) = \E_y\left[X_{i,1}\right] + \frac{\gamma_t B}{(1-\gamma_t)} \le \frac{B}{(1-\gamma_t)}.
+		V^K_{\gamma}(y, B) = \E_y\left[X_{i,1}\right] + \frac{\gamma B}{(1-\gamma)} \le \frac{B}{(1-\gamma)}.
 	\]
-	Thus, $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$ is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and also negative for $\lambda > v^K_\gamma(y)$.
+	Thus, consider again the above function of $\lambda$, namely,  $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$. Such a function is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and is also negative for $\lambda > v^K_\gamma(y)$.
 	\begin{figure}
 		\centering
 		\input{plots/visualize_gx.pgf} 
