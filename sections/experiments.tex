@@ -7,7 +7,7 @@ A major consideration in running these experiments is that the CPU time required
 
 \subsection{IDS experiments}
 
-\paragraph{Gaussian}We replicate the experiments from \cite{russo2014learning}. In the first experiment (Table~\ref{table:gaussian_experiment1}), the arms generate Gaussian rewards  $X_{i,t} \sim \mathcal{N}(\theta_i, 1)$ where each $\theta_i$ is independently drawn from a standard Gaussian distribution. We simulate 1000 independent trials with 10 arms and 1000 time periods. The implementation of OGI in this experiment uses $K = 1$. It is difficult to compute exact Gittins indices in this setting, but a classical approximation for Gaussian bandits does exist; see \cite{powell2012optimal}, Chapter 6.1.3. We term the use of that approximation `OGI($\infty$) Approx'.  In addition to regret, we  show the average CPU time taken, in seconds, to execute each trial.
+\paragraph{Gaussian}We replicate the experiments from \cite{russo2014learning}. In the first experiment (Table~\ref{table:gaussian_experiment1}), the arms generate Gaussian rewards  $X_{i,t} \sim \mathcal{N}(\theta_i, 1)$ where each $\theta_i$ is independently drawn from a standard Gaussian distribution. We simulate 1,000 independent trials with 10 arms and 1,000 time periods. The implementation of OGI in this experiment uses $K = 1$. It is difficult to compute exact Gittins indices in this setting, but a classical approximation for Gaussian bandits does exist; see \cite{powell2012optimal}, Chapter 6.1.3. We term the use of that approximation `OGI($\infty$) Approx'.  In addition to regret, we  show the average CPU time taken, in seconds, to execute each trial.
 %We also evaluate a policy (labeled `OGI Approx' in the table) that computes a particular closed-form approximation to the Gittins Index given in Chapter 6.1.3 of Powell and Ryzhov \cite{powell2012optimal}. 
 
 \begin{table}[h!]
@@ -30,7 +30,7 @@ The key feature of the results here is that OGI offers an approximately 10\% imp
 
 
 \paragraph{Bernoulli}
-In this experiment regret is simulated over 1000 periods, with 10 arms each having a uniformly distributed Bernoulli parameter. There are 1000 independent trials and Table~\ref{table:bernoulli_experiment1} summarizes the results.
+In this experiment regret is simulated over 1,000 periods, with 10 arms each having a uniformly distributed Bernoulli parameter. There are 1,000 independent trials and Table~\ref{table:bernoulli_experiment1} summarizes the results.
 
 \begin{table}[h!]
 	\centering
@@ -50,7 +50,7 @@ Each version of OGI outperforms other algorithms and the one that uses (actual) 
 
 
 \paragraph{Longer horizon and robustness}
-To understand how Bayes' regret grows in the long run, we simulate Bernoulli and Gaussian bandit problems for a longer horizon of 5000 time steps and with three arms. The results shown in Figure~\ref{fig:sub1}.
+To understand how Bayes' regret grows in the long run, we simulate Bernoulli and Gaussian bandit problems for a longer horizon of 5,000 time steps and with three arms. The results shown in Figure~\ref{fig:sub1}.
 
 \begin{figure}[h!]
 	\begin{subfigure}{.5\textwidth}
@@ -77,8 +77,8 @@ In the Gaussian experiment, we again see that OGI dominates other policies and t
 These experiments are motivated by similar ones in \cite{chapelle2011empirical}. The key feature here is that we simulate a longer horizon of $T = 10^6$ and include a greater number of arms, particularly we let $A \in \{10,40,70,100\}$. Since these experiments require substantially more iterations than the earlier ones, we are only able to simulate the fastest algorithms, which are OGI with $K=1$, Thompson Sampling and Bayes UCB. Again, this is a Bernoulli experiment where arm means are independently sampled from a uniform prior. The results are shown in Figure~\ref{fig:chapelle_and_li} with additional tables in Appendix~\ref{sec:further_exp}.
 \begin{figure}
 	\centering
-	\input{plots/chapelle_li.pgf}
-	\caption{Cumulative regret in the Bernoulli problem averaged over 5000 independent trials.}
+	\input{plots/chapelle_li_bkp.pgf}
+	\caption{Cumulative regret in the Bernoulli problem averaged over 5,000 independent trials.}
 	\label{fig:chapelle_and_li}
 \end{figure}
 
@@ -95,7 +95,7 @@ We propose a heuristic to this problem using our scheme, which is to compute the
 To test our policy, we simulate $A = 6$ binary arms with uniformly distributed biases and fix $m=3$. 
 We benchmark our heuristic against Thompson Sampling and IDS. Because the arms give independent Bernoulli rewards, we will use a flat Beta prior for all of the algorithms. We implement the version of IDS designed for the linear bandit problem because this experiment is a special case of it and the IDS algorithm there is practical to simulate. Our implementation of IDS also uses 100 Monte Carlo samples per iteration.
 
-The results, produced from 1000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. We notice a significant spread in the performance between OGI and both Thompson Sampling and IDS. Just like for our main algorithm, the primary computational bottleneck in using OGI comes from solving the stopping problem and this can be onerous if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters. By contrast, IDS is the slowest algorithm because it needs to generate a hundred Monte Carlo samples in every iteration.
+The results, produced from 1,000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. We notice a significant spread in the performance between OGI and both Thompson Sampling and IDS. Just like for our main algorithm, the primary computational bottleneck in using OGI comes from solving the stopping problem and this can be onerous if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters. By contrast, IDS is the slowest algorithm because it needs to generate a hundred Monte Carlo samples in every iteration.
 \begin{figure}
 	\centering
 	\input{plots/multiple_pulls.pgf}
