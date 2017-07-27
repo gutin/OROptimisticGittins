@@ -511,7 +511,6 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	&\P{(1-\gamma_t)V^K_{\gamma_t}(y_{1,\Nt{1}}, \eta) < \eta + \frac{\zeta}{t}} \nonumber  \\
 	&\qquad = \mathbb{P}\left((1-\gamma_t)\Ee{X_{1,t} \given y_{1,\Nt{1}}}  \right. \nonumber\\
 	&\hspace{6em} + \gamma_t \Ee{\max(\eta, (1-\gamma_t)V^{K-1}_{\gamma_t}(y_{1,\Nt{1}+1}, \eta)) \given y_{1,\Nt{1}}} < \eta + \frac{\zeta}{t}\bigg) \label{eq:appl_of_lemma_9} \\
-	& \qquad \le \P{ \gamma_t \max\left(\eta, (1-\gamma_t)\Ee{V^{K-1}_{\gamma_{t}}(y_{1,\Nt{1}+1}, \eta ) \given y_{1,\Nt{1}}}\right)< \eta + \frac{\zeta}{t}} \label{ineq:appl_jensens} \\
 	& \qquad \le \P{ \left(1-\frac{1}{t}\right) \Ee{(1-\gamma_t)V^{K-1}_{\gamma_{t}}(y_{1,\Nt{1}+1}, \eta) \given y_{1,\Nt{1}} }< \eta + \frac{\zeta}{t}} \nonumber \\
 	& \qquad \le \P{\left(1-\frac{1}{t}\right)(1-\gamma_t) V^{K-1}_{\gamma_{t}}(y_{1,\Nt{1}}, \eta)< \eta  + \frac{\zeta}{t}} \label{ineq:missing_step} \\
 	& \qquad \le \P{ (1-\gamma_t)V^{K-1}_{\gamma_{t}}(y_{1,\Nt{1}}, \eta)< \frac{t}{t-1}\left(\eta +  \frac{\zeta}{t}}\right) \nonumber \\
@@ -519,8 +518,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 	& \qquad \le \P{ (1-\gamma_t)V^{K-1}_{\gamma_{t}}(y_{1,\Nt{1}}, \eta)< \eta +   \frac{\zeta + 1}{t}} \nonumber \\
 	&\qquad =  \mathcal{O}_{\eta,\zeta}\left(\frac{1}{t^{1 + h_\eta}}\right) \label{eqn:ind_hyp}
 	\end{align}
-	where the final inequality holds when $t$ is large enough since $\eta < 1$. In the above derivation, \eqref{eq:appl_of_lemma_9} is an expansion of Bellman's equation and \eqref{ineq:appl_jensens} uses Jensen's inequality. 
-	Lemma~\ref{lemma:vk_bound} give us \eqref{ineq:missing_step}. %\eqref{eqn:another_appl_of_lemma_9} follows from both \eqref{bnd:conc_result} and Lemma~\ref{cor:equivalent_event}. 
+	where the final inequality holds when $t$ is large enough because $\eta < 1$, equation \eqref{eq:appl_of_lemma_9} results from an expansion of Bellman's equation and bound \eqref{ineq:missing_step} follows from Lemma~\ref{lemma:vk_bound}. %\eqref{eqn:another_appl_of_lemma_9} follows from both \eqref{bnd:conc_result} and Lemma~\ref{cor:equivalent_event}. 
 	Finally, equation \eqref{eqn:ind_hyp} follows from the induction hypothesis.
 	%We finish the proof by using the following asymptotic argument. Take $M$ to be a large enough integer, then we have, using the result of the preceding induction proof, that
 	%\begin{align*}
