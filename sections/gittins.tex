@@ -1,12 +1,12 @@
 \section{Optimistic Gittins Indices} \label{sec:gittins_and_approx}
 
-This section introduces the notion of an optimistic Gittins index, and presents an algorithm for the MAB problem that we will subsequently show is optimal in that it achieves the Lai-Robbins lower bound. We will begin with reviewing the Gittins index theorem for the discounted infinite horizon bandit problem and show that one cannot expect the use of the index from that well known result to yield a regret optimal policy for the MAB problem. We then show that the use of the Gittins index in concert with an increasing discount factor yields poly-logarithmic Bayesian regret. This coarse result motivates the discount factor schedule we eventually propose. Finally, we present a series of `optimistic' approximations to the Gittins index with the view of minimizing the computational burden of index computation. Putting these ingredients together yields the optimistic Gittins index algorithm that is the subject of our paper. 
+This section introduces the notion of an optimistic Gittins index, and presents an algorithm for the MAB problem that we will subsequently show is optimal in that it achieves the Lai-Robbins lower bound. We will begin with reviewing the Gittins index theorem for the discounted infinite horizon bandit problem and show that one cannot expect the use of the index from that well known result to yield a regret optimal policy for the MAB problem. We then show that the use of the Gittins index in concert with an increasing discount factor yields poly-logarithmic Bayesian regret. This coarse result motivates the discount factor schedule we eventually propose. Finally, we present a series of `optimistic' approximations to the Gittins index with the view of minimizing the computational burden of index computation. Putting these ingredients together yields the optimistic Gittins index algorithm that is the subject of our paper. The regret optimality of the optimistic Gitiins index, for Beta-Bernoulli bandits, is proved in Section~\ref{sec:analysis_of_regret} (Theorem~\ref{thm:frequentist_optimal_bound}). That is our main theoretical result. 
 
 \subsection{The Gittins Index and Regret}
 
 The Gittins index theorem presents a surprisingly simple solution to the problem of computing an optimal policy for the discounted infinite horizon bandit problem. Specifically, the theorem defines for each arm state $y \in \Yscr$, an index we denote $v_\gamma(y)$; we define this index shortly. The theorem shows that an arm selection rule which at every time selects the arm with the highest index is optimal. The result is powerful in that the computation of the index for a given arm requires the solution of an MDP on the state space $\Yscr$, as opposed to solving an MDP on the considerably larger state space $\Yscr^A$. 
 
-One way to compute the Gittins Index $v_\gamma(y)$ for an arm in state $y$ is via the so-called retirement value formulation \cite{whittle1980multi}. Specifically, $v_\gamma(y)$ is defined as the value of $\lambda$ that solves
+One way to compute the Gittins Index $v_\gamma(y)$ for an arm in state $y$ is via the so-called retirement value formulation \citep{whittle1980multi}. Specifically, $v_\gamma(y)$ is defined as the value of $\lambda$ that solves
 \begin{equation} \label{eqn:gittins_index}
 \frac{\lambda}{1-\gamma} = \sup_{\tau > 0}\E_{y}\left[\sum_{t=1}^{\tau} \gamma^{t-1} X_{i,t} + \gamma^{\tau} \frac{\lambda}{1-\gamma}
 %	\given y_{i,1} = y
@@ -61,13 +61,13 @@ and consider using the policy that at time $t$ picks an arm from the set $\argma
 	\] 
 	where the constant in the big-Oh term depends on the prior $q$ and $A$.
 \end{proposition}
-The proof of this simple result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is within a constant factor of the optimal finite horizon regret. The second ingredient is the doubling trick described above. The coarse analysis above illustrates that the use of the Gittins index policy together with an increasing discount factor does indeed yield an algorithm with sub-linear Bayesian regret. It is worth noting that the result above does not show that such a policy achieves {\em optimal} Bayesian regret (the achievable lower bound being $\log^2T$ \citep{lai1987adaptive}). The analysis does however suggest a candidate discount rate schedule that we will eventually show to yield a regret optimal policy. 
+The proof of this result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is within a constant factor of the optimal finite horizon regret. The second ingredient is the doubling trick described above. The coarse analysis above illustrates that the use of the Gittins index policy together with an increasing discount factor does indeed yield an algorithm with sub-linear Bayesian regret. It is worth noting that the result above does not show that such a policy achieves {\em optimal} Bayesian regret (the achievable lower bound being $\log^2T$ \citep{lai1987adaptive}). The analysis does however suggest a candidate discount rate schedule that we will eventually show to yield a regret optimal policy. 
  
 \subsection{Effective Computation: Optimistic Approximations to The Gittins Index}\label{sec:approx_agi_deriv}
 
-The retirement value formulation makes clear that computing a Gittins index is equivalent to solving a discounted, infinite horizon stopping problem. Solving this problem requires substantially more computational effort than, say, Thompson Sampling or the Bayes UCB algorithm. In fact, this computation can even be rendered intractable in practice. Specifically, the set $\Yscr$ can be high dimensional; see \cite{chapelle2011empirical} for one such example that arises in the context of contextual news recommendations. This motivates an approximation to the Gittins index that is the subject of this section. Specifically, we introduce a sequence of `optimistic' approximations to the Gittins index that will alleviate computational burden. 
+The retirement value formulation makes clear that computing a Gittins index is equivalent to solving a discounted, infinite horizon stopping problem. Solving this problem requires substantially more computational effort than, say, Thompson Sampling or the Bayes UCB algorithm. In fact, this computation can even be rendered intractable in practice. Specifically, the set $\Yscr$ can be high dimensional; see \citep{chapelle2011empirical} for one such example that arises in the context of contextual news recommendations. This motivates an approximation to the Gittins index that is the subject of this section. Specifically, we introduce a sequence of `optimistic' approximations to the Gittins index that will alleviate computational burden. 
 
-Consider the following alternative stopping problem that requires as input the parameters $\lambda$ (which has the same interpretation as it did before), and $K$, an integer limiting the number of steps that we need to look ahead. For an arm in state $y$ (recall that the state specifies sufficient statistics for the current prior on the arm reward), let $R(y)$ be a random variable drawn from the prior on expected arm reward specified by $y$. Define the retirement value $R_{\lambda,K}(s,y)$ according to 
+Consider the following alternative stopping problem that requires as input the parameters $\lambda$ (which has the same interpretation as it did before), and $K$, an integer limiting the number of steps that we need to look ahead. For an arm in state $y$ (recall that the state specifies sufficient statistics for the current prior on the arm reward), let $R(y)$ be a random variable distributed as the prior on expected arm reward specified by $y$. Define the retirement value $R_{\lambda,K}(s,y)$ according to 
 \[
 R_{\lambda,K}(s, y) = 
 \begin{cases}
@@ -84,14 +84,18 @@ For a given $K$, the \emph{Optimistic Gittins Index} for arm $i$ in state $y$ is
 \end{equation}
 where we recall that the subscript on the expectation indicates that $y_{i,0} = y$. 
 We denote the solution to this equation by $v_\gamma^{K}(y)$.
-The problem above admits a simple, attractive interpretation: nature reveals the {\em true} mean reward for the arm at time $K+1$ should we choose to not retire prior to that time, which enables the decision maker to then instantaneously decide whether to retire at time $K+1$ or else, never retire. In this manner one is better off than in the stopping problem inherent to the definition of the Gittins index, so that we use the moniker optimistic. The following Lemma formalizes this intuition
+
+Let us interpret the stopping problem above. Assume we choose to retire after $\tau$ pulls of the arm. If $\tau$ were less than $K$, we then receive a reward $\lambda$ per period, over the rest of time, discounted at the rate $\gamma$. This is no different from what happens in the stopping problem defining the usual Gittins index, \eqref{eqn:gittins_index}. On the other hand, unlike that formulation we are forced to retire after the $K$th arm pull if we have not done so already. Should we retire at that time, nature reveals the `true' mean reward of the arm, and we receive the greater of that quantity and $\lambda$ as our per period retirement payoff. In this manner one is better off than in the stopping problem inherent to the definition of the Gittins index, \eqref{eqn:gittins_index}, so that we use the moniker `optimistic'.
+%nature reveals the {\em true} mean reward for the arm at time $K+1$ should we choose to not retire prior to that time, which enables the decision maker to then instantaneously decide whether to retire at time $K+1$ or else, never retire. In this manner one is better off than in the stopping problem inherent to the definition of the Gittins index, so that we use the moniker optimistic. 
+The following Lemma formalizes this intuition
 
 \begin{lemma} \label{lemma:approx_bound}
-	For all discount factors $\gamma$ and states $y \in \mathcal Y$, we have 
-	\[
-	v^1_\gamma(y) \geq v^2_\gamma(y) \ldots \geq v_\gamma^{K}(y) \geq v_\gamma(y) \quad \forall K,
-	\]
-	and, furthermore, $v^K_\gamma(y) \to v_\gamma(y)$ as $K \to \infty$.
+$v_\gamma^{K}(y)$ is non-increasing in $K$ for all discount factors $\gamma$ and states $y \in \mathcal Y$.
+Moreover, $v^K_\gamma(y) \to v_\gamma(y)$ as $K \to \infty$.	
+%	\[
+%	v^1_\gamma(y) \geq v^2_\gamma(y) \ldots \geq v_\gamma^{K}(y) \geq v_\gamma(y) \quad \forall K,
+%	\]
+%	and, furthermore, $v^K_\gamma(y) \to v_\gamma(y)$ as $K \to \infty$.
 \end{lemma}
 \begin{myproof}[Proof]
 	See Appendix~\ref{prf:approx_bound}
@@ -113,30 +117,41 @@ The discussion thus far suggests a simple class of bandit algorithms we dub the 
 
 \noindent where $\gamma_t = 1 - \frac{1}{t}$. 
 
-The following Section will establish the surprising result that the algorithm above achieves the Lai-Robbins lower bound (and thus is regret optimal), for any finite $K$ (and thus, even for $K=1$!). We will establish this result for Beta priors. To appreciate the computation required for this algorithm in simplest case where $K=1$, we end this section with a few concrete examples. 
+The following Section will establish that the algorithm above achieves the Lai-Robbins lower bound (and thus is regret optimal), for {\em any} finite $K$. In particular, the algorithm above is regret optimal even for the choice $K=1$. We will establish this result for Beta priors and Bernoulli rewards. We also indicate how to extend the result to arbitrary bounded rewards. 
 
-First, note that when $K=1$, equation~\eqref{eqn:ogi_general} simplifies to
+We end this section, with some brief commentary on computation. For concreteness, let us focus on the case of a Beta-Bernoulli bandit. First, we note that solving the stopping problem implicit in the definition of $v^K_\gamma(y)$ for any given value of the retirement subsidy $\lambda$ requires the solution of a relatively simple dynamic program with just $O(K)$ states. This dynamic program can be solved exactly in $O(K^2)$ time. The optimal value of $\lambda$ can be found by bisection. For small values of $K$ this is substantially less effort that computing a Gittins index. The case of $K=1$ is particularly appealing. There, we note that equation~\eqref{eqn:ogi_general} simplifies to
 \begin{equation} \label{eqn:ogi_k1}
 \lambda = \E[R(y)] + \gamma \E[(\lambda - R(y))^+].
 \end{equation}
-The equation for $\lambda$ above can also be viewed as an upper confidence bound to an arm's expected reward. 
-Solving equation~\eqref{eqn:ogi_k1} is often simple in practice, and we list a few examples to illustrate this.
-\begin{example}[Beta]
-	In this case $y$ is the pair $(a,b)$, which specifies a Beta prior distribution. The 1-step Optimistic Gittins Index, is the value of $\lambda$ that solves
-	\begin{align*}
-	\lambda & = \frac{a}{a+b} + \gamma \E[(\lambda - {\rm Beta}(a,b))^+] \\
-	 & =  \frac{a}{a+b}(1 - \gamma F^\beta_{a+1,b}(\lambda)) + \gamma \lambda (1-F^\beta_{a,b}(\lambda))
-	\end{align*}
-	where $F^\beta_{a,b}$ is the CDF of a Beta distribution with parameters $a, b$.
-\end{example}
+This equation is easily solved via a method such as Newton-Raphson. In fact, the gradients required for the use of the Newton-Raphson approach are often readily available in closed form. To wit, in the case of a Beta prior with sufficient statistics $(a,b)$, \eqref{eqn:ogi_k1} reduces to
+\[
+	\lambda  =  \frac{a}{a+b}\left(1 - \gamma F^\beta_{a+1,b}(\lambda)\right) + \gamma \lambda \left(1-F^\beta_{a,b}(\lambda)\right) \triangleq g_{a,b}(\lambda)
+\]
+wherein we see that $\frac{\partial}{\partial \lambda} g_{a,b}(\lambda)$ can be computed in closed form. This makes the use of the Newton-Raphson method for the solution of the equation $\lambda =  g_{a,b}(\lambda)$ particularly simple. In our computational experiments, we will see that the choice of $K=1$ already provides a material improvement in empirical performance over state-of-the-art alternatives. 
 
-\begin{example}[Gaussian]
-	Here $y = (\mu,\sigma^2)$, which specifies a Gaussian prior and the corresponding equation is
-	\begin{align*}
-	\lambda & = \mu  + \gamma \E[(\lambda - {\rm \mathcal{N}}(\mu,\sigma^2))^+]  \\
-	& = \mu + \gamma \left[( \lambda - \mu) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma\phi\left(\frac{\mu-\lambda}{\sigma}\right)\right].
-	\end{align*}
-\end{example}
 
-Notice that in both the Beta and Gaussian examples, the equations for $\lambda$ are in terms of distribution functions. Therefore it is straightforward to compute a derivative for these equations (which would be in terms of the density and CDF of the prior) and makes finding a solution, using a method such as Newton-Raphson, simple and efficient. 
+%First, note that when $K=1$, equation~\eqref{eqn:ogi_general} simplifies to
+%\begin{equation} \label{eqn:ogi_k1}
+%\lambda = \E[R(y)] + \gamma \E[(\lambda - R(y))^+].
+%\end{equation}
+%The equation for $\lambda$ above can also be viewed as an upper confidence bound to an arm's expected reward. 
+%Solving equation~\eqref{eqn:ogi_k1} is often simple in practice, and we list a few examples to illustrate this.
+%\begin{example}[Beta]
+%	In this case $y$ is the pair $(a,b)$, which specifies a Beta prior distribution. The 1-step Optimistic Gittins Index, is the value of $\lambda$ that solves
+%	\begin{align*}
+%	\lambda & = \frac{a}{a+b} + \gamma \E[(\lambda - {\rm Beta}(a,b))^+] \\
+%	 & =  \frac{a}{a+b}(1 - \gamma F^\beta_{a+1,b}(\lambda)) + \gamma \lambda (1-F^\beta_{a,b}(\lambda))
+%	\end{align*}
+%	where $F^\beta_{a,b}$ is the CDF of a Beta distribution with parameters $a, b$.
+%\end{example}
+%
+%\begin{example}[Gaussian]
+%	Here $y = (\mu,\sigma^2)$, which specifies a Gaussian prior and the corresponding equation is
+%	\begin{align*}
+%	\lambda & = \mu  + \gamma \E[(\lambda - {\rm \mathcal{N}}(\mu,\sigma^2))^+]  \\
+%	& = \mu + \gamma \left[( \lambda - \mu) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma\phi\left(\frac{\mu-\lambda}{\sigma}\right)\right].
+%	\end{align*}
+%\end{example}
+%
+%Notice that in both the Beta and Gaussian examples, the equations for $\lambda$ are in terms of distribution functions. Therefore it is straightforward to compute a derivative for these equations (which would be in terms of the density and CDF of the prior) and makes finding a solution, using a method such as Newton-Raphson, simple and efficient. 
 
