@@ -73,7 +73,7 @@ where $d_{\rm KL}$ is the Kullback-Liebler divergence. A policy $\pi'$ that achi
 \frac{\mu^*(\theta) - \mu(\theta_i)}{d_{\rm KL}\left(p_{\theta_i},p_{\theta_{i^*}} \right)}
 \]
 
-\noindent\textbf{\textsf{Bayesian Bandits: }}A {\em Bayesian} MAB problem is endowed with additional structure: we are given a prior on $\theta$. Specifically, we suppose that each $\theta_i$ is, in fact, an independent draw according to some prior distribution $q$ that is supported on $\Theta$. We assume that $q$ is conjugate to $p_{\theta_i}$ and with a minor abuse of notation, denote by $y$ the sufficient statistic specifying $q$. We denote by $\Yscr$ the set of all possible values of $y$. 
+\noindent\textbf{\textsf{Bayesian Bandits: }}A {\em Bayesian} MAB problem is endowed with additional structure: we are given a prior on $\theta$. Specifically, we suppose that each $\theta_i$ is, in fact, an independent draw according to some prior distribution $q$ that is supported on $\Theta$. We assume that $q$ is conjugate to $p_{\theta_i}$ and that $\Ee{|\mu(\theta_i)|} < \infty$. With a minor abuse of notation, we denote by $y$ the sufficient statistic specifying $q$ and by $\Yscr$ the set of all possible values of $y$. 
 
 An algorithm that leverages knowledge of $q$ will frequently maintain a posterior distribution on $\theta_i$ given observations from that arm. To that end, denote by $q_{i,s}$ the posterior distribution on $\theta_i$ given the first $s$ rewards from that arm, $X_{i,1},X_{i,2},\dots,X_{i,s}$. Denote by $y_{i,s}$ the corresponding values of the sufficient statistic describing the posterior. Of course, $q_{i,0} \triangleq q$. 
 
