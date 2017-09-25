@@ -689,34 +689,3 @@ This experiment is motivated by \cite{kaufmann2012thompson} and in it we simulat
 	\caption{Optimistic and exact Gittins Indices when $\gamma = 0.95$ for different Beta-Bernoulli parameters}
 	\label{table:ogi_table_for_gamma_95}
 \end{table}
-\begin{table}
-	\centering
-	\begin{tabular}{llrrrrr}
-		\toprule
-		&       &  Diff. B-UCB &  Diff. TS &    OGI &  Thompson &  Bayes UCB \\
-		\midrule
-		& mean &           28.9 &            3.0 &    99.7 &      102.7 &      128.5 \\
-		& SD &          407.2 &          410.6 &   493.8 &      297.5 &      302.3 \\
-		$A = 10$& 25\% &           20.0 &           12.0 &   -79.7 &      -62.6 &      -43.5 \\
-		& 50\% &           33.0 &           22.0 &    57.3 &       70.4 &       86.5 \\
-		& 75\% &           59.0 &           34.0 &   228.2 &      244.9 &      270.1 \\ \hline
-		& mean &           48.4 &           20.8 &   184.1 &      205.0 &      232.5 \\
-		& SD &          540.8 &          556.9 &   565.2 &      237.7 &      214.0 \\
-		$A = 40$& 25\% &           46.0 &           31.0 &    37.4 &       79.7 &       92.8 \\
-		& 50\% &           87.0 &           67.0 &   119.6 &      159.8 &      183.1 \\
-		& 75\% &          127.0 &           91.0 &   236.1 &      286.9 &      324.0 \\ \hline
-		& mean &           75.2 &           42.4 &   239.4 &      281.7 &      314.5 \\
-		& SD &          443.2 &          438.3 &   451.8 &      181.4 &      203.1 \\
-		$A = 70$ & 25\% &           50.0 &           37.0 &    98.9 &      157.5 &      170.3 \\
-		& 50\% &          124.0 &           97.0 &   180.3 &      241.0 &      265.7 \\
-		& 75\% &          182.0 &          139.0 &   276.6 &      366.0 &      412.3 \\ \hline
-		& mean &           93.6 &           60.6 &   287.1 &      347.7 &      380.7 \\
-		& SD &          448.3 &          442.7 &   447.2 &      184.3 &      208.8 \\
-		$A = 100$  & 25\% &           57.0 &           41.0 &   149.3 &      217.9 &      234.0 \\
-		& 50\% &          144.0 &          121.5 &   228.5 &      309.0 &      334.5 \\
-		& 75\% &          232.0 &          182.0 &   325.4 &      434.0 &      483.7 \\
-		\bottomrule
-	\end{tabular}
-	\caption{Summary statistics (mean, standard deviation, lower, median and upper quartiles) for regret in the \cite{chapelle2011empirical} inspired experiment. For each value of $A$ we simulated 5,000 trials. The first two columns show statistics for the absolute difference in realized regret between the two competing algorithms and OGI.}
-	\label{table:additional_cli_table}
-\end{table}
