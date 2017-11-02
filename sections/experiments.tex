@@ -71,7 +71,8 @@ We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:cha
 \begin{figure}[h!]
 	\centering
 	\input{plots/large_scale_exp_a100.pgf}
-	\caption{Cumulative regret in the large-scale problem, of this section, averaged over 5,000 independent trials.}
+	\caption{Cumulative regret in the large-scale problem of this section averaged over 5,000 independent trials.
+		We plot the number of periods, $T$ on a logarithmic scale.}
 	\label{fig:chapelle_and_li}
 \end{figure}
 
@@ -79,15 +80,16 @@ We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:cha
 	\centering
 	\begin{tabular}{c|ccccc}
 		\toprule
-		Time periods (1000's) &   OGI &  Thompson &   Bayes-UCB &  Rel. adv (\%) &  Abs. adv \\
+		$T/A$ &   OGI &  Thompson &   IDS &  Rel. improvement (\%) &  Abs. improvement \\
 		\midrule
-		200 & 230.5 &     284.4 & 297.9 &                      18.9 &                  53.9 \\
-		400 & 254.7 &     311.6 & 333.5 &                      18.3 &                  57.0 \\
-		600 & 268.6 &     327.4 & 354.5 &                      18.0 &                  58.8 \\
-		800 & 279.1 &     339.2 & 369.6 &                      17.7 &                  60.1 \\
-		1,000 & 287.1 &     347.7 & 380.7 &                      17.4 &                  60.6 \\
+		20,000 & 230.5 &     284.4 & 297.9 &                            18.9 &                  53.9 \\
+		40,000 & 254.7 &     311.6 & 333.5 &                            18.3 &                  57.0 \\
+		60,000 & 268.6 &     327.4 & 354.5 &                            18.0 &                  58.8 \\
+		80,000 & 279.1 &     339.2 & 369.6 &                            17.7 &                  60.1 \\
+		100,000 & 287.1 &     347.7 & 380.7 &                            17.4 &                  60.6 \\
 		\bottomrule
 	\end{tabular}
+	
 	\caption{Regret in the large scale experiment from OGI, Thompson Sampling and Bayes UCB. The last two columns show the relative and absolute difference from Thompson Sampling, which is the closest competitor to OGI.}
 	\label{table:additional_cli_table}
 \end{table}
