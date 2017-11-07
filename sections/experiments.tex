@@ -110,7 +110,10 @@ We propose a heuristic to this problem using our scheme, which is to compute the
 To test our policy, we simulate $A = 6$ binary arms with uniformly distributed biases and fix $m=3$. 
 We benchmark our heuristic against Thompson Sampling and IDS. Because the arms give independent Bernoulli rewards, we will use a flat Beta prior for all of the algorithms. We implement the version of IDS designed for the linear bandit problem because this experiment is a special case of it and the IDS algorithm there is practical to simulate. Our implementation of IDS also uses 100 Monte Carlo samples per iteration.
 
-The results, produced from 1,000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. We notice a significant spread in the performance between OGI and both Thompson Sampling and IDS. Just like for our main algorithm, the primary computational bottleneck in using OGI comes from solving the stopping problem and this can be onerous if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters. By contrast, IDS is the slowest algorithm because it needs to generate a hundred Monte Carlo samples in every iteration.
+The results, produced from 2,000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. The horizon is limited to 250 time periods because of the increased computational effort required to execute a single trial of both the IDS algorithm and Whittle's heuristic, when $K > 1$. This extra time is on the order of minutes for these algorithms.
+For the sake of simplicity, we dub this algorithm as exactly `Whittle's heuristic' for the remainder of this section.
+
+We notice a significant spread in performance between Whittle's heuristic and both Thompson Sampling and IDS. Just like for our main algorithm, the primary computational bottleneck in using Whittle's heuristic comes from solving the stopping problem and this can be onerous if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters but nonetheless improves slightly when $K$ increases. By contrast, IDS is one of the slowest algorithm because it needs to generate a hundred Monte Carlo samples in every iteration.
 \begin{figure}
 	\centering
 	\input{plots/multiple_pulls.pgf}
@@ -120,18 +123,19 @@ The results, produced from 1,000 independent trials, are summarized in Figure~\r
 
 \begin{table}
 	\centering
-	\begin{tabular}{lrrrr}
+	\begin{tabular}{lrrrrrr}
 		\toprule
-		{} &   IDS &  Thompson &  Whittle(3) &  Whittle(4) \\
+		{} &    IDS &  Thompson &  Whittle(1) &  Whittle(2) &  Whittle(3) &  Whittle(4) \\
 		\midrule
-		Mean      & 15.50 &     15.12 &       11.07 &       11.23 \\
-		SD       & 22.14 &     13.08 &       14.85 &       14.71 \\
-		25\% &  1.32 &      6.02 &        1.02 &        1.08 \\
-		50\%    & 10.75 &     14.86 &        9.65 &        9.85 \\
-		75\% & 24.65 &     23.12 &       20.00 &       19.97 \\
+		Mean           &  15.12 &     15.23 &       11.09 &       11.20 &       11.00 &       11.11 \\
+		Standard error &   0.21 &      0.13 &        0.14 &        0.15 &        0.15 &        0.15 \\
+		25\%            &   1.18 &      6.60 &        1.66 &        1.57 &        1.20 &        1.39 \\
+		50\%            &  10.84 &     14.75 &       10.34 &        9.96 &        9.91 &        9.74 \\
+		75\%            &  24.60 &     23.52 &       19.62 &       19.41 &       19.27 &       19.13 \\
+		CPU time (s)   & 349.25 &      2.07 &       14.20 &     1122.12 &     2196.83 &     4106.89 \\
 		\bottomrule
 	\end{tabular}
 	
-	\caption{Regret from the multiple arm pulls experiment. ``OGI($K$)" refers to the Whittle heuristic-like policy, using $K$ look-ahead steps.}
+	\caption{Regret from the multiple arm pulls experiment. ``Whittle($K$)" refers to the Whittle heuristic policy, where $K$ look-ahead steps are used in computing the Optimistic Gittins index.}
 	\label{table:restless1_summary}
 \end{table}
