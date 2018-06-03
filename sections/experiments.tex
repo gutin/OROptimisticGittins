@@ -76,7 +76,8 @@ We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:cha
 \begin{figure}[h!]
 	\centering
 	\input{plots/large_scale_exp_a100.pgf}
-	\caption{Cumulative regret in the large-scale problem, of this section, averaged over 5,000 independent trials.}
+	\caption{Cumulative regret in the large-scale problem of this section averaged over 5,000 independent trials.
+		We plot the number of periods, $T$ on a logarithmic scale.}
 	\label{fig:chapelle_and_li}
 \end{figure}
 
@@ -84,15 +85,16 @@ We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:cha
 	\centering
 	\begin{tabular}{c|ccccc}
 		\toprule
-		Time periods (1000's) &   OGI &  Thompson &   Bayes-UCB &  Rel. adv (\%) &  Abs. adv \\
+		$T/A$ &   OGI &  Thompson &   IDS &  Rel. improvement (\%) &  Abs. improvement \\
 		\midrule
-		200 & 230.5 &     284.4 & 297.9 &                      18.9 &                  53.9 \\
-		400 & 254.7 &     311.6 & 333.5 &                      18.3 &                  57.0 \\
-		600 & 268.6 &     327.4 & 354.5 &                      18.0 &                  58.8 \\
-		800 & 279.1 &     339.2 & 369.6 &                      17.7 &                  60.1 \\
-		1,000 & 287.1 &     347.7 & 380.7 &                      17.4 &                  60.6 \\
+		20,000 & 230.5 &     284.4 & 297.9 &                            18.9 &                  53.9 \\
+		40,000 & 254.7 &     311.6 & 333.5 &                            18.3 &                  57.0 \\
+		60,000 & 268.6 &     327.4 & 354.5 &                            18.0 &                  58.8 \\
+		80,000 & 279.1 &     339.2 & 369.6 &                            17.7 &                  60.1 \\
+		100,000 & 287.1 &     347.7 & 380.7 &                            17.4 &                  60.6 \\
 		\bottomrule
 	\end{tabular}
+	
 	\caption{Regret in the large scale experiment from OGI, Thompson Sampling and Bayes UCB. The last two columns show the relative and absolute difference from Thompson Sampling, which is the closest competitor to OGI.}
 	\label{table:additional_cli_table}
 \end{table}
@@ -126,7 +128,11 @@ We benchmark our heuristic against Thompson Sampling and IDS. Because the arms g
 
 The results, produced from 1,000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. We notice a significant spread in the performance between OGI and both Thompson Sampling and IDS. Just like for our main algorithm, the primary computational bottleneck in using OGI comes from solving the stopping problem and this can be onerous if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters. The experiment here sets the stage for an exploration of the appropriate extensions to the OGI algorithm for more complex bandit problems (such as contextual bandits) which we leave for future work. 
 
-%By contrast, IDS is the slowest algorithm because it needs to generate a hundred Monte Carlo samples in every iteration.
+The results, produced from 2,000 independent trials, are summarized in Figure~\ref{fig:restless1} and Table~\ref{table:restless1_summary}. The horizon is limited to 250 time periods because of the increased computational effort required to execute a single trial of both the IDS algorithm and Whittle's heuristic, when $K > 1$. This extra time is on the order of minutes for these algorithms.
+For the sake of simplicity, we dub this algorithm as exactly `Whittle's heuristic' for the remainder of this section.
+
+We notice a significant spread in performance between Whittle's heuristic and both Thompson Sampling and IDS. Just like for our main algorithm, the primary computational bottleneck in using Whittle's heuristic comes from solving the stopping problem and this can be onerous if $K$ is large. However, as the results suggest, the policy works well even for low to moderate look-ahead parameters but nonetheless improves slightly when $K$ increases. By contrast, IDS is one of the slowest algorithm because it needs to generate a hundred Monte Carlo samples in every iteration.
+
 \begin{figure}
 	\centering
 	\input{plots/multiple_pulls.pgf}
@@ -136,18 +142,19 @@ The results, produced from 1,000 independent trials, are summarized in Figure~\r
 
 \begin{table}
 	\centering
-	\begin{tabular}{lrrrr}
+	\begin{tabular}{lrrrrrr}
 		\toprule
-		{} &   IDS &  Thompson &  Whittle(3) &  Whittle(4) \\
+		{} &    IDS &  Thompson &  Whittle(1) &  Whittle(2) &  Whittle(3) &  Whittle(4) \\
 		\midrule
-		Mean      & 15.50 &     15.12 &       11.07 &       11.23 \\
-		SD       & 22.14 &     13.08 &       14.85 &       14.71 \\
-		25\% &  1.32 &      6.02 &        1.02 &        1.08 \\
-		50\%    & 10.75 &     14.86 &        9.65 &        9.85 \\
-		75\% & 24.65 &     23.12 &       20.00 &       19.97 \\
+		Mean           &  15.12 &     15.23 &       11.09 &       11.20 &       11.00 &       11.11 \\
+		Standard error &   0.21 &      0.13 &        0.14 &        0.15 &        0.15 &        0.15 \\
+		25\%            &   1.18 &      6.60 &        1.66 &        1.57 &        1.20 &        1.39 \\
+		50\%            &  10.84 &     14.75 &       10.34 &        9.96 &        9.91 &        9.74 \\
+		75\%            &  24.60 &     23.52 &       19.62 &       19.41 &       19.27 &       19.13 \\
+		CPU time (s)   & 349.25 &      2.07 &       14.20 &     1122.12 &     2196.83 &     4106.89 \\
 		\bottomrule
 	\end{tabular}
 	
-	\caption{Regret from the multiple arm pulls experiment. ``OGI($K$)" refers to the Whittle heuristic-like policy, using $K$ look-ahead steps.}
+	\caption{Regret from the multiple arm pulls experiment. ``Whittle($K$)" refers to the Whittle heuristic policy, where $K$ look-ahead steps are used in computing the Optimistic Gittins index.}
 	\label{table:restless1_summary}
 \end{table}
