@@ -129,7 +129,7 @@ We end this section, with some brief commentary on computation. For concreteness
 \end{equation}
 This equation is easily solved via a method such as Newton-Raphson. In fact, the gradients required for the use of the Newton-Raphson approach are often readily available in closed form. To wit, in the case of a Beta prior with sufficient statistics $(a,b)$, \eqref{eqn:ogi_k1} reduces to
 \[
-	\lambda  =  \frac{a}{a+b}\left(1 - \gamma F^\beta_{a+1,b}(\lambda)\right) + \gamma \lambda \left(1-F^\beta_{a,b}(\lambda)\right) \triangleq g_{a,b}(\lambda)
+	\lambda  =  \frac{a}{a+b}\left(1 - \gamma F^\beta_{a+1,b}(\lambda)\right) + \gamma \lambda F^\beta_{a,b}(\lambda) \triangleq g_{a,b}(\lambda)
 \]
 wherein we see that $\frac{\partial}{\partial \lambda} g_{a,b}(\lambda)$ can be computed in closed form. This makes the use of the Newton-Raphson method for the solution of the equation $\lambda =  g_{a,b}(\lambda)$ particularly simple. In our computational experiments, we will see that the choice of $K=1$ already provides a material improvement in empirical performance over state-of-the-art alternatives. 
 
