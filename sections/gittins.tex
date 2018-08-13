@@ -127,7 +127,8 @@ We end this section, with some brief commentary on computation. For concreteness
 \begin{equation} \label{eqn:ogi_k1}
 \lambda = \E[R(y)] + \gamma \E[(\lambda - R(y))^+].
 \end{equation}
-This equation is easily solved via a method such as Newton-Raphson. In fact, the gradients required for the use of the Newton-Raphson approach are often readily available in closed form. To wit, in the case of a Beta prior with sufficient statistics $(a,b)$, \eqref{eqn:ogi_k1} reduces to
+This equation is easily solved via a method such as Newton-Raphson\footnote{Intuitively, we solve a `degenerate' stopping problem, where we one is forced to stop at time $1$. Such a problem involves no recourse decisions (or learning) and `nature' immediately reveals the true mean reward after pulling the arm once. This is why the index is especially easy to compute when $K=1$.}.
+In fact, the gradients required for the use of the Newton-Raphson approach are often readily available in closed form. To wit, in the case of a Beta prior with sufficient statistics $(a,b)$, \eqref{eqn:ogi_k1} reduces to
 \[
 	\lambda  =  \frac{a}{a+b}\left(1 - \gamma F^\beta_{a+1,b}(\lambda)\right) + \gamma \lambda F^\beta_{a,b}(\lambda) \triangleq g_{a,b}(\lambda)
 \]
