@@ -48,20 +48,21 @@ Consider employing discount factors that increase at roughly the rate $1 - 1/t$;
 \frac{1}
 {2^{\floor{\log_2 t}}}%+1}}
 \]
-and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t-1)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is within a factor of $\log T$ of the optimal Bayes risk. Specifically, we have:
+and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t-1)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is sub-linear as long as the reward distribution is uniformly bounded. Specifically, we have:
 \begin{proposition}
 	\label{prop:gittins_log3T}
+	Assume that rewards are uniformly bounded, namely that $X_{i,t} \in [0,1]$ for all $i \in \mathcal A$ and $t$. Then
 	\[
 	{\rm Regret}(\pi^{\rm D},T)
 	=
 	O
 	\left(
-	\log^3 T
+	\sqrt T
 	\right).
 	\] 
-	where the constant in the big-Oh term depends on the prior $q$ and $A$.
+	where the constant in the big-Oh term depends on $A$.
 \end{proposition}
-The proof of this result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is within a constant factor of the optimal finite horizon regret. The second ingredient is the doubling trick described above. The coarse analysis above illustrates that the use of the Gittins index policy together with an increasing discount factor does indeed yield an algorithm with sub-linear Bayesian regret. It is worth noting that the result above does not show that such a policy achieves {\em optimal} Bayesian regret (the achievable lower bound being on the order of $\log^2T$ \citep{lai1987adaptive}). The analysis does however suggest a candidate discount rate schedule that we will eventually show to yield a regret optimal policy (in a frequentist sense). 
+The proof of this result (Appendix~\ref{proof:prop_log3T}) relies on showing that the finite horizon regret achieved by using a Gittins index with an appropriate fixed discount factor is bounded by the regret of the IDS policy \citep{russo2014learning}. The second ingredient is the doubling trick described above. The coarse analysis above illustrates that the use of the Gittins index policy together with an increasing discount factor does indeed yield an algorithm with sub-linear Bayesian regret. It is worth noting that the result above does not show that such a policy achieves {\em optimal} Bayesian regret (the achievable lower bound being on the order of $\log^2T$ \citep{lai1987adaptive}). The analysis does however suggest a candidate discount rate schedule that we will eventually show to yield a regret optimal policy (in a frequentist sense). 
  
 \subsection{Optimistic Approximations to The Gittins Index}\label{sec:approx_agi_deriv}
 
