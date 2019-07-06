@@ -1,7 +1,13 @@
 \section{Computational Experiments} \label{sec:experiments}
-Our goal is to benchmark Optimistic Gittins Indices (OGI) against state-of-the-art Bayesian algorithms. Specifically, we compare ourselves against Thomson Sampling, Bayes UCB and IDS. Each of these algorithms has in turn been shown to substantially dominate other extant schemes. Our experimental setup closely follows that of \cite{russo2014learning,kaufmann2012thompson} and \cite{chapelle2011empirical}. 
-%The only difference in our paper is we will randomize arm parameters rather than set them to specific constants. This is for consistency and so that we focus on evaluating algorithms purely on their Bayesian performance. 
+Our goal is to benchmark Optimistic Gittins Indices (OGI) against state-of-the-art Bayesian algorithms. Specifically, we compare ourselves against Thomson Sampling, Bayes UCB and IDS. Each of these algorithms has in turn been shown to substantially dominate other extant schemes. Our experimental setup closely follows that of \cite{russo2014learning,kaufmann2012thompson} and \cite{chapelle2011empirical}.
 The experiment from \cite{kaufmann2012thompson} is deferred to Appendix~\ref{exp:bayes_ucb} because it is brief and sends a similar message to the rest of this section. We conclude with a novel experiment to test the problem with multiple simultaneous arm pulls.
+
+{\color{blue}In addition to the previously mentioned benchmarks, and in order to understand the impact behind each element of OGI (varying discount factor, the optimistic approximation to Gittins index, etc.), we simulate a few additional algorithms. These are 
+\begin{itemize}
+	\item OGI with a one-step lookahead and a fixed discount factor of $\gamma$, which we will refer to throughout as ``FOGI($1/(1-\gamma)$)". The quantity $1/(1-\gamma)$ can be interpreted as a rough horizon over which this policy is optimal.
+	\item OGI in which the Gittins index approximation equals the closed-form expression given in \cite{brezzi2002optimal}. We will refer to this policy as ``BL-OGI".
+	\item The greedy policy, which plays the arm in $\argmax_i \E_{y_{i, N_i(t-1)}}[X_{i,t}]$. Effectively it is equivalent to FOGI($1$), and completely disregards the value of future exploration. We will simply call this policy ``Greedy" in our tables and plots.
+\end{itemize}}
 
 For the majority of experiments, we configure the OGI algorithm with $K =1$ to keep the computational burden under control. In one experiment, included for completeness, we test OGI with $K = 3$ and $K=\infty$, where the latter is equivalent to using Gittins indices. The purpose of those experiments is to show the (limited) value of a higher lookahead in the OGI algorithm. 
 
@@ -14,8 +20,6 @@ We use a common discount factor schedule in all experiments setting $\gamma_t = 
 This section considers a series of smaller scale experiments (10 arms, 1000 time periods) drawn from the paper introducing the IDS algorithm, \citep{russo2014learning}. A major consideration in running these experiments is that the CPU time required to execute IDS, the closest competitor, based on the current suggested implementation is orders of magnitudes greater than that of the index schemes or Thompson Sampling. The main bottleneck is that IDS uses numerical integration, requiring the calculation of a CDF over, at least, hundreds of iterations. By contrast, the version of OGI with $K=1$ uses 10 iterations of the Newton-Raphson method. 
 
 \paragraph{Gaussian}We replicate the Gaussian experiments from \cite{russo2014learning}. In the first experiment (Table~\ref{table:gaussian_experiment1}), the arms generate Gaussian rewards  $X_{i,t} \sim \mathcal{N}(\theta_i, 1)$ where each $\theta_i$ is independently drawn from a standard Gaussian distribution. We simulate 1,000 independent trials with 10 arms and 1,000 time periods. The implementation of OGI in this experiment uses $K = 1$. It is difficult to compute exact Gittins indices in this setting, but a classical approximation for Gaussian bandits does exist; see \cite{powell2012optimal}, Chapter 6.1.3. We term the use of that approximation `OGI($\infty$) Approx'.  In addition to regret, we  show the average CPU time taken, in seconds, to execute each trial.
-%We also evaluate a policy (labeled `OGI Approx' in the table) that computes a particular closed-form approximation to the Gittins Index given in Chapter 6.1.3 of Powell and Ryzhov \cite{powell2012optimal}. 
-
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{cccccc} \toprule
@@ -34,10 +38,35 @@ This section considers a series of smaller scale experiments (10 arms, 1000 time
 
 The key feature of the results here is that OGI offers an approximately 10\% improvement in regret over its nearest competitor IDS, and larger improvements (20 and 40 \% respectively) over Bayes UCB and Thompson Sampling. The best performing policy is OGI with the specialized Gaussian approximation since it gives a closer approximation to the Gittins Index. At the same time, OGI is essentially as fast as Thompson sampling, and three orders of magnitude faster than its nearest competitor (in terms of regret). 
 
+{\color{blue}
+Next, in Table~\ref{table:gaussian_experiment2} we compare OGI against some of its variants: FOGI, BL-OGI and Greedy, that were explained earlier. Importantly, we see that there is value in knowing the true horizon $T$ since FOGI($T$) approximates the optimal Gittins index policy and so performs well. It's also worth highlighting that because the Gittins index policy is near-optimal for this particular choice of horizon, our approximation is effective during the running of the algorithm.
+In contrast to getting the horizon $T$ correct, either over or under-estimating the horizon leads to worse performance as evidenced by the regret from FOGI($T/10$), FOGI($10T$) and Greedy. Interestingly, we also see that the BL-OGI shows larger regret than OGI, suggesting that there is perhaps value in using our optimistic approximation for this particular problem.
+}
+
+\begin{table}[h!]
+	\centering
+	{\color{blue}
+	\begin{tabular}{lrrrrr}
+		\toprule
+		{} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
+		\midrule
+		Mean  &   58.54 &  167.16 &      49.61 &         60.72 &        59.09 \\
+		Standard error   &    2.14 &    9.74 &       1.90 &          4.25 &         1.47 \\
+		25\%   &   45.83 &  102.75 &      39.28 &         34.85 &        50.94 \\
+		50\%   &   56.87 &  156.63 &      47.29 &         52.19 &        57.84 \\
+		75\%   &   67.67 &  216.77 &      60.04 &         87.63 &        67.59 \\
+		CPU time (s)   &  164.48 &  405.66 &     119.72 &        226.19 &        94.30 \\
+		\bottomrule
+	\end{tabular}
+	}
+	\caption[Table caption text]{Comparison against some of OGI's simpler variants in the  Gaussian setup.}
+	\label{table:gaussian_experiment2}
+\end{table}
 
 \paragraph{Bernoulli}
 We next replicate the Beta-Bernoulli experiments from \cite{russo2014learning}.
 In this experiment regret is simulated over 1,000 periods, with 10 arms each having a uniformly distributed Bernoulli parameter. We simulate 1,000 independent trials and Table~\ref{table:bernoulli_experiment1} summarizes the results.
+
 
 \begin{table}[h!]
 	\centering
@@ -53,10 +82,33 @@ In this experiment regret is simulated over 1,000 periods, with 10 arms each hav
 	\caption[Table caption text]{Bernoulli experiment. OGI($K$) denotes the OGI algorithm with a $K$ step approximation and tuning parameter $\alpha = 100$. OGI($\infty$) is the algorithm that uses Gittins Indices.}
 	\label{table:bernoulli_experiment1}
 \end{table}
-Each version of OGI outperforms other algorithms and the one that uses exact Gittins Indices shows the lowest mean regret.
-Perhaps, unsurprisingly, when OGI  looks ahead 3 steps (or when the lookahead is not limited), it performs better than with a single step. It is however apparent that in each of these cases the improvement over simply setting $K=1$ is marginal. Indeed, looking ahead 1 step is a reasonably close approximation to the Gittins Index in the Bernoulli problem. In the Appendix, we report the approximation error in approximating the Gittins index for various choice of $K$. When using an optimistic 1 step approximation, the error is around 15\% and if $K$ is increased to 3, the error drops to around 4\% (see Tables~\ref{table:ogi_table_for_gamma_9} and \ref{table:ogi_table_for_gamma_95} in the Appendix). 
+
+Each version of OGI outperforms {\color{blue}all of the benchmark} algorithms and the one that uses exact Gittins Indices shows the lowest mean regret.
+Perhaps, unsurprisingly, when OGI  looks ahead 3 steps (or when the lookahead is not limited), it performs better than with a single step. It is however apparent that in each of these cases the improvement over simply setting $K=1$ is marginal. Indeed, looking ahead 1 step is a reasonably close approximation to the Gittins Index in the Bernoulli problem. In the Appendix, we report the approximation error in approximating the Gittins index for various choice of $K$. When using an optimistic 1 step approximation, the error is around 15\% and if $K$ is increased to 3, the error drops to around 4\% (see Tables~\ref{table:ogi_table_for_gamma_9} and \ref{table:ogi_table_for_gamma_95} in the Appendix). {\color{blue} The comparison against FOGI, BL-OGI and Greedy in the Bernoulli case, presented in Table~\ref{table:bernoulli_experiment2}, tells a similar story as in Table~\ref{table:gaussian_experiment2}.
+}
 
 As an aside, we note that the regret we computed for the IDS algorithm is slightly different from that reported by \cite{russo2014learning}. Specifically, we obtain slightly lower regret for IDS than they report in the Gaussian experiments, and slightly higher values for the Beta-Bernoulli case; we include a link to the code we used to implement the algorithms\footnote{\url{https://github.com/gutin/FastGittins}} as a reference.  
+
+
+\begin{table}[h!]
+	\centering
+	{\color{blue}
+		\begin{tabular}{lrrrrr}
+			\toprule
+			\textbf{Algorithm} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
+			\midrule
+			Mean  &   23.50 &   56.32 &      16.52 &         18.69 &        20.14 \\
+			Standard error  &    0.63 &    2.36 &       0.62 &          0.82 &         0.58 \\
+			25\%   &   18.74 &   37.61 &      12.36 &         12.70 &        16.36 \\
+			50\%   &   22.50 &   55.16 &      15.55 &         17.14 &        19.43 \\
+			75\%   &   28.18 &   74.64 &      19.72 &         23.29 &        23.62 \\
+			CPU time (s)  &   0.01 &  0.001 &   0.12 &         0.11 &      0.13  \\
+			\bottomrule
+		\end{tabular}
+		\caption[Table caption text]{\color{blue}Comparison against some of OGI's simpler variants in the  Bernoulli setup.}
+		\label{table:bernoulli_experiment2}
+	}
+\end{table}
 
 \subsection{Large scale experiment} \label{exp:ts_sampling_experiment}
 This experiment replicates a large scale synthetic experiment in \cite{chapelle2011empirical}.
@@ -69,10 +121,11 @@ In particular, we can think of the horizon as giving us a rough budget on the nu
 The idea is that with more trials per arm we should expect a smaller relative difference between the algorithms (and indeed the theoretical guarantees for the algorithms require this happen). 
 We will see that even when the ratio $T/A$ and $A$ itself are large, there is a substantial difference between OGI and the competing benchmarks in both a relative and absolute sense.
 
-As this experiment requires an order of magnitude more iterations than the earlier ones, we are only able to simulate the fastest algorithms, which are OGI with $K=1$, Thompson Sampling and Bayes UCB. 
+As this experiment requires an order of magnitude more iterations than the earlier ones, we are only able to simulate the fastest algorithms, which are {OGI with $K=1$, Thompson Sampling, Bayes UCB, FOGI-$\gamma$ and BL-OGI. 
+}
 It was not possible to include IDS because its performance is hindered by the fact that each arm pull decision requires time that is quadratic in the number of arms to compute. 
 Again, this is a Bernoulli experiment where arm means are independently sampled from a uniform prior and each algorithm assumes this same prior over the unknown mean rewards from the arms.
-We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:chapelle_and_li} and Table~\ref{table:additional_cli_table}.
+We show the {\color{blue} six best} algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:chapelle_and_li}. {\color{blue}Table~\ref{table:additional_cli_table} quantifies OGI's outperformance over its closest horizon-independent competitor, namely Thompson Sampling.}
 {
 \color{blue}
 \begin{figure}[h!]
@@ -85,23 +138,26 @@ We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:cha
 }
 \begin{table}[h!]
 	\centering
-	\begin{tabular}{c|ccccc}
+	{\color{blue}
+	\begin{tabular}{c|cccc}
 		\toprule
-		$T/A$ &   OGI &  Thompson &   IDS &  Rel. improvement (\%) &  Abs. improvement \\
+		$T/A$ &   OGI &  Thompson &  Relative improvement (Percent) &  Absolute improvement \\
 		\midrule
-		{\color{blue}2,000} & 230.5 &     284.4 & 297.9 &                            18.9 &                  53.9 \\
-		{\color{blue}4,000} & 254.7 &     311.6 & 333.5 &                            18.3 &                  57.0 \\
-		{\color{blue}6,000} & 268.6 &     327.4 & 354.5 &                            18.0 &                  58.8 \\
-		{\color{blue}8,000} & 279.1 &     339.2 & 369.6 &                            17.7 &                  60.1 \\
-		{\color{blue}10,000} & 287.1 &     347.7 & 380.7 &                            17.4 &                  60.6 \\
+		2,000 & 230.5 &     284.4 &                            18.9 &                  53.9 \\
+		4,000 & 254.7 &     311.6 &                            18.3 &                  57.0 \\
+		6,000 & 268.6 &     327.4 &                            18.0 &                  58.8 \\
+		8,000 & 279.1 &     339.2 &                            17.7 &                  60.1 \\
+		10,000 & 287.1 &     347.7 &                            17.4 &                  60.6 \\
 		\bottomrule
 	\end{tabular}
-	
+	}
 	\caption{Regret in the large scale experiment from OGI, Thompson Sampling and Bayes UCB. The last two columns show the relative and absolute difference from Thompson Sampling, which is the closest competitor to OGI.}
 	\label{table:additional_cli_table}
 \end{table}
 
-As before, the OGI scheme consistently dominates the other two. What is particularly interesting is that despite going out to a horizon of $10^6$ time periods, the relative improvement in regret over these algorithms remains substantial. For instance, going from a horizon length of $2 \times 10^5$ (corresponding to a heuristic budget of $T/A = 200$ pulls per arm) 
+As before, the OGI scheme consistently dominates {\color{blue}Thompson Sampling and Bayes UCB. We did not plot the Greedy policy and BL-OGI since their regret is almost twice as high as that of Bayes UCB. Including them would have obscured the Figure. We notice that using a fixed discount factor of either $1-1/T$,  $1-10/T$ and  $1-1/(10T)$ actually results in lower regret than under the usual OGI. When $\gamma = 1 - 1/T$, we are effectively using the right discount factor for the problem because the horizon is $T$. The fact that Gittins index is optimal arguably makes it unsurprising that FOGI$(T)$ performs that well, which creates a compelling case for our optimistic approximation to be useful in practice.  By running FOGI$(T/10)$ and thus effectively underestimating $T$, gives us the upward sloping curve seen in Figure~\ref{fig:chapelle_and_li}. Ultimately, FOGI$(T/10)$ explores less than FOGI$(T)$ and that extra exploitation helps it early on when $t \ll T$ but harms it as $t$ approaches $T$. Interestingly, running FOGI$(10T)$ gives decent performance and its regret curve is most robust to the upward sloping effect encountered around $t \approx T$. What should be apparent from these plots is that using a discount factor schedule, as in OGI, of $\gamma_t = 1-1/t$ gives us a performant \emph{anytime} bandit algorithm whose success does not rely on the precise choice of $T$.}
+
+What is particularly interesting is that despite going out to a horizon of $10^6$ time periods, the relative improvement in regret over {\color{blue} Thompson Sampling} remains substantial. For instance, going from a horizon length of $2 \times 10^5$ (corresponding to a heuristic budget of $T/A = 200$ pulls per arm) 
 to a horizon length of $10^6$ (corresponding to a heuristic budget of $T/A = 1000$ pulls per arm) resulted in the relative improvement offered by OGI shrining only marginally, from $18.9\%$ to $17.4\%$. 
 
 % and the relative margin by which OGI outperforms the other algorithms appears to decline, albeit steadily with the horizon.
@@ -113,7 +169,7 @@ to a horizon length of $10^6$ (corresponding to a heuristic budget of $T/A = 100
 
 \subsection{Bandits with multiple arm pulls}
 
-In this section, we consider a somewhat exploratory experiment; we seek to adapt OGI to a more complex bandit problem (here, we allow for multiple simultaneous arm pulls). Again, in the discounted infinite horizon setting, a number of heuristic approaches have been proposed to adapt the Gittins index to more complex settings; a good example is the so-called Whittle relaxation for restless bandits. One might consider applying those same heuristic strategies to the optimistic gittins index. 
+In this section, we consider a somewhat exploratory experiment; we seek to adapt OGI to a more complex bandit problem (here, we allow for multiple simultaneous arm pulls). Again, in the discounted infinite horizon setting, a number of heuristic approaches have been proposed to adapt the Gittins index to more complex settings; a good example is the so-called Whittle relaxation for restless bandits. One might consider applying those same heuristic strategies to the optimistic Gittins index. 
 
 For this experiment, we consider a more general MAB problem, where the agent is able to pull up to a certain number (say $m < A$) of the arms simultaneously. In order to describe the problem, we recall that $A$ is the total number of arms and define  $\mathcal{D}_m := \{d \in \{0,1\}^A : \sum_i d_i \le m\}$ to be the set of all $A$-dimensional binary vectors with up to $m$ ones in them, which we take to be the action space. Let $X_t = (X_{1,t}, \ldots, X_{1,A})$ be a tuple of (potential) rewards from the $A$ arms at time $t$, where the definition of $X_{i,t}$ for any arm $i$ is the same as in Section~\ref{sec:model_and_prelim}. Given a decision $d \in \mathcal D_m$, which encodes the subset of arms pulled, the reward $d^\top X_t$ is earned and an arm $j$'s reward $X_{j,t}$ is observed if and only if that arm is pulled, i.e. $d_{j} = 1$. We can then define a policy $(\pi_t, t \in \mathbb{N})$ to be a $\mathcal{D}_m$-valued stochastic process adapted to an information set generated by past actions and observed feedback. 
 %where $\pi_{t+1}$ is measurable with respect to $\sigma\left( (\pi_s, (\pi_{i,s} X_{i,s}, \;i =1,\ldots,A)), \; s=1,\ldots,t\right)$. That is a policy's information set comes from its previous decisions and observed feedback.
