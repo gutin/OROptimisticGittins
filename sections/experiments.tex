@@ -73,6 +73,8 @@ As this experiment requires an order of magnitude more iterations than the earli
 It was not possible to include IDS because its performance is hindered by the fact that each arm pull decision requires time that is quadratic in the number of arms to compute. 
 Again, this is a Bernoulli experiment where arm means are independently sampled from a uniform prior and each algorithm assumes this same prior over the unknown mean rewards from the arms.
 We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:chapelle_and_li} and Table~\ref{table:additional_cli_table}.
+{
+\color{blue}
 \begin{figure}[h!]
 	\centering
 	\input{plots/large_scale_exp_a100.pgf}
@@ -80,18 +82,18 @@ We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:cha
 		We plot the number of periods, $T$ on a logarithmic scale.}
 	\label{fig:chapelle_and_li}
 \end{figure}
-
+}
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{c|ccccc}
 		\toprule
 		$T/A$ &   OGI &  Thompson &   IDS &  Rel. improvement (\%) &  Abs. improvement \\
 		\midrule
-		20,000 & 230.5 &     284.4 & 297.9 &                            18.9 &                  53.9 \\
-		40,000 & 254.7 &     311.6 & 333.5 &                            18.3 &                  57.0 \\
-		60,000 & 268.6 &     327.4 & 354.5 &                            18.0 &                  58.8 \\
-		80,000 & 279.1 &     339.2 & 369.6 &                            17.7 &                  60.1 \\
-		100,000 & 287.1 &     347.7 & 380.7 &                            17.4 &                  60.6 \\
+		{\color{blue}2,000} & 230.5 &     284.4 & 297.9 &                            18.9 &                  53.9 \\
+		{\color{blue}4,000} & 254.7 &     311.6 & 333.5 &                            18.3 &                  57.0 \\
+		{\color{blue}6,000} & 268.6 &     327.4 & 354.5 &                            18.0 &                  58.8 \\
+		{\color{blue}8,000} & 279.1 &     339.2 & 369.6 &                            17.7 &                  60.1 \\
+		{\color{blue}10,000} & 287.1 &     347.7 & 380.7 &                            17.4 &                  60.6 \\
 		\bottomrule
 	\end{tabular}
 	
