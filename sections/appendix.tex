@@ -138,15 +138,17 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 \begin{myproof}[Proof.]
 	Fix an arbitrary state $y$ and discount factor $\gamma \in (0,1)$. We prove convexity by induction on the parameter $K$. For $K = 1$, recall from Section~\ref{sec:gittins_and_approx} that
 	\begin{align*}
-	V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \gamma \E_y\left[\max(\lambda/(1-\gamma), R(y_{i,0}))\right].
+	{\color{blue} V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \frac{\gamma}{1-\gamma} \E_y\left[\max(\lambda, R(y_{i,0}))\right].}
 	\end{align*}
 	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$. 
 	
 	%Now assume that $R(y)$ is a continuous random variable. We will verify through the bounded convergence theorem that $V^1_\gamma(y, \lambda)$ is differentiable. Indeed, this holds because the event $\{ R(y)= \lambda/(1-\gamma)\}$, at which the random variable inside the expectation is not differentiable, has measure zero, precisely because $R(y)$ is a continuous random variable.
 	Now we show the inductive step. For any $K > 1$, assume that $V^{K-1}_\gamma(y, \lambda)$ is convex. By writing the Bellman equation,
+	{\color{blue}
 	\begin{align*}
-	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \gamma \E_y\left[\max\left(\lambda/(1-\gamma), V^K_\gamma(y_{i,1}, \lambda)\right) \right],
+	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \frac{\gamma}{1-\gamma} \E_y\left[\max\left(\lambda, V^{K-1}_\gamma(y_{i,1}, \lambda)\right) \right],
 	\end{align*}
+	}
 	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$.% If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
 \end{myproof}
 
@@ -156,31 +158,44 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	Let $v^K_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $\eta$ be a scalar, then the following equivalence holds
 	\[
 	\{v^K_{i,t} < \eta \} = \{(1-\gamma_t)V^K_{\gamma_t}(y_{i,\Ntg{i}{t}}, \eta) < \eta\}\]
-	where $y_{i,\Ntg{1}{t}}$ is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
+	where {\color{blue}$y_{i,\Ntg{i}{t}}$} is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
 \end{lemma}
+{
+\color{blue}
 \begin{myproof}[Proof.]
-	First of all note that for any state $y$ and discount factor $\gamma$, the function
+	Fix any state $y$ and discount factor $\gamma$. At $\lambda = 0$, we have
+	\[
+		(1-\gamma)V^K_{\gamma}(y, 0) \ge 0
+	\]
+	because $V^K_{\gamma}(0,y)$ is the expectation of a sum of nonnegative terms. Also, in the other extreme case when $\lambda = B$, the function in question evaluates to
+	\[
+		V^K_{\gamma}(y, B) = \E_y\left[X_{i,1}\right] + \frac{\gamma B}{(1-\gamma)} < \frac{B}{(1-\gamma)}.
+	\]
+	and so $(1-\gamma)V^{K}_\gamma(y, B) < B$.
+	
+	Next we prove that $V^K_\gamma(y, \lambda)$ is monotonically increasing in $\lambda$. To show this, pick any $\lambda' < \lambda''$ and let $\tau^*(\lambda')$ and $\tau^*(\lambda'')$ denote the two optimal stopping times under $\lambda', \lambda''$, respectively. It then follows, from $R_{\lambda,\tau}(.)$ being an increasing function of $\lambda$ on every sample path, that
 	\begin{align*}
-	(1-\gamma)V^K_\gamma(y, \lambda) - \lambda&  = \sup_{1 \le \tau \le K}\E_y\left[\sum_{s=1}^\tau\gamma^{s-1}(1-\gamma)X_{i,s} + \ind{\tau = K}\gamma^\tau(R(y_{i,\tau-1}) - \lambda)^+\right],
+	V^K_{\gamma}(y, \lambda') & = \E_y\left[\sum_{t=1}^{\tau^*(\lambda')} \gamma^{t-1}  X_{i,t} + \gamma^{\tau^*(\lambda')} \frac{R_{\lambda', K}(\tau, y_{i,\tau^*(\lambda')-1})}{1-\gamma}\right] \\
+	& \leq \E_y\left[\sum_{t=1}^{\tau^*(\lambda')} \gamma^{t-1}  X_{i,t} + \gamma^{\tau^*(\lambda')} \frac{R_{\lambda'', K}(\tau, y_{i,\tau^*(\lambda')-1})}{1-\gamma}\right] \\
+	& \leq \E_y\left[\sum_{t=1}^{\tau^*(\lambda'')} \gamma^{t-1}  X_{i,t} + \gamma^{\tau^*(\lambda'')} \frac{R_{\lambda'', K}(\tau, y_{i,\tau^*(\lambda'')-1})}{1-\gamma}\right] \\
+	& = V^K_{\gamma}(y, \lambda'').
 	\end{align*}
-	is convex (from Fact~\ref{fact:v_is_convex}) yet decreasing in $\lambda$. Also notice that at $\lambda = 0$
-	\[
-		V^K_{\gamma}(y, 0) = \frac{\E_y\left[X_{i,1}\right]}{(1-\gamma)} \ge 0
-	\]
-	because it is never optimal to retire in the stopping problem. Also, in the other extreme case when $\lambda = B$, the function in question evaluates to
-	\[
-		V^K_{\gamma}(y, B) = \E_y\left[X_{i,1}\right] + \frac{\gamma B}{(1-\gamma)} \le \frac{B}{(1-\gamma)}.
-	\]
-	Thus, consider again the above function of $\lambda$, namely,  $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$. Such a function is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and is also negative for $\lambda > v^K_\gamma(y)$.
+	Let's put together these observations:
+	\begin{itemize}
+		\item $(1-\gamma)V^{K}_\gamma(y, \lambda) \ge \lambda $ at $\lambda = 0$.
+		\item   $(1-\gamma)V^{K}_\gamma(y, \lambda) < \lambda $ at $\lambda = B$
+		\item $(1-\gamma)V^{K}_\gamma(y, \lambda)$ is monotonically increasing in $\lambda$.
+	\end{itemize}
+	These together with Fact~\ref{fact:v_is_convex} show that the univariate function  $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$ is continuous and decreasing in $\lambda$. Moreover, this function is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and is also negative for $\lambda > v^K_\gamma(y)$.
 	\begin{figure}
 		\centering
 		\input{plots/visualize_gx.pgf} 
 		\caption{Visualization of Lemma~\ref{cor:equivalent_event}'s proof for a instance of the problem with a Beta prior corresponding to the pair $y = (4,5)$, a discount factor of $\gamma=0.95$ and $K = 2$. The intersection of the two lines represents the Optimistic Gittins index.}
 		\label{fig:visaulize_gx_proof}
 	\end{figure}
-	From these observations, and the fact that $y$ and $\gamma$ were arbitrary, the result follows. Figure~\ref{fig:visaulize_gx_proof} provides a visualization of this proof.
+	This proves the result in question. Figure~\ref{fig:visaulize_gx_proof} also provides a visualization.
 \end{myproof}
-
+}
 
 \subsection{Proof of Lemma~\ref{lemma:approx_bound}} \label{prf:approx_bound}
 \begin{myproof}[Proof.]
@@ -194,7 +209,8 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\end{align*}
 	Thus we conclude, because $\hat \theta_i$ was arbitrary, that almost surely,
 	\begin{equation} \label{ineq:fundamntal_bound_for_lemma_2}
-	\Ee{\sum_{t=\tau_1+1}^{\tau_2} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2}\frac{\zeta(\hat \theta_i)}{1 - \gamma} \given[\Bigg] \theta_i}  \le \Ee{\gamma^{\tau_1} \given \theta_i }  \frac{\max(\zeta(\hat \theta_i), \mu(\theta_i))}{1-\gamma}.
+	\color{blue}
+	\Ee{\sum_{t=\tau_1+1}^{\tau_2} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2}\frac{\zeta( \theta_i)}{1 - \gamma} \given[\Bigg] \theta_i}  \le \Ee{\gamma^{\tau_1} \given \theta_i }  \frac{\max(\zeta( \theta_i), \mu(\theta_i))}{1-\gamma}.
 	\end{equation}
 	Let $\tau^\star$ be a stopping time that achieves the supremum in  $V_\gamma^M(y, \lambda)$ and define the predictable stopping time $\tau^\star_K \defeq K \wedge \tau^\star$. Consider the (conditional) cumulative rewards in the definition of $V^M_\gamma(y)$, from time $\tau^\star_K+1$ onwards, given the sufficient statistic observed at time $\tau_K^\star$. That is, 
 	\[
@@ -206,19 +222,21 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\P{R(\hat y) \le r} = \P{\mu(\theta_i) \le r \given y_{i,s} = \hat y}, \qquad \forall r \in \Re
 	\end{equation}
 	meaning that the posterior distribution of the arm's expected reward $R(y_{i,s})$ is the same as $\mu(\theta_i)$ \emph{conditioned} on having observed statistic $\hat y$ about the arm. This holds by definition of the random variable $R(y)$. Because of this observation, we have that the following inequality  holds almost surely,
+	{\color{blue}
 	\begin{align*}
 		& \gamma^{\tau^\star} \frac{R_{\lambda,M}(\tau^\star, y_{i,\tau^\star-1})}{1-\gamma}
 		 \nonumber \\
 		&\quad =  \gamma^{\tau^\star}\left( \ind{\tau^\star =M}\frac{\max(\lambda, R(y_{i,\tau^\star-1}))}{1-\gamma} + \ind{\tau^\star < M}\frac{\lambda}{1-\gamma}\right)
 		 \nonumber\\
-		&\quad= \ind{\tau^\star =M} \gamma^{M}\frac{\max(\lambda, R(y_{i,M}))}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
+		&\quad= \ind{\tau^\star =M} \gamma^{M}\frac{\max(\lambda, R(y_{i,M-1}))}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
 	\nonumber\\
-		& \quad\overset{(*)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, R(y_{i,M})) \given y_{i,M} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
+		& \quad\overset{(*)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, R(y_{i,M-1})) \given y_{i,M-1} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
 		\\
-		& \quad\overset{(\dagger)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, \mu(\theta_i)) \given y_{i,M} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
+		& \quad\overset{(\dagger)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, \mu(\theta_i)) \given y_{i,M-1} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
 		 \\
 		&\quad \overset{(**)}{\le} \frac{  \Ee{\gamma^{\tau^\star}\max(\lambda, \mu(\theta_i)) \given y_{i,\tau^\star-1} }}{1-\gamma}
 	\end{align*}
+	}
 	where $(*)$ and $(**)$ both use the fact that for any $t$, $\tau^\star \le t$ is measurable with respect to the $\sigma$-algebra generated by $y_{i,t-1}$, namely $\mathcal F_{t-1}$. Equation ($\dagger$) follows from \eqref{eqn:dist_equal_theta_i}. Therefore, immediately using the above inequality and conditioning on the event $\tau^\star > K$, we have that
 	\begin{align} 
 	&\E\left[\sum_{t=\tau_K^\star+1}^{\tau^\star} \gamma^{t-1} X_{i,t} + \gamma^{\tau^\star} \frac{R_{\lambda,M}(\tau^\star, y_{i,\tau^\star-1})}{1-\gamma}
