@@ -68,47 +68,232 @@
 	The result follows. 
 \end{myproof}
 \section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
+
+We begin by establishing a simple Lemma concerning the allocation rule proposed in \cite{lai1987adaptive}; we note that the allocation rule there is specified for a fixed time horizon, and the Lemma below extends it to a policy as defined in this paper. 
+
+\begin{lemma} 
+\label{lemma:laianytime}
+Let the prior with sufficient statistic $\mathbf y$ satisfy the requirements of Theorem~$3$ in \cite{lai1987adaptive}. Then, there exists a policy $\tilde \pi_{\mathbf y}$, and a constant $C_{\mathbf y}$ for which
+\[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y}, T
+\right)
+\triangleq 
+\E_{\mathbf y}
+\left[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y}, T,\theta
+\right)
+\right]
+\leq
+C_{\mathbf y} \log^3 T
+\] 
+for all $T$. 
+\end{lemma}
 \begin{myproof}[Proof.]
-	%First, letting $\gamma_n = 1 - 1/n$, we show that
-	%\begin{equation} \label{eq:basic_finite_time_gittins}
-	%\Regret{\pi^{G, \gamma_n}, n} = O\left( \log^2(n) \right).
-	%\end{equation}
-	We start by proving a regret bound for the Gittins index policy over a finite horizon.
-	Since we are dealing with Bayesian regret, we will prove our bound by comparing against the Information Directed Sampling (IDS) policy, denoted by $\pi^{IDS}$. It was shown in \citep{russo2014learning} (Proposition 2) that for any horizon $T \in \mathbb N$ and any prior, described by a vector $\hat{\mathbf y}$, that
-	\[
-	\E_{\hat{\mathbf y}}\left[ \Regret{\pi^{IDS}, T, \theta} \right] 
-	 \le  \sqrt{\frac{1}{2} (A \log A) T}.
-	\]
-	whenever the reward distribution is uniformly bounded.
-	We will leverage this useful result in the next step of the proof.
-	
-	Fix any $n \ge 2$ and sufficient statistic $\hat{\mathbf y}$. Define $H$ to be a geometric random variable with mean $n$, then	
-	\begin{align}
-	\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, \gamma_n}, n, \theta}\right]  & = \E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, \gamma_n}, n, \theta}\right]\frac{\P{H > n}}{(1 - 1/n)^n} \nonumber \\
-	&  \le  \E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, \gamma_n}, H, \theta} \given H > n\right]\frac{\P{H > n} }{(1 - 1/n)^n} \nonumber\\
-	& \le  (1 - 1/n)^{-n}  \E_{\hat{\mathbf y}}\left[ \Regret{\pi^{G,\gamma_n}, H, \theta} \right] \nonumber   \\
-	& \le  4 \E_{\hat{\mathbf y}}\left[ \Regret{\pi^{G,\gamma_n}, H, \theta} \right]   \nonumber \\
-	& \le 4\E_{\hat{\mathbf y}}\left[ \Regret{\pi^{IDS}, H, \theta} \right] \label{eqn:opt_gittins_over_geo_horizon} \\
-	& \le 4 \E\left[  \sqrt{\frac{1}{2} (A \log A) H} \right] \nonumber\\
-	& \le  \E\left[  \sqrt{8 (A \log A) H} \right] \nonumber \\
-	& \le  \sqrt{8 (A \log A) \E[H]}  \label{eqn:jensens_ids} \\
-	& =  \sqrt{8 (A \log A) n} \label{eqn:regret_bound_for_ids}   
-	\end{align}
-	where \eqref{eqn:opt_gittins_over_geo_horizon} follows from the Gittins index policy being optimal over the random \& geometrically distributed horizon of $H$ (because $\E[H] = n$ and the discount factor is assumed to be $1 - 1/n$ here). Equation~\eqref{eqn:jensens_ids} follows from Jensen's inequality.
-	
-	Back to the doubling trick policy. Recall that this entails pulling the arms according to $\pi^{G,1 - 1/2^{k-1}}$ during periods $\{2^{k-1},\ldots,2^{k}-1\}$ for each $k \in \mathbb{N}$.
-	For convenience, we define the function $\text{Regret}(\pi, t_1, t_2, \theta)$ to be the total regret accumulated from periods $t_1$ up to $t_2$ under policy $\pi$ and where the arms' parameters are set to $\theta$. We will also denote the tuple of sufficient statistics for the arms in period $t$ as $\mathbf y_t$, to reflect all the Bayesian updates up to and inlcuding that time.
-	
-	Now we can bound the Bayes risk up to time $T$ as follows:
-	\begin{align}
-		\E_{\mathbf y}\left[\Regret{\pi^D, T, \theta} \right] &
-		\leq 1 + \sum_{k=2}^{\ceil{\log_2 T}} \E_{\mathbf y}\left[\Regret{\pi^D, 2^{k-1}, 2^k - 1, \theta} \right] \nonumber \\
-		& = 1+ \sum_{k=2}^{\ceil{\log_2 T}} \E_{\mathbf y}\left[ \E_{\mathbf y_{2^k-1}}\left[\Regret{\pi^{G, 1 - 1/2^{k-1}}, 2^{k-1}, \theta} \right] \right] \nonumber \\
-		& \le 1 + \sum_{k=2}^{\ceil{\log_2 T}}  \sqrt{8(A \log A) 2^{k-1}} \label{eqn:application_of_ids}\\
-		& = \mathcal O\left( \sqrt{T} \right), \nonumber
-	\end{align}
-	where inequality \eqref{eqn:application_of_ids} is implied by  \eqref{eqn:regret_bound_for_ids}.
+By Theorem $3$ in \cite{lai1987adaptive}, we know that there exists a constant $\bar C_{\mathbf y}$ such that for any $T$, there exists a policy, $\tilde \pi_{\mathbf y, T}$  (that depends on $T$ and is specified only up to time $T$), for which
+\[
+\E
+_{\mathbf y}
+\left[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y, T}, T,\theta
+\right)
+\right]
+\leq
+\bar C_{\mathbf y} \log^2 T
+\]
+Now consider the `doubling' policy $\tilde \pi_{\mathbf y}$ which at time $t$ selects arms according to the policy $\tilde \pi_{\mathbf y,2^k}$ applied at the state $g\left(\mathbf y, h_{2^{k(t)}-1}^t\right)$ where $k(t) = \lfloor \log_2(t+1) \rfloor$. In words, this is the policy obtained wherein (a) time is divided into epochs such that the $k$th epoch extends from time $2^{k}-1$ to $2^{k+1}-2$, and (b) at the start of the $k$th epoch we `forget' everything learned up until that time and subsequently use the policy $\tilde \pi_{\mathbf y,2^k}$ over the course of that epoch. Thus,
+\[
+\begin{split}
+\E
+_{\mathbf y}
+\left[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y}, T,\theta
+\right)
+\right]
+&
+\leq
+\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E_{\mathbf y}
+\left[
+\E_{\mathbf y_{2^k -2}}
+\left[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y,2^k}, 2^k,\theta
+\right)
+\right]
+\right]
+\\
+&
+=
+\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E
+\left[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y,2^k}, 2^k,\theta
+\right)
+\right]
+\\
+&
+\leq
+\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+C_y \log^2 2^k
+\\
+&
+\leq
+\bar C_y C \log^3 T
+\end{split}
+\]
+where the equality follows from the tower property and where $C$ is some absolute constant. 
 \end{myproof}
+
+Next, we establish a simple result related to the Gittins index policy that relates the finite horizon performance of the policy to the (discounted) infinite horizon performance. 
+
+\begin{lemma}
+\label{lemma:gittinsfiniteinfinite}
+For any $\mathbf{\hat y} \in \Yscr$, and horizon $T' \geq 2$, we have
+\[
+\E
+_{\hat{\mathbf y}}
+\left[
+{\rm Regret}\left(
+\pi^{G,1-1/{T'}}, T',\theta
+\right)
+\right]
+\leq
+4
+\E
+_{\hat{\mathbf y}}
+\left[
+{\rm Regret}\left(
+\pi^{G,1-1/{T'}}, H_{T'},\theta
+\right)
+\right]
+\]
+where $H_{T'}$ is an independent Geometrically distributed random variable with mean $T'$. 
+\end{lemma}
+\begin{myproof}[Proof.]
+We have
+\[
+\begin{split}
+\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, T', \theta}\right]  
+& = 
+\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, T', \theta}\right]\frac{\P{H_{T'} > T'}}{(1 - 1/{T'})^{T'}}
+\\
+& \leq
+\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, H_{T'}, \theta} \given H_{T'} > T'\right]\frac{\P{H_{T'} > T'} }{(1 - 1/{T'})^{T'}}
+\\ 
+& \leq
+{(1 - 1/{T'})^{-T'}} \E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, H_{T'}, \theta}\right]
+\\
+& \leq
+4 \E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, H_{T'}, \theta}\right]
+\end{split}
+\]
+where the first inequality follows from the fact that $\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, n, \theta}\right]$ is non-decreasing in $n$, the second inequality follows from the fact that regret is non-negative. 
+\end{myproof}
+
+We can now proceed with the proof of the proposition. First, we note that since the Gittins policy with discount factor $1-1/{T'}$ is optimal for a geometrically distributed horizon with mean $T'$, we must have for any $\mathbf{\hat y} \in \Yscr$, 
+\begin{equation}
+\label{eq:gittinsopt}
+\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, 1-1/{T'}}, H_{T'}, \theta}\right]
+\leq
+\E_{\hat{\mathbf y}}\left[\Regret{\tilde \pi_{\mathbf{y}}, H_{T'}, \theta}\right]
+\end{equation}
+But we have
+\[
+\begin{split}
+\E_{{\mathbf y}}\left[\Regret{\pi^{D}, T, \theta}\right]
+&\leq
+\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E_{{\mathbf y}}\left[
+\E_{\hat{\mathbf y}_{2^k-2}}\left[
+\Regret{\pi^{G,1-1/2^k}, 2^k, \theta}\right]
+\right]
+\\
+&\leq
+\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E_{{\mathbf y}}\left[
+4
+\E_{\hat{\mathbf y}_{2^k-2}}\left[
+\Regret{\pi^{G,1-1/2^k}, H_{2^k}, \theta}\right]
+\right]
+\\
+&\leq
+\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E_{{\mathbf y}}\left[
+4
+\E_{\hat{\mathbf y}_{2^k-2}}\left[
+\Regret{\tilde \pi_{\mathbf{y}}, H_{2^k}, \theta}
+\right]
+\right]
+\\
+&
+=
+4\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E_{{\mathbf y}}\left[
+\Regret{\tilde \pi_{\mathbf{y}}, H_{2^k}, \theta}
+\right]
+\\
+&
+\leq 
+4 C_{\mathbf y}\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+\E \left[ \log^3 H_{2^k} \right]
+\\
+&
+\leq 
+4 C_{\mathbf y}\sum_{k=1}^{\lfloor \log (T+2) \rfloor}
+k^3
+\end{split}
+\]
+where the first inequality follows simply from the definition of $\pi^D$, the second inequality follows from Lemma~\ref{lemma:gittinsfiniteinfinite}, the third inequality follows from the aforementioned optimality of the Gittins policy (namely, \eqref{eq:gittinsopt}), the first equality follows from the tower property, the fourth inequality follows from Lemma~\ref{lemma:laianytime}, and the fifth and final inequality is simply Jensen's inequality. 
+
+
+
+
+%\begin{myproof}[Proof.]
+%	%First, letting $\gamma_n = 1 - 1/n$, we show that
+%	%\begin{equation} \label{eq:basic_finite_time_gittins}
+%	%\Regret{\pi^{G, \gamma_n}, n} = O\left( \log^2(n) \right).
+%	%\end{equation}
+%	We start by proving a regret bound for the Gittins index policy over a finite horizon.
+%	Since we are dealing with Bayesian regret, we will prove our bound by comparing against the Information Directed Sampling (IDS) policy, denoted by $\pi^{IDS}$. It was shown in \citep{russo2014learning} (Proposition 2) that for any horizon $T \in \mathbb N$ and any prior, described by a vector $\hat{\mathbf y}$, that
+%	\[
+%	\E_{\hat{\mathbf y}}\left[ \Regret{\pi^{IDS}, T, \theta} \right] 
+%	 \le  \sqrt{\frac{1}{2} (A \log A) T}.
+%	\]
+%	whenever the reward distribution is uniformly bounded.
+%	We will leverage this useful result in the next step of the proof.
+%	
+%	Fix any $n \ge 2$ and sufficient statistic $\hat{\mathbf y}$. Define $H$ to be a geometric random variable with mean $n$, then	
+%	\begin{align}
+%	\E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, \gamma_n}, n, \theta}\right]  & = \E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, \gamma_n}, n, \theta}\right]\frac{\P{H > n}}{(1 - 1/n)^n} \nonumber \\
+%	&  \le  \E_{\hat{\mathbf y}}\left[\Regret{\pi^{G, \gamma_n}, H, \theta} \given H > n\right]\frac{\P{H > n} }{(1 - 1/n)^n} \nonumber\\
+%	& \le  (1 - 1/n)^{-n}  \E_{\hat{\mathbf y}}\left[ \Regret{\pi^{G,\gamma_n}, H, \theta} \right] \nonumber   \\
+%	& \le  4 \E_{\hat{\mathbf y}}\left[ \Regret{\pi^{G,\gamma_n}, H, \theta} \right]   \nonumber \\
+%	& \le 4\E_{\hat{\mathbf y}}\left[ \Regret{\pi^{IDS}, H, \theta} \right] \label{eqn:opt_gittins_over_geo_horizon} \\
+%	& \le 4 \E\left[  \sqrt{\frac{1}{2} (A \log A) H} \right] \nonumber\\
+%	& \le  \E\left[  \sqrt{8 (A \log A) H} \right] \nonumber \\
+%	& \le  \sqrt{8 (A \log A) \E[H]}  \label{eqn:jensens_ids} \\
+%	& =  \sqrt{8 (A \log A) n} \label{eqn:regret_bound_for_ids}   
+%	\end{align}
+%	where \eqref{eqn:opt_gittins_over_geo_horizon} follows from the Gittins index policy being optimal over the random \& geometrically distributed horizon of $H$ (because $\E[H] = n$ and the discount factor is assumed to be $1 - 1/n$ here). Equation~\eqref{eqn:jensens_ids} follows from Jensen's inequality.
+%	
+%	Back to the doubling trick policy. Recall that this entails pulling the arms according to $\pi^{G,1 - 1/2^{k-1}}$ during periods $\{2^{k-1},\ldots,2^{k}-1\}$ for each $k \in \mathbb{N}$.
+%	For convenience, we define the function $\text{Regret}(\pi, t_1, t_2, \theta)$ to be the total regret accumulated from periods $t_1$ up to $t_2$ under policy $\pi$ and where the arms' parameters are set to $\theta$. We will also denote the tuple of sufficient statistics for the arms in period $t$ as $\mathbf y_t$, to reflect all the Bayesian updates up to and inlcuding that time.
+%	
+%	Now we can bound the Bayes risk up to time $T$ as follows:
+%	\begin{align}
+%		\E_{\mathbf y}\left[\Regret{\pi^D, T, \theta} \right] &
+%		\leq 1 + \sum_{k=2}^{\ceil{\log_2 T}} \E_{\mathbf y}\left[\Regret{\pi^D, 2^{k-1}, 2^k - 1, \theta} \right] \nonumber \\
+%		& = 1+ \sum_{k=2}^{\ceil{\log_2 T}} \E_{\mathbf y}\left[ \E_{\mathbf y_{2^k-1}}\left[\Regret{\pi^{G, 1 - 1/2^{k-1}}, 2^{k-1}, \theta} \right] \right] \nonumber \\
+%		& \le 1 + \sum_{k=2}^{\ceil{\log_2 T}}  \sqrt{8(A \log A) 2^{k-1}} \label{eqn:application_of_ids}\\
+%		& = \mathcal O\left( \sqrt{T} \right), \nonumber
+%	\end{align}
+%	where inequality \eqref{eqn:application_of_ids} is implied by  \eqref{eqn:regret_bound_for_ids}.
+%\end{myproof}
 
 \section{Properties of the Optimistic Gittins index}\label{sec:appendix_properties_of_ogi}
 This section gives proofs for a few properties of the Optimistic Gittins index that are used throughout the paper and particularly in the proof of Theorem~\ref{thm:frequentist_optimal_bound}.  
