@@ -675,6 +675,65 @@ We also see that either over or under-estimating the horizon leads to worse perf
 	}
 \end{table}
 
+{\color{blue}
+\subsection{Additional benchmark algorithms}
+In this section, we simulate a few additional algorithms to understand the importance of the varying discount factor, and to try out a different approximation of the Gittins index. The algorithms we experiment with are:
+\begin{itemize}
+	\item OGI with a one-step lookahead and a fixed discount factor of $\gamma$, which we will refer to throughout as ``FOGI($1/(1-\gamma)$)". The quantity $1/(1-\gamma)$ can be interpreted as a rough horizon over which this policy is optimal.
+	\item OGI in which the Gittins index approximation equals the closed-form expression given in \cite{brezzi2002optimal}. We will refer to this policy as ``BL-OGI".
+	\item The greedy policy, which plays the arm in $\argmax_i \E_{y_{i, N_i(t-1)}}[X_{i,t}]$. Effectively it is equivalent to FOGI($1$), and completely disregards the value of future exploration. We will simply call this policy ``Greedy" in our tables and plots.
+\end{itemize}
+We reuse the two main experimental setups from Section~\ref{sec:experiments}
+
+Wee see from Table~\ref{table:gaussian_experiment2} that there is value in knowing the true horizon $T$ since FOGI($T$) approximates the optimal Gittins index policy and so performs well. It's also worth highlighting that because the Gittins index policy is near-optimal for this particular choice of horizon, our approximation is effective during the running of the algorithm.
+In contrast to getting the horizon $T$ correct, either over or under-estimating the horizon leads to worse performance as evidenced by the regret from FOGI($T/10$), FOGI($10T$) and Greedy. Interestingly, we also see that the BL-OGI shows larger regret than OGI, suggesting that there is perhaps value in using our optimistic approximation for this particular problem.
+}
+
+\begin{table}[h!]
+	\centering
+	{\color{blue}
+		\begin{tabular}{lrrrrr}
+			\toprule
+			{} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
+			\midrule
+			Mean  &   58.54 &  167.16 &      49.61 &         60.72 &        59.09 \\
+			Standard error   &    2.14 &    9.74 &       1.90 &          4.25 &         1.47 \\
+			25\%   &   45.83 &  102.75 &      39.28 &         34.85 &        50.94 \\
+			50\%   &   56.87 &  156.63 &      47.29 &         52.19 &        57.84 \\
+			75\%   &   67.67 &  216.77 &      60.04 &         87.63 &        67.59 \\
+			CPU time (s)   &  164.48 &  405.66 &     119.72 &        226.19 &        94.30 \\
+			\bottomrule
+		\end{tabular}
+	}
+	\caption[Table caption text]{Comparison against some of OGI's simpler variants in the  Gaussian setup.}
+	\label{table:gaussian_experiment2}
+\end{table}
+
+{\color{blue} The comparison against FOGI, BL-OGI and Greedy in the Bernoulli case, presented in Table~\ref{table:bernoulli_experiment2}, tells a similar story as in Table~\ref{table:gaussian_experiment2}.
+}
+	
+	
+	
+\begin{table}[h!]
+	\centering
+	{\color{blue}
+		\begin{tabular}{lrrrrr}
+			\toprule
+			\textbf{Algorithm} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
+			\midrule
+			Mean  &   23.50 &   56.32 &      16.52 &         18.69 &        20.14 \\
+			Standard error  &    0.63 &    2.36 &       0.62 &          0.82 &         0.58 \\
+			25\%   &   18.74 &   37.61 &      12.36 &         12.70 &        16.36 \\
+			50\%   &   22.50 &   55.16 &      15.55 &         17.14 &        19.43 \\
+			75\%   &   28.18 &   74.64 &      19.72 &         23.29 &        23.62 \\
+			CPU time (s)  &   0.01 &  0.001 &   0.12 &         0.11 &      0.13  \\
+			\bottomrule
+		\end{tabular}
+		\caption[Table caption text]{\color{blue}Comparison against some of OGI's simpler variants in the  Bernoulli setup.}
+		\label{table:bernoulli_experiment2}
+	}
+\end{table}
+
 \subsection{Additional tables for Section~\ref{sec:experiments}}
 \begin{table}
 	\centering
