@@ -133,23 +133,27 @@ S_i(t) \defeq \sum_{s=1}^{\Ntg{i}{t}} X_{i,s}.
 
 We begin by investigating the effect of the parameter $\lambda$, which gives the deterministic payoff in \eqref{eqn:ogi_general}, on the continuation value $V^K_\gamma(y, \lambda)$ and use that to find out how close an approximation $v^K_\gamma(y)$ is to the Gittins index.
 \begin{fact}\label{fact:v_is_convex}
-	For any state $y \in \mathcal{Y}$, discount factor $\gamma$ and parameter $K$, the function $V^K_\gamma(y,\lambda)$ is convex in $\lambda$.% Moreover, if $R(y)$ is a continuous random variable, the function is also differentiable.
+	For any state $y \in \mathcal{Y}$, discount factor $\gamma$ and parameter $K$, the function $V^K_\gamma(y,\lambda)$ is convex in $\lambda$.
+	{\color{blue}Moreover, $V^K_\gamma(y,\lambda)$ is Lipschitz continuous in $\lambda$ with a constant of 1.}
+	% Moreover, if $R(y)$ is a continuous random variable, the function is also differentiable.
 \end{fact}
 \begin{myproof}[Proof.]
-	Fix an arbitrary state $y$ and discount factor $\gamma \in (0,1)$. We prove convexity by induction on the parameter $K$. For $K = 1$, recall from Section~\ref{sec:gittins_and_approx} that
+	Fix an arbitrary state $y$ and discount factor $\gamma \in (0,1)$. Our proof is by induction on the parameter $K$. For $K = 1$, recall from Section~\ref{sec:gittins_and_approx} that
 	\begin{align*}
 	{\color{blue} V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \frac{\gamma}{1-\gamma} \E_y\left[\max(\lambda, R(y_{i,0}))\right].}
 	\end{align*}
-	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$. 
+	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$.
+	{\color{blue}Moreover it's Lipschitz with a constant of 1 since its derivative with respect to $\lambda$ is bounded by 1.}
 	
 	%Now assume that $R(y)$ is a continuous random variable. We will verify through the bounded convergence theorem that $V^1_\gamma(y, \lambda)$ is differentiable. Indeed, this holds because the event $\{ R(y)= \lambda/(1-\gamma)\}$, at which the random variable inside the expectation is not differentiable, has measure zero, precisely because $R(y)$ is a continuous random variable.
 	Now we show the inductive step. For any $K > 1$, assume that $V^{K-1}_\gamma(y, \lambda)$ is convex. By writing the Bellman equation,
 	{\color{blue}
 	\begin{align*}
-	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \frac{\gamma}{1-\gamma} \E_y\left[\max\left(\lambda, V^{K-1}_\gamma(y_{i,1}, \lambda)\right) \right],
+	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \gamma\E_y\left[\max\left(\lambda, V^{K-1}_\gamma(y_{i,1}, \lambda)\right) \right],
 	\end{align*}
 	}
-	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$.% If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
+	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$. % If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
+	{\color{blue}Finally, Lipschitz continuity follows since the derivative of both terms in the maximization, $\lambda$ and $V^{K-1}_\gamma(y_{i,1}, \lambda)$ (by induction), are bounded by 1.}
 \end{myproof}
 
 \begin{lemma} \label{cor:equivalent_event}
@@ -300,14 +304,25 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 		& \le V_{\gamma}(y, \lambda)  + \gamma^{M}\E_y\left[\frac{|R(y_{i,M-1})|}{1-\gamma}\right] \nonumber  \\
 		& = V_{\gamma}(y, \lambda)  + \gamma^M \E_y\left[\frac{|\mu(\theta_i)|}{1-\gamma}\right] \label{eqn:proof_lem_vk_bound_iter_exp},
 	\end{align}
-	where equation \eqref{eqn:proof_lem_vk_bound_iter_exp} follows from the definition of the random variable $R(.)$ and the law of iterated expectation. Now because $0 < \gamma < 1$ and $\E_y\left[|\mu(\theta_i)|\right] < \infty$, the right hand side above converges to $V_{\gamma}(y, \lambda)$. Finally, notice that $V^M_\gamma(y, \lambda) \ge V_\gamma(y, \lambda)$, and from this equation~\eqref{eqn:proof_vk_bound_convergence_of_continuation_value} follows. To finish the proof, we note that $V^K_\gamma(y, \lambda)$ is continuous in $\lambda$. Therefore, if we fix $\epsilon$, there is an integer $K = K(\epsilon)$ that is large enough so that
+	where equation \eqref{eqn:proof_lem_vk_bound_iter_exp} follows from the definition of the random variable $R(.)$ and the law of iterated expectation. Now because $0 < \gamma < 1$ and $\E_y\left[|\mu(\theta_i)|\right] < \infty$, the right hand side above converges to $V_{\gamma}(y, \lambda)$. Finally, notice that $V^M_\gamma(y, \lambda) \ge V_\gamma(y, \lambda)$, and from this equation~\eqref{eqn:proof_vk_bound_convergence_of_continuation_value} follows. 
+	
+	{\color{blue}
+	To finish the proof, we consider the sequence of fixed points of the equations $\lambda = V^K_\gamma(y, \lambda)$ denoted by $\{V_K\}$. 
+	Because this sequence is bounded, there exists a convergent sub-sequence $\{ \lambda_k \}$ whose elements we index with $k$. Let $\hat \lambda$ denote the limit of this sub-sequence. We will prove that this limit is the Gittins index.
+	
+	Indeed, we can bound the difference between each element $\lambda_k$ and $V_\gamma(y, \hat \lambda)$ as follows
 	\begin{align*}
-	\left| v^K_\gamma(y) - v_\gamma(y) \right| & = \left| V^K_\gamma(y, v^K_\gamma(y)) -  V_\gamma(y, v_\gamma(y)) \right| \\
-	 &  \le \left| V^K_\gamma(y, v_\gamma(y)) -  V_\gamma(y, v_\gamma(y)) + \eps\right| \\
-	 &  \le \left| V^K_\gamma(y, v_\gamma(y)) -  V_\gamma(y, v_\gamma(y))\right| + \eps \\
-	 & \le 2\epsilon.
+	|\lambda_k - V_\gamma(y, \hat \lambda)| &  = |V^k_\gamma(y, \lambda_k) - V_\gamma(y, \hat \lambda) | \\
+	&  \leq \underbrace{|V^k_\gamma(y, \lambda_k) - V^k_\gamma(y, \hat \lambda)|}_{=: a_k} + \underbrace{|V^k_\gamma(y, \hat \lambda) - V_\gamma(y, \hat \lambda)|}_{=:b_k}.
 	\end{align*}
-	Then, we take the limit as $\epsilon \downarrow 0$ and the Lemma is shown.
+	We already proved \eqref{eqn:proof_vk_bound_convergence_of_continuation_value} and therefore know that $b_k \to 0$ as $k \to \infty$. As for the $a_k$ sequence, we have
+	\begin{align}
+	a_k & = |V^k_\gamma(y, \lambda_k) - V^k_\gamma(y, \hat \lambda)| \nonumber \\
+	& \leq | \lambda_k - \hat \lambda | \label{eqn:use_of_lipshitz_bound}\\
+	&  \to 0 \nonumber
+	\end{align}
+	where \eqref{eqn:use_of_lipshitz_bound} follows from the Lipschitz continuity of $V^K$ as shown in Fact~\ref{fact:v_is_convex}. Therefore $\lambda_k \to V_\gamma(y, \hat \lambda)$, which implies that $\hat \lambda = V_\gamma(y, \hat \lambda)$. This proves that $\hat \lambda$ is a fixed point of the function $V_\gamma(y, .)$, namely the Gittins index.
+	}
 \end{myproof}
 
 
@@ -629,9 +644,9 @@ Specifically, the algorithms we experiment with are:
 	\item OGI in which the Gittins index approximation equals the closed-form expression given in \cite{brezzi2002optimal}. We will refer to this policy as ``BL-OGI".
 	\item The greedy policy, which plays the arm in $\argmax_i \E_{y_{i, N_i(t-1)}}[X_{i,t}]$. Effectively it is equivalent to FOGI($1$), and completely disregards the value of future exploration. We will simply call this policy ``Greedy" in our tables and plots.
 \end{itemize}
-Recall that the Gittins index policy is optimal for a geometrically distributed horizon with mean $T$. Since FOGI$(T)$ is precisely an approximation for that policy, we would expect it to perform well in our experiments when the horizon is $T$ (even though really it ought to be gemoetrically distributed).
+Recall that the Gittins index policy is optimal for a geometrically distributed horizon with mean $T$. Since FOGI$(T)$ is precisely an approximation for that policy, we would expect it to perform well in our experiments when the horizon is $T$ (even though really it ought to be geometrically distributed).
 
-We reuse the two main experimental setups from Section~\ref{sec:experiments}: the Gaussian bandit with 10 independent arms, and the Bernoulli equivalent. Notice from Table~\ref{table:gaussian_experiment2}, in the Guassian setup, that there is value in knowing the true horizon $T$ because FOGI($T$) is the dominant policy. 
+We reuse the two main experimental setups from Section~\ref{sec:experiments}: the Gaussian bandit with 10 independent arms, and the Bernoulli equivalent. Notice from Table~\ref{table:gaussian_experiment2}, in the Gaussian setup, that there is value in knowing the true horizon $T$ because FOGI($T$) is the dominant policy. 
 We also see that either over or under-estimating the horizon leads to worse performance as demonstrated by the regret from FOGI($T/10$), FOGI($10T$) and Greedy. Interestingly, we also see that the BL-OGI shows larger regret than OGI (see Table~\ref{table:gaussian_experiment1}), suggesting that there is perhaps value in using our optimistic approximation for this particular problem. The comparison against FOGI, BL-OGI and Greedy in the Bernoulli case, presented in Table~\ref{table:bernoulli_experiment2}, tells a similar story as in Table~\ref{table:gaussian_experiment2}.
 
 \begin{table}[h!]
