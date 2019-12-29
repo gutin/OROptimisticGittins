@@ -297,7 +297,7 @@ where the first inequality follows simply from the definition of $\pi^D$, the se
 
 \section{Properties of the Optimistic Gittins index}\label{sec:appendix_properties_of_ogi}
 This section gives proofs for a few properties of the Optimistic Gittins index that are used throughout the paper and particularly in the proof of Theorem~\ref{thm:frequentist_optimal_bound}.  
-It shall be useful, in what follows, to define the continuation value for the Whittle's retirement problem (\cite{whittle1980multi}) as
+It shall be useful, in what follows, to define the continuation value for the Vittles's retirement problem (\cite{whittle1980multi}) as
 \[
 V_\gamma(y, \lambda)  \defeq \sup_{\tau > 0} \E_y\left[\sum_{t=1}^{\tau} \gamma^{t-1} X_{i,t} + \gamma^{\tau} \frac{\lambda}{1-\gamma}\right],
 \]
@@ -318,21 +318,27 @@ S_i(t) \defeq \sum_{s=1}^{\Ntg{i}{t}} X_{i,s}.
 
 We begin by investigating the effect of the parameter $\lambda$, which gives the deterministic payoff in \eqref{eqn:ogi_general}, on the continuation value $V^K_\gamma(y, \lambda)$ and use that to find out how close an approximation $v^K_\gamma(y)$ is to the Gittins index.
 \begin{fact}\label{fact:v_is_convex}
-	For any state $y \in \mathcal{Y}$, discount factor $\gamma$ and parameter $K$, the function $V^K_\gamma(y,\lambda)$ is convex in $\lambda$.% Moreover, if $R(y)$ is a continuous random variable, the function is also differentiable.
+	For any state $y \in \mathcal{Y}$, discount factor $\gamma$ and parameter $K$, the function $V^K_\gamma(y,\lambda)$ is convex in $\lambda$.
+	{\color{blue}Moreover, $V^K_\gamma(y,\lambda)$ is Lipschitz continuous in $\lambda$ with a constant of 1.}
+	% Moreover, if $R(y)$ is a continuous random variable, the function is also differentiable.
 \end{fact}
 \begin{myproof}[Proof.]
-	Fix an arbitrary state $y$ and discount factor $\gamma \in (0,1)$. We prove convexity by induction on the parameter $K$. For $K = 1$, recall from Section~\ref{sec:gittins_and_approx} that
+	Fix an arbitrary state $y$ and discount factor $\gamma \in (0,1)$. Our proof is by induction on the parameter $K$. For $K = 1$, recall from Section~\ref{sec:gittins_and_approx} that
 	\begin{align*}
-	V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \gamma \E_y\left[\max(\lambda/(1-\gamma), R(y_{i,0}))\right].
+	{\color{blue} V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \frac{\gamma}{1-\gamma} \E_y\left[\max(\lambda, R(y_{i,0}))\right].}
 	\end{align*}
-	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$. 
+	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$.
+	{\color{blue}Moreover it's Lipschitz with a constant of 1 since its derivative with respect to $\lambda$ is bounded by 1.}
 	
 	%Now assume that $R(y)$ is a continuous random variable. We will verify through the bounded convergence theorem that $V^1_\gamma(y, \lambda)$ is differentiable. Indeed, this holds because the event $\{ R(y)= \lambda/(1-\gamma)\}$, at which the random variable inside the expectation is not differentiable, has measure zero, precisely because $R(y)$ is a continuous random variable.
 	Now we show the inductive step. For any $K > 1$, assume that $V^{K-1}_\gamma(y, \lambda)$ is convex. By writing the Bellman equation,
+	{\color{blue}
 	\begin{align*}
-	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \gamma \E_y\left[\max\left(\lambda/(1-\gamma), V^K_\gamma(y_{i,1}, \lambda)\right) \right],
+	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \gamma\E_y\left[\max\left(\lambda, V^{K-1}_\gamma(y_{i,1}, \lambda)\right) \right],
 	\end{align*}
-	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$.% If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
+	}
+	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$. % If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
+	{\color{blue}Finally, Lipschitz continuity follows since the derivative of both terms in the maximization, $\lambda$ and $V^{K-1}_\gamma(y_{i,1}, \lambda)$ (by induction), are bounded by 1.}
 \end{myproof}
 
 \begin{lemma} \label{cor:equivalent_event}
@@ -341,31 +347,44 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	Let $v^K_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $\eta$ be a scalar, then the following equivalence holds
 	\[
 	\{v^K_{i,t} < \eta \} = \{(1-\gamma_t)V^K_{\gamma_t}(y_{i,\Ntg{i}{t}}, \eta) < \eta\}\]
-	where $y_{i,\Ntg{1}{t}}$ is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
+	where {\color{blue}$y_{i,\Ntg{i}{t}}$} is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
 \end{lemma}
+{
+\color{blue}
 \begin{myproof}[Proof.]
-	First of all note that for any state $y$ and discount factor $\gamma$, the function
+	Fix any state $y$ and discount factor $\gamma$. At $\lambda = 0$, we have
+	\[
+		(1-\gamma)V^K_{\gamma}(y, 0) \ge 0
+	\]
+	because $V^K_{\gamma}(0,y)$ is the expectation of a sum of nonnegative terms. Also, in the other extreme case when $\lambda = B$, the function in question evaluates to
+	\[
+		V^K_{\gamma}(y, B) = \E_y\left[X_{i,1}\right] + \frac{\gamma B}{(1-\gamma)} < \frac{B}{(1-\gamma)}.
+	\]
+	and so $(1-\gamma)V^{K}_\gamma(y, B) < B$.
+	
+	Next we prove that $V^K_\gamma(y, \lambda)$ is monotonically increasing in $\lambda$. To show this, pick any $\lambda' < \lambda''$ and let $\tau^*(\lambda')$ and $\tau^*(\lambda'')$ denote the two optimal stopping times under $\lambda', \lambda''$, respectively. It then follows, from $R_{\lambda,\tau}(.)$ being an increasing function of $\lambda$ on every sample path, that
 	\begin{align*}
-	(1-\gamma)V^K_\gamma(y, \lambda) - \lambda&  = \sup_{1 \le \tau \le K}\E_y\left[\sum_{s=1}^\tau\gamma^{s-1}(1-\gamma)X_{i,s} + \ind{\tau = K}\gamma^\tau(R(y_{i,\tau-1}) - \lambda)^+\right],
+	V^K_{\gamma}(y, \lambda') & = \E_y\left[\sum_{t=1}^{\tau^*(\lambda')} \gamma^{t-1}  X_{i,t} + \gamma^{\tau^*(\lambda')} \frac{R_{\lambda', K}(\tau, y_{i,\tau^*(\lambda')-1})}{1-\gamma}\right] \\
+	& \leq \E_y\left[\sum_{t=1}^{\tau^*(\lambda')} \gamma^{t-1}  X_{i,t} + \gamma^{\tau^*(\lambda')} \frac{R_{\lambda'', K}(\tau, y_{i,\tau^*(\lambda')-1})}{1-\gamma}\right] \\
+	& \leq \E_y\left[\sum_{t=1}^{\tau^*(\lambda'')} \gamma^{t-1}  X_{i,t} + \gamma^{\tau^*(\lambda'')} \frac{R_{\lambda'', K}(\tau, y_{i,\tau^*(\lambda'')-1})}{1-\gamma}\right] \\
+	& = V^K_{\gamma}(y, \lambda'').
 	\end{align*}
-	is convex (from Fact~\ref{fact:v_is_convex}) yet decreasing in $\lambda$. Also notice that at $\lambda = 0$
-	\[
-		V^K_{\gamma}(y, 0) = \frac{\E_y\left[X_{i,1}\right]}{(1-\gamma)} \ge 0
-	\]
-	because it is never optimal to retire in the stopping problem. Also, in the other extreme case when $\lambda = B$, the function in question evaluates to
-	\[
-		V^K_{\gamma}(y, B) = \E_y\left[X_{i,1}\right] + \frac{\gamma B}{(1-\gamma)} \le \frac{B}{(1-\gamma)}.
-	\]
-	Thus, consider again the above function of $\lambda$, namely,  $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$. Such a function is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and is also negative for $\lambda > v^K_\gamma(y)$.
+	Let's put together these observations:
+	\begin{itemize}
+		\item $(1-\gamma)V^{K}_\gamma(y, \lambda) \ge \lambda $ at $\lambda = 0$.
+		\item   $(1-\gamma)V^{K}_\gamma(y, \lambda) < \lambda $ at $\lambda = B$
+		\item $(1-\gamma)V^{K}_\gamma(y, \lambda)$ is monotonically increasing in $\lambda$.
+	\end{itemize}
+	These together with Fact~\ref{fact:v_is_convex} show that the univariate function  $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$ is continuous and decreasing in $\lambda$. Moreover, this function is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and is also negative for $\lambda > v^K_\gamma(y)$.
 	\begin{figure}
 		\centering
 		\input{plots/visualize_gx.pgf} 
 		\caption{Visualization of Lemma~\ref{cor:equivalent_event}'s proof for a instance of the problem with a Beta prior corresponding to the pair $y = (4,5)$, a discount factor of $\gamma=0.95$ and $K = 2$. The intersection of the two lines represents the Optimistic Gittins index.}
 		\label{fig:visaulize_gx_proof}
 	\end{figure}
-	From these observations, and the fact that $y$ and $\gamma$ were arbitrary, the result follows. Figure~\ref{fig:visaulize_gx_proof} provides a visualization of this proof.
+	This proves the result in question. Figure~\ref{fig:visaulize_gx_proof} also provides a visualization.
 \end{myproof}
-
+}
 
 \subsection{Proof of Lemma~\ref{lemma:approx_bound}} \label{prf:approx_bound}
 \begin{myproof}[Proof.]
@@ -379,7 +398,8 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\end{align*}
 	Thus we conclude, because $\hat \theta_i$ was arbitrary, that almost surely,
 	\begin{equation} \label{ineq:fundamntal_bound_for_lemma_2}
-	\Ee{\sum_{t=\tau_1+1}^{\tau_2} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2}\frac{\zeta(\hat \theta_i)}{1 - \gamma} \given[\Bigg] \theta_i}  \le \Ee{\gamma^{\tau_1} \given \theta_i }  \frac{\max(\zeta(\hat \theta_i), \mu(\theta_i))}{1-\gamma}.
+	\color{blue}
+	\Ee{\sum_{t=\tau_1+1}^{\tau_2} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2}\frac{\zeta( \theta_i)}{1 - \gamma} \given[\Bigg] \theta_i}  \le \Ee{\gamma^{\tau_1} \given \theta_i }  \frac{\max(\zeta( \theta_i), \mu(\theta_i))}{1-\gamma}.
 	\end{equation}
 	Let $\tau^\star$ be a stopping time that achieves the supremum in  $V_\gamma^M(y, \lambda)$ and define the predictable stopping time $\tau^\star_K \defeq K \wedge \tau^\star$. Consider the (conditional) cumulative rewards in the definition of $V^M_\gamma(y)$, from time $\tau^\star_K+1$ onwards, given the sufficient statistic observed at time $\tau_K^\star$. That is, 
 	\[
@@ -391,19 +411,21 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\P{R(\hat y) \le r} = \P{\mu(\theta_i) \le r \given y_{i,s} = \hat y}, \qquad \forall r \in \Re
 	\end{equation}
 	meaning that the posterior distribution of the arm's expected reward $R(y_{i,s})$ is the same as $\mu(\theta_i)$ \emph{conditioned} on having observed statistic $\hat y$ about the arm. This holds by definition of the random variable $R(y)$. Because of this observation, we have that the following inequality  holds almost surely,
+	{\color{blue}
 	\begin{align*}
 		& \gamma^{\tau^\star} \frac{R_{\lambda,M}(\tau^\star, y_{i,\tau^\star-1})}{1-\gamma}
 		 \nonumber \\
 		&\quad =  \gamma^{\tau^\star}\left( \ind{\tau^\star =M}\frac{\max(\lambda, R(y_{i,\tau^\star-1}))}{1-\gamma} + \ind{\tau^\star < M}\frac{\lambda}{1-\gamma}\right)
 		 \nonumber\\
-		&\quad= \ind{\tau^\star =M} \gamma^{M}\frac{\max(\lambda, R(y_{i,M}))}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
+		&\quad= \ind{\tau^\star =M} \gamma^{M}\frac{\max(\lambda, R(y_{i,M-1}))}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
 	\nonumber\\
-		& \quad\overset{(*)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, R(y_{i,M})) \given y_{i,M} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
+		& \quad\overset{(*)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, R(y_{i,M-1})) \given y_{i,M-1} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
 		\\
-		& \quad\overset{(\dagger)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, \mu(\theta_i)) \given y_{i,M} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
+		& \quad\overset{(\dagger)}{=} \ind{\tau^\star =M} \gamma^{M}\frac{\Ee{\max(\lambda, \mu(\theta_i)) \given y_{i,M-1} }}{1-\gamma} + \ind{\tau^\star < M} \gamma^{\tau^\star}\frac{\lambda}{1-\gamma}
 		 \\
 		&\quad \overset{(**)}{\le} \frac{  \Ee{\gamma^{\tau^\star}\max(\lambda, \mu(\theta_i)) \given y_{i,\tau^\star-1} }}{1-\gamma}
 	\end{align*}
+	}
 	where $(*)$ and $(**)$ both use the fact that for any $t$, $\tau^\star \le t$ is measurable with respect to the $\sigma$-algebra generated by $y_{i,t-1}$, namely $\mathcal F_{t-1}$. Equation ($\dagger$) follows from \eqref{eqn:dist_equal_theta_i}. Therefore, immediately using the above inequality and conditioning on the event $\tau^\star > K$, we have that
 	\begin{align} 
 	&\E\left[\sum_{t=\tau_K^\star+1}^{\tau^\star} \gamma^{t-1} X_{i,t} + \gamma^{\tau^\star} \frac{R_{\lambda,M}(\tau^\star, y_{i,\tau^\star-1})}{1-\gamma}
@@ -467,14 +489,25 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 		& \le V_{\gamma}(y, \lambda)  + \gamma^{M}\E_y\left[\frac{|R(y_{i,M-1})|}{1-\gamma}\right] \nonumber  \\
 		& = V_{\gamma}(y, \lambda)  + \gamma^M \E_y\left[\frac{|\mu(\theta_i)|}{1-\gamma}\right] \label{eqn:proof_lem_vk_bound_iter_exp},
 	\end{align}
-	where equation \eqref{eqn:proof_lem_vk_bound_iter_exp} follows from the definition of the random variable $R(.)$ and the law of iterated expectation. Now because $0 < \gamma < 1$ and $\E_y\left[|\mu(\theta_i)|\right] < \infty$, the right hand side above converges to $V_{\gamma}(y, \lambda)$. Finally, notice that $V^M_\gamma(y, \lambda) \ge V_\gamma(y, \lambda)$, and from this equation~\eqref{eqn:proof_vk_bound_convergence_of_continuation_value} follows. To finish the proof, we note that $V^K_\gamma(y, \lambda)$ is continuous in $\lambda$. Therefore, if we fix $\epsilon$, there is an integer $K = K(\epsilon)$ that is large enough so that
+	where equation \eqref{eqn:proof_lem_vk_bound_iter_exp} follows from the definition of the random variable $R(.)$ and the law of iterated expectation. Now because $0 < \gamma < 1$ and $\E_y\left[|\mu(\theta_i)|\right] < \infty$, the right hand side above converges to $V_{\gamma}(y, \lambda)$. Finally, notice that $V^M_\gamma(y, \lambda) \ge V_\gamma(y, \lambda)$, and from this equation~\eqref{eqn:proof_vk_bound_convergence_of_continuation_value} follows. 
+	
+	{\color{blue}
+	To finish the proof, we consider the sequence of fixed points of the equations $\lambda = V^K_\gamma(y, \lambda)$ denoted by $\{V_K\}$. 
+	Because this sequence is bounded, there exists a convergent sub-sequence $\{ \lambda_k \}$ whose elements we index with $k$. Let $\hat \lambda$ denote the limit of this sub-sequence. We will prove that this limit is the Gittins index.
+	
+	Indeed, we can bound the difference between each element $\lambda_k$ and $V_\gamma(y, \hat \lambda)$ as follows
 	\begin{align*}
-	\left| v^K_\gamma(y) - v_\gamma(y) \right| & = \left| V^K_\gamma(y, v^K_\gamma(y)) -  V_\gamma(y, v_\gamma(y)) \right| \\
-	 &  \le \left| V^K_\gamma(y, v_\gamma(y)) -  V_\gamma(y, v_\gamma(y)) + \eps\right| \\
-	 &  \le \left| V^K_\gamma(y, v_\gamma(y)) -  V_\gamma(y, v_\gamma(y))\right| + \eps \\
-	 & \le 2\epsilon.
+	|\lambda_k - V_\gamma(y, \hat \lambda)| &  = |V^k_\gamma(y, \lambda_k) - V_\gamma(y, \hat \lambda) | \\
+	&  \leq \underbrace{|V^k_\gamma(y, \lambda_k) - V^k_\gamma(y, \hat \lambda)|}_{=: a_k} + \underbrace{|V^k_\gamma(y, \hat \lambda) - V_\gamma(y, \hat \lambda)|}_{=:b_k}.
 	\end{align*}
-	Then, we take the limit as $\epsilon \downarrow 0$ and the Lemma is shown.
+	We already proved \eqref{eqn:proof_vk_bound_convergence_of_continuation_value} and therefore know that $b_k \to 0$ as $k \to \infty$. As for the $a_k$ sequence, we have
+	\begin{align}
+	a_k & = |V^k_\gamma(y, \lambda_k) - V^k_\gamma(y, \hat \lambda)| \nonumber \\
+	& \leq | \lambda_k - \hat \lambda | \label{eqn:use_of_lipshitz_bound}\\
+	&  \to 0 \nonumber
+	\end{align}
+	where \eqref{eqn:use_of_lipshitz_bound} follows from the Lipschitz continuity of $V^K$ as shown in Fact~\ref{fact:v_is_convex}. Therefore $\lambda_k \to V_\gamma(y, \hat \lambda)$, which implies that $\hat \lambda = V_\gamma(y, \hat \lambda)$. This proves that $\hat \lambda$ is a fixed point of the function $V_\gamma(y, .)$, namely the Gittins index.
+	}
 \end{myproof}
 
 
@@ -786,6 +819,61 @@ This experiment is motivated by \cite{kaufmann2012thompson} and in it we simulat
 	\caption{Frequentist regret. The OGI policy is configured $K=1$ and $\alpha=100$.}
 	\label{fig:kaufmann_regret}
 \end{figure}
+{\color{blue}
+\subsection{Additional benchmark algorithms}
+In this section, we simulate a few additional algorithms to understand the importance of the varying discount factor, and to try out a different approximation of the Gittins index.
+We also simulate the greedy policy to see the inherent value of exploration in our benchmark problems.
+Specifically, the algorithms we experiment with are:
+\begin{itemize}
+	\item OGI with a one-step lookahead and a fixed discount factor of $\gamma$, which we will refer to throughout as ``FOGI($1/(1-\gamma)$)". The quantity $1/(1-\gamma)$ can be interpreted as a rough horizon over which this policy is optimal.
+	\item OGI in which the Gittins index approximation equals the closed-form expression given in \cite{brezzi2002optimal}. We will refer to this policy as ``BL-OGI".
+	\item The greedy policy, which plays the arm in $\argmax_i \E_{y_{i, N_i(t-1)}}[X_{i,t}]$. Effectively it is equivalent to FOGI($1$), and completely disregards the value of future exploration. We will simply call this policy ``Greedy" in our tables and plots.
+\end{itemize}
+Recall that the Gittins index policy is optimal for a geometrically distributed horizon with mean $T$. Since FOGI$(T)$ is precisely an approximation for that policy, we would expect it to perform well in our experiments when the horizon is $T$ (even though really it ought to be geometrically distributed).
+
+We reuse the two main experimental setups from Section~\ref{sec:experiments}: the Gaussian bandit with 10 independent arms, and the Bernoulli equivalent. Notice from Table~\ref{table:gaussian_experiment2}, in the Gaussian setup, that there is value in knowing the true horizon $T$ because FOGI($T$) is the dominant policy. 
+We also see that either over or under-estimating the horizon leads to worse performance as demonstrated by the regret from FOGI($T/10$), FOGI($10T$) and Greedy. Interestingly, we also see that the BL-OGI shows larger regret than OGI (see Table~\ref{table:gaussian_experiment1}), suggesting that there is perhaps value in using our optimistic approximation for this particular problem. The comparison against FOGI, BL-OGI and Greedy in the Bernoulli case, presented in Table~\ref{table:bernoulli_experiment2}, tells a similar story as in Table~\ref{table:gaussian_experiment2}.
+
+\begin{table}[h!]
+	\centering
+	{\color{blue}
+	\begin{tabular}{lrrrrr}
+		\toprule
+		{} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
+		\midrule
+		Mean  &   58.54 &  167.16 &      49.61 &         60.72 &        59.09 \\
+		Standard error   &    2.14 &    9.74 &       1.90 &          4.25 &         1.47 \\
+		25\%   &   45.83 &  102.75 &      39.28 &         34.85 &        50.94 \\
+		50\%   &   56.87 &  156.63 &      47.29 &         52.19 &        57.84 \\
+		75\%   &   67.67 &  216.77 &      60.04 &         87.63 &        67.59 \\
+		CPU time (s)   &  164.48 &  405.66 &     119.72 &        226.19 &        94.30 \\
+		\bottomrule
+	\end{tabular}
+	\caption[Table caption text]{Comparison against some of OGI's simpler variants in the  Gaussian setup.}
+	\label{table:gaussian_experiment2}
+	}
+\end{table}
+}
+	
+\begin{table}[h!]
+	\centering
+	{\color{blue}
+		\begin{tabular}{lrrrrr}
+			\toprule
+			\textbf{Algorithm} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
+			\midrule
+			Mean  &   23.50 &   56.32 &      16.52 &         18.69 &        20.14 \\
+			Standard error  &    0.63 &    2.36 &       0.62 &          0.82 &         0.58 \\
+			25\%   &   18.74 &   37.61 &      12.36 &         12.70 &        16.36 \\
+			50\%   &   22.50 &   55.16 &      15.55 &         17.14 &        19.43 \\
+			75\%   &   28.18 &   74.64 &      19.72 &         23.29 &        23.62 \\
+			CPU time (s)  &   0.01 &  0.001 &   0.12 &         0.11 &      0.13  \\
+			\bottomrule
+		\end{tabular}
+		\caption[Table caption text]{\color{blue}Comparison against some of OGI's simpler variants in the  Bernoulli setup.}
+		\label{table:bernoulli_experiment2}
+	}
+\end{table}
 
 \subsection{Additional tables for Section~\ref{sec:experiments}}
 \begin{table}
