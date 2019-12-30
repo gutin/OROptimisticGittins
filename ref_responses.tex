@@ -1,23 +1,381 @@
-\documentclass[]{article}
+\documentclass[11pt]{article}
 
-%opening
-\title{Responses to referee reports}
-%\author{E}
+%%%%%%%% start of generic header CCM 2010-04-09
+%% packages
+\usepackage{epsfig}
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{float}
+\usepackage[hypertexnames=false,hyperfootnotes=false]{hyperref}
+\usepackage{texnansi}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{subfigure}
+\usepackage{afterpage}
+\usepackage{enumitem}
+\usepackage[boxed]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[normalem]{ulem}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{sectsty}
+\usepackage{ifthen}
+\usepackage[leqno]{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+%\usepackage{xspace}
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}
+%\usepackage[sort&compress]{natbib}
+\usepackage{natbib}
+%\usepackage{xfrac}
+%% useful math macros
+\newcommand{\field}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\N}{\ensuremath{\field{N}}} % natural numbers
+\newcommand{\R}{\ensuremath{\field{R}}} % real numbers
+\newcommand{\Rp}{\ensuremath{\R_+}} % positive real numbers
+\newcommand{\Z}{\ensuremath{\field{Z}}} % integers
+\newcommand{\Zp}{\ensuremath{\Z_+}} % positive integers
+\newcommand{\1}{\ensuremath{\mathbf{1}}} % vector of all 1's
+\newcommand{\I}[1]{\ensuremath{\mathbb{I}_{\left\{#1\right\}}}} % indicator function
+\newcommand{\Inb}[1]{\ensuremath{\mathbb{I}_{#1}}} % indicator function, no brackets
+\newcommand{\tends}{\ensuremath{\rightarrow}} % arrow for limits
+\newcommand{\ra}{\ensuremath{\rightarrow<}} % abbreviation for right arrow
+\newcommand{\PR}{\ensuremath{\mathsf{P}}} % probability
+\newcommand{\E}{\ensuremath{\mathsf{E}}} % expectation
+\newcommand{\defeq}{\ensuremath{\triangleq}}
+\newcommand{\subjectto}{\text{\rm subject to}} % subject to
+\renewcommand{\Re}{\ensuremath{\R}} % expectation
+%% some caligraphic symbols
+\newcommand{\Ascr}{\ensuremath{\mathcal A}}
+\newcommand{\Bscr}{\ensuremath{\mathcal B}}
+\newcommand{\Cscr}{\ensuremath{\mathcal C}}
+\newcommand{\Dscr}{\ensuremath{\mathcal D}}
+\newcommand{\Escr}{\ensuremath{\mathcal E}}
+\newcommand{\Fscr}{\ensuremath{\mathcal F}}
+\newcommand{\Gscr}{\ensuremath{\mathcal G}}
+\newcommand{\Hscr}{\ensuremath{\mathcal H}}
+\newcommand{\Iscr}{\ensuremath{\mathcal I}}
+\newcommand{\Jscr}{\ensuremath{\mathcal J}}
+\newcommand{\Kscr}{\ensuremath{\mathcal K}}
+\newcommand{\Lscr}{\ensuremath{\mathcal L}}
+\newcommand{\Mscr}{\ensuremath{\mathcal M}}
+\newcommand{\Nscr}{\ensuremath{\mathcal N}}
+\newcommand{\Oscr}{\ensuremath{\mathcal O}}
+\newcommand{\Pscr}{\ensuremath{\mathcal P}}
+\newcommand{\Qscr}{\ensuremath{\mathcal Q}}
+\newcommand{\Rscr}{\ensuremath{\mathcal R}}
+\newcommand{\Sscr}{\ensuremath{\mathcal S}}
+\newcommand{\Tscr}{\ensuremath{\mathcal T}}
+\newcommand{\Uscr}{\ensuremath{\mathcal U}}
+\newcommand{\Vscr}{\ensuremath{\mathcal V}}
+\newcommand{\Wscr}{\ensuremath{\mathcal W}}
+\newcommand{\Xscr}{\ensuremath{\mathcal X}}
+\newcommand{\Yscr}{\ensuremath{\mathcal Y}}
+\newcommand{\Zscr}{\ensuremath{\mathcal Z}}
+%% math operators
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator*{\argmin}{\mathrm{argmin}}
+\DeclareMathOperator*{\argmax}{\mathrm{argmax}}
+\newcommand{\minimize}{\ensuremath{\mathop{\mathrm{minimize}}\limits}}
+\newcommand{\maximize}{\ensuremath{\mathop{\mathrm{maximize}}\limits}}
+%% theorem environments
+\newtheoremstyle{thm-sf}{}{}{\itshape}{}{\sffamily\bfseries}{.}{ }{}
+\theoremstyle{thm-sf}
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{fact}{Fact}
+\newtheorem{proposition}{Proposition}
+\renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
+\renewcommand{\proofname}{{\normalfont\sffamily\bfseries Proof}}
+\newcommand{\proofnamest}[1]{{\normalfont\sffamily\bfseries #1}}
+%% Tikz customizations
+\usetikzlibrary{arrows,patterns,plotmarks}
+\tikzstyle{every picture} += [>=stealth]
+%% customize section titles
+\allsectionsfont{\sffamily}
+\makeatletter
+\def\@seccntformat#1{\csname the#1\endcsname.\quad}
+\makeatother
+%% abstract, table, figure names
+\renewcommand{\figurename}{\normalfont\sffamily\bfseries Figure}
+\renewcommand{\tablename}{\normalfont\sffamily\bfseries Table}
+\renewcommand{\abstractname}{\normalfont\sffamily\bfseries Abstract}
+\floatname{algorithm}{\normalfont\sffamily\bfseries Algorithm}
+%% other customizations
+%\numberwithin{equation}{section}
+\floatstyle{ruled}
+\newcommand{\emailhref}[1]{\href{mailto:#1}{\tt #1}} % hyperlinked email address
+%% boolean for fast compilation
+\provideboolean{fastcompile}
+\newcommand{\hidefastcompile}[1]{\ifthenelse{\boolean{fastcompile}}{}{#1}}
+%% for editing comments
+\newcommand{\todo}[1]{{\color{red} \noindent {\sffamily\bfseries TODO:} #1}}
+\newcommand{\vff}[1]{{\color{red} \noindent {\sffamily\bfseries VFF:} #1}}
+%%%%%%%% end of generic header
+
+%% many person editing commands
+\newcommand{\delvf}[1]{{\color{blue} [{\sffamily\bfseries DELETED VF:} #1]}}
+\newcommand{\delccm}[1]{{\color{red} [{\sffamily\bfseries DELETED RM:} #1]}}
+\newcommand{\notevf}[1]{{\color{blue} [{\sffamily\bfseries NOTE VF:} {\em #1}]}}
+\newcommand{\noteccm}[1]{{\color{red} [{\sffamily\bfseries NOTE RM:} {\em #1}]}}
+\newcommand{\newvf}[1]{{\color{blue} #1}}
+\newcommand{\newccm}[1]{{\color{red} #1}}
+\newcommand{\newtw}[1]{{\color{green} #1}}
+\newcommand{\newbvr}[1]{{\color{orange} #1}}
+
+%%% margins
+\marginparwidth 0pt\marginparsep 0pt
+\topskip 0pt\headsep 0pt\headheight 0pt
+\oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+\usepackage{setspace}
+\setstretch{1.1}
+
+%%% bibliography
+%\setcitestyle{numbers,square}
+
+%\setenumerate[1]{resume}
 
 \begin{document}
+	\begin{center} {\Large {\sffamily\bfseries Responses to the Comments Made by \\
+				the Editors and the Referees}}
+	\end{center}
+	
+	\bigskip
+	
+	\section{Response to the Department Editor}
+	
+	The present revision addresses most of the edits requested by the review team. This document provides responses to all comments.
+	
+	\section{Response to the Associate Editor}
+	
+	We have addressed all of the comments from the reviewers. Any edits made in the paper are highlighted in {\color{blue} blue}. 
+	
+	\subsection{Responses to Comments}
+	{\it I read the paper with great interest and also solicited feedback from two expert referees. Both referees think the paper makes important contributions to the literature on multi-armed bandits. The referees have provided excellent reports, and I thank them. The major concerns raised by the referees are (1) addressing some technical issues in the proofs; (2) adding more details and comparisons in the numerical examples; and (3) expanding the literature review. Despite these concerns, however, both referees appear to be quite positive on the paper.
+		
+	I agree with the overall positive assessment, and in particular I agree with the referees that, beyond the key theoretical contribution of the paper --- developing the OGI policy and showing that it is regret optimal --- the paper nicely unifies disparate streams of work in the multi-armed bandit literature. That is a valuable contribution that should not be overlooked.
+	
+	Obviously, the authors should do their best to address all of the comments from the referees. I do not have much to add here, but do have two other comments:
+	} 
+	\begin{enumerate}
+		
+		\item {\it 1. First, a key motivation for the OGI policy is the fact that computing Gittins indices is computationally burdensome. Although I don't disagree that calculating a Gittins index is much more involved computationally than, say, Thompson sampling or Bayes UCB, I wonder if the authors are possibly overstating the difficulty of calculating Gittins indices. How did you calculate these in the examples with $K=\infty$? It is known that, for finite state MABs and a given discount factor, that all Gittins indices can be computed using parametric linear programming. These calculations can be done offline and the number of iterations in the parametric LP equals the number of possible states for the arm. The work per iteration involves solving a system of linear equations, but this can often be greatly simplified, especially when state transitions are structured (e.g., there is an ordering among states – states can only advance) and sparse. I believe both of these would be true in the Bernoulli bandits case. (Of course, the Bernoulli bandit problem has a countably infinite number of states, so you'd need to truncate to obtain a finite number of possible states, but presumably you are already doing this in your methods). Some relevant references here are Kallenberg (1986) and Nino-Mora (2007).
+			
+		Of course, the authors may know all of this already, and I am not insisting that they overhaul computational experiments. I would just like to see some clarification about what methods they are using for calculating Gittins indices and whether parametric LP approaches could be effective (if they are not using these). Given that this paper could receive attention from researchers studying multi-armed bandits from different perspectives, and computational effort is a motivation of the OGI approach, it seems important to acknowledge leading methods for calculating Gittins indices. (On a related note, I believe parametric LP could be useful for calculating $OGI(K)$ indices for finite (but long) $K$ as well, although that may not be necessary in any of the authors’ experiments, given the fast runtimes).
 
-\maketitle
+		}
+		
+		\item {\it The discussion on the ``doubling trick" in the second to last paragraph on p. 10 was somewhat vague. Could the authors add more intuition here? This ``trick" seems to be at the core of the schedule of discount factors the authors use, so providing more detail could be helpful.}
 
+	\end{enumerate}
+	
+	{\it Minor comment: the ratios of $T/A$ quoted at the bottom of p. 19 appear to be wrong (shouldn't these be 2,000 and 10,000, respectively?).}
+	
+	%% BEGIN RESPONSE %%
+	We fixed this typo.
+	%% END RESPONSE %%
+	
+	\newpage
+	\section{Response to  Reviewer 1}
+	
+	Thank you for your interest in our work, and your careful review. We believe this revision addresses the major comments that you have raised, in particular regarding some of the proofs.
+	
+	\subsection{Responses to Proof Comments}
+	
+	\begin{enumerate}
+		\item \textbf {Proposition 1:} We have re-written this proof.
+		\item \textbf {Lemma 2:} We've corrected the final part of Lemma 2. As you pointed out, more care was needed to show that the sequence of fixed points to the equation
+		\begin{equation*}
+			\frac{\lambda}{1- \gamma} = V^K_\gamma(y, \lambda)
+		\end{equation*}
+		converges to the Gittins index (assuming $V_K^\gamma$ converges to $V_\gamma$, as was shown earlier in the proof). In the current revision, we prove this statment by showing that the sequence of the aforementioned fixed points has a convergent subsequence (Bolzano-Weirstress), and that the limit of this sequence has to equal the Gittins index. We are eager to hear your feedback on the corrected proof.
+	\end{enumerate}
+	
+	
+	\subsection{Responses to Literature Review Comments}
+	
+	\begin{enumerate}
+		\item {\it Perhaps the primary reason for interest in Thompson sampling, Bayes UCB, IDS etc. is that there area natural ways to apply or extend these techniques to much more complicated problems. This paper really tries to give a specialized solution for problems with independent arms (and quite naturally leverages the Gittins indices to do so). I'd recommend including some clear comment to this effect, to help readers understand how this fits into the literature.}
+		
+		TODO
+		
+		\item {\it The authors should read and acknowledge the work of \citep{chang1987optimal}. That paper derives links between upper confidence bounds and Gittins indices and between finite horizon and discounted formulations of the problem. I think anyone who carefully read that paper would come away thinking UCBs are essentially an asymptotic approximation of Gittins indices. Unfortunately, that message mostly gets lost because the paper is so hard to read.}
+		
+		TODO
+		
+		\item {\it The paper sidesteps relevant comparisons to \cite{lattimore2016bayesregret} by mentioning that the paper requires apriori knowledge of the horizon. I don't find that to be convincing. It is easy to apply finite horizon Gittins indices with an increasing planning horizon, as is done in this paper. For most bandit algorithms (and also online gradient algorithms) anytime bounds follow pretty easily once the known horizon case is worked out. If the authors believe there are unusual challenges in extending the techniques of \cite{lattimore2016bayesregret} in this way, perhaps they could mention these. Otherwise, it seems better to give readers some perspective on the connections and differences between that paper and yours.
+		}
+		
+		TODO
+		
+	\end{enumerate}
+	
+	\subsection{Responses to Minor Comments on Simulation Experiments}
+	
+	\begin{enumerate}
+		\item {\it Since you compare algorithms that do not take the time horizon as input, it would be relatively easy to compare their performance over a whole range of time horizons. You present some experiments with extremely long horizon, but the experiment with shortest horizon has 1,000 periods and ten arms. It would be relatively easy to show the regret incurred across varying horizons, either through a regret plot or a table. This is not a requirement, but it would make a more convincing case to readers.}
+		
+		%% BEGIN RESPONSE (1) %%
+		Our experiments section already include results for a range of time horizons (from $T=10^4$ periods to $T = 10^6$); see Table 3. 
+		%% END RESPONSE (1) %%
+		
+		\item {\it Similar to the point above, this is not a requirement. But the comparison to Bayesian UCB algorithms would be much more convincing if you compared to a version which tuned the confidence parameter.}
+		
+		%% BEGIN RESPONSE (2) %%
+		We didn't tune the $c$ parameter for  Bayes UCB because the authors of the paper found that $c=0$ was already a good choice in practice. Moreover, when $c > 0$ it turns out that Bayes UCB is no longer an anytime algorithm since the quantile function becomes $1 - 1/(t\log T^c)$ where $T$ is the horizon \citep{kaufmann2012bayesian}.
+		%% END RESPONSE (2) %%
+		
+		\item {\it For multiple arm experiment in section 5.3, using 100 Monte Carlo samples seems far too low in the implementation of IDS. It looks like the information-directed sampling paper used 10,000.}
+		
+		%% BEGIN RESPONSE (3) %%
+		%% (In progess)
+		TODO
+		%% END RESPONSE (3) %%
+	\end{enumerate}
 
-\section{First review}
-\subsection{Response to: ``Two issues in the proofs"}
-(Note this is all just a rough draft at the moment. Will refine later to make it sound friendly and professional.)
-\subsubsection{Proof of Proposition 1}
-The statement is more that for large enough $n$, we get an asymptotic bound that depends on $y$.
+	\newpage
+	\section{Respone to Reviewer 2}
+	
+	\subsection{Responses to Major Comments}
+	
+	\begin{enumerate}
+		\item {\it The paper considers the Bayesian and frequentist formulations of the MAB, which is very interesting, but can lead to confusion. This happens a few times in the paper. For instance, at the top of page 8 the paper talks about policies that are Bayes optimal, though Bayes optimality hasn't been introduced (it is mentioned in passing after Proposition 1). Another example is the bottom of page 9 where it says that one cannot even hope for the policy $\pi^{G,\gamma}$ to have sub-linear regret in the frequentist sense, but then Lemma 1 is given for the Bayesian formulation. Since the main performance metric used in the paper is the frequentist regret, to avoid confusion I would suggest that only the frequentist results are kept in the main text. That would mean rewriting Lemma 1 in the frequentist sense and moving Proposition 1 to the appendix. I believe that would streamline the paper and would help the reader.}
+		
+		TODO
+		
+		\item {\it The way the time $t$ is counted can also generate confusion. The paper is written as if time moves forward, but to understand the logic of the OGI policy one has to think of time moving backwards. For instance, when $t = 1$, there's no discount $\gamma_1 = 0$ and the OGI is just the expected reward $\mathbb E_y [X_{i,1}]$ so there's no weight given to exploration. That makes sense in the last period, i.e., when t is counted backwards. In contrast, when t is very large, the discount $\gamma$ tends to one so the OGI index will give a lot of weight to exploration, which makes sense in the early periods. It's important for the reader to understand how the OGI policy captures the tension between exploration and exploitation since it's the underlying trade-off in the MAB problem.
+		}
+	
+		We decided to count time $t$ forwards in the definition of OGI for two reasons. One is to be consistent with our original formulation in the `Model' section, and second, in order to be consistent with the other important Multi-Armed Bandit papers that we reference throughout the text (e.g., \cite{lai1985asymptotically,auer2002finite,gittins1979bandit} etc.), all of which count time forwards. Most importantly, we want to count time forwards just like in the Gittins paper, on which most of the paper is built on.
+	
+		\item {\it The paper compares the OGI algorithm against some common competitors but there are a few other benchmarks that are worth considering:
+		\begin{itemize}
+			\item Passive learning or greedy policy. This is the policy that at time t picks the arm with the highest expected mean $\mathbb E_{y_{i, N_i(t)}}[X_{i,t}]$. It is also known as the myopic policy because it disregards that value of exploration. The reason to include this policy is that it shows the value of engaging in active learning (through the OGI index) versus just doing passive learning.
+			
+			\item Optimistic index with $\gamma_t = \gamma$. The OGI combines two elements: the optimistic approximation of the retirement stopping problem and a more generous discount factor. It would be useful to show the impact of each element. The $OGI(\infty)$ shows the value of $\gamma_t$ alone. The optimistic index with a fixed $\gamma$ could be used to show the value of the approximation. This would show if it's one element that is driving the performance or whether it's really the combination of both that matters.
+			
+			\item Closed-form index policies. One of the motivations of the OGI is computational efficiency. In that regard, it would be important to compare it to closed-form index policies, which are the easiest to compute. Moreover, closed-form index policies have a straightforward managerial interpretation because they make the exploration-versus- exploitation trade-off explicit. One possibility is to test the closed-form index developed in Brezzi and Lai (2002) or the one described in Caro and Gallien (2007), which was also developed using a limited look-ahead approximation.
+	\end{itemize}}
+	
+	%% BEGIN RESPONSE %%
+	Thank you for these suggestions. We agree that there is value in simulating alternative but related policies. We include the results from the simulations in Appendix E.2.
+	%% END RESPONSE %%
 
-Having said that, the referee is right that we forgot to state assumptions on the prior distribution $q$.
-It actually needs to belong to a conjugate family of prior distributions.
+	\item {\it As far as I can tell, the main line of argument in the proofs is correct. I admittedly did not have time to check the proofs line by line. Instead, I did some random sampling and I noticed some imprecisions, which indicates that the proofs might require some cleaning. Here are a few issues that I spotted:}
+		
+		\begin{itemize}
+			\item {\it Proof of Lemma 1: I'm not convinced that the last inequality implies the second to last.
+			 That would require $\mathbb P(R(y_{2,0} > 1/2)| y_{2,0} = (\alpha, \alpha + 1))$ to be greater or equal than $\mathbb E (\max \{R(y_{2,0}, 1/2 )\} | y_{2,0} = (\alpha, \alpha + 1))$, which is not always true (unless I'm missing something).
+			 In fact, I don't think this last step is necessary since the expectation goes to $1/2$ as $\alpha \to 0$, and that is enough to show the result.}
+			 
+			 %% (1) BEGIN RESPONSE %%
+			 We fixed this typo in the proof. As $\alpha \to 0$ the continuation value from arm 2 goes to $\gamma/2$, and the result goes through.
+			 %% (1) END RESPONSE %%
+			 
+			 \item {\it Proof of Fact 1 (page 28): In the expression given for $V^1_\gamma(y, \lambda)$, the term $1/(1-\gamma)$ should be outside the second expectation. Also, the inductive step should have $V^{K-1}_\gamma$ instead.}
+			 
+			 %% (2) BEGIN RESPONSE %%
+			 Fixed.
+			 %% (2) END RESPONSE %%
+			 
+			 \item {\it Proof of Lemma 5: The expression given for $(1 - \gamma) V_\gamma^K (y, \lambda) - \lambda$ does not seem correct because it doesn't consider the case $\tau < K$. Regardless, that expression is not needed to show the convexity of $(1 - \gamma) V_\gamma^K (y, \lambda) - \lambda$, which already follows from Fact 1.}
+			 
+			 %% (3) BEGIN RESPONSE %%
+			 We have re-written most of this proof and agree that it could be streamlined / corrected.
+			 %% (3) END RESPONSE %%
+			 
+			 \item {\it Proof of Lemma 5: I think that $V^{K}_\gamma(y, 0)$ equals $\frac{\mathbb E_y[X_{i,1}]|}1-\gamma$ only for $K = \infty$. If $\lambda = 0$ and $K < \infty$ it doesn't makes sense to retire before K, but couldn't it be worth stopping at time $K$? Anyway,I don't know why this is needed. If it's to show $V^{K}_\gamma(y, 0) \geq 0$ then that follows directly from the definition of $V^{K}_\gamma(y, \lambda)$ at the bottom of page 27 because it's a sum of non-negative terms.}
+			 
+			 %% (4) BEGIN RESPONSE %%
+			 Same as above.
+			 %% (4) END RESPONSE %%
+			 
+			 \item {\it Proof of Lemma 2, Equation (16): $\zeta(\hat \theta_i)$ should be $\zeta(\theta_i)$ .}
+			 
+			 %% (5) BEGIN RESPONSE %%
+			 Fixed.
+			 %% (5) END RESPONSE %%
+			 
+			 \item {\it 
+			 	Proof of Lemma 2, top of page 31: The term  $R(y_{i^*, \tau - 1})$ becomes $R(y_{i,M})$ in the second equality. Shouldn't it be $R(y_{i,M-1})$ since it's being multiplied by $\mathbf 1(\tau^* = M)$ (and $\gamma^{\tau^*}$ was replaced by $\gamma^M$)?
+			 }
+			 
+			 %% (6) BEGIN RESPONSE %%
+			 Yes, we've corrected this typo.
+			 %% (6) END RESPONSE %%
+		 
+		 	\item {\it Overall, I was a bit confused by the definition (and use of) $y_{i,s}$. At the bottom of page 7 it says that $y_{i,s}$ corresponds to the sufficient statistic that describe the posterior of $\theta_i$ given the first $s$ rewards of arm $i$. Then in the definition of the Optimistic Gittins Index (page 12) it says that retirement happens after $\tau$ pulls. Hence, when retirement happens, $\tau$ realizations of the (unknown) reward have been observed and $y_{i,\tau}$ is known. 
+		 		So why does Equation (3) have $R_{\lambda,K}(\tau, y_{\tau-1})$ and not $R_{\lambda,K}(\tau, y_{\tau})$? It might be a basic question but it was nagging me throughout the proofs.
+	 		}
+	 		
+	 		%% (7) BEGIN RESPONSE %%
+	 		The text should say ``after $\tau -1$ pulls of the arm". We have corrected this typo.
+	 		%% (7) END RESPONSE %%
+			 
+			 
+		\end{itemize}
+	
+	\end{enumerate}
 
-There are other steps in the proof that should have been written clearer.
-We hope that our revision to the proof makes it easier to read \& understand now.
+	\subsection{Responses to Minor Comments}
+	
+	\begin{enumerate}
+		\item  {\it The paper could provide a bit more intuition on why the $OGI(K)$ index performs well. The conjecture posed on top of page 13 and the numerical results seem to suggest that it performs well because it's a good approximation of the $OGI(\infty)$ index, which is the Gittins index with the modified discount $\gamma_t = 1 - 1/t$ (if I understood correctly). However, the $OGI(\infty)$ index is not Bayes optimal, as shown in Proposition 1. Any thoughts?}
+		
+		%% (0) BEGIN RESPONSE %%
+		TODO
+		%% (0) END RESPONSE %%
+		
+		\item {\it In the Gaussian experiments, please clarify the initial prior $q$. I assume it was a standard normal for all arms.}
+		
+		%% (1) BEGIN RESPONSE %%
+		That's correct. In the original manuscript, we stated that each arm's mean reward parmater $\theta_i$ is independently drawn from a standard Gaussian distribution. We clarified that this is the prior $q$ in the text.
+		%% (1) END RESPONSE %%
+		\item {\it The curves in Figure 1 are indistinguishable when printed in black and white. Maybe use different dashed/dotted patterns. Same comment for Figure 2.}
+		
+		%% (2) BEGIN RESPONSE %%
+		Fixed.
+		%% (2) END RESPONSE %%
+		
+		\item {\it In Table 3, I presume the IDS column should be Bayes UCB. Note that the $T/A$ values reported in the table don't match does described in the text (the text refers to a heuristic budget of 200 and 1000). Also, please report CPU times.}
+		
+		%% (3) BEGIN RESPONSE %%
+		We fixed the typos that you mentioned. The CPU time required to simulate a Bernoulli bandit is already shown in Table 1; the experiment setup here was the same except that we simulated more periods and arms (the computation time would just scale linearly with the number of arms and time periods and so can be deduced from the already reported CPU times).
+		%% (3) END RESPONSE %%
+		\item {\it The tests with multiple arm pulls is an interesting application. In these tests, how does the OGI resolve ties? Note that recent research shows that tiebreaking can have a significant impact on performance. See Brown and Smith (2017).}
+		
+		%% (4) BEGIN RESPONSE %%
+		For each period $t$, we iterate sequentially through all the different combinations of arms and choose the first combination $D \in \mathcal D_m$ whose value, given by $\sum_{i \in D} v^1(y_{i,N_i(t)})$, is strictly larger than previously encountered combinations' values. That is, our tie breaking is simple.
+		We agree that it is interesting to explore smarter tiebreaking schemes and so we added a discussion about this in the current revision.
+		%% (4) END RESPONSE %%
+			
+		\item {\it Typos. Page 18: ``the theoretical guarantees for the algorithms require this to happen". Page
+		20, in the definition of $X_t$, $X_{1,A}$ should be $X_{A,t}$. Page 20, in the definition of Regret$(\pi,T)$: the expression $\mathbb{E}[d^\top X_t]$ should not depend on $t$.}
+	
+		%% (5) BEGIN RESPONSE %%
+		Fixed.
+		%% (5) END RESPONSE %%
+	\end{enumerate}
+	
+
+%\singlespacing
+
+\bibliographystyle{named}
+\bibliography{references} 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
