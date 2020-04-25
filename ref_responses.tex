@@ -189,17 +189,31 @@
 	\newpage
 	\section{Response to  Reviewer 1}
 	
-	Thank you for your interest in our work, and your careful review. We believe this revision addresses the major comments that you have raised, in particular regarding some of the proofs.
+	Thank you for your interest in our work, and your careful review. We believe this revision addresses the comments that you have raised. We have fixed the gaps you identified in two proofs and have updated some of our experiments in response to your comments.  
 	
 	\subsection{Responses to Proof Comments}
 	
 	\begin{enumerate}
-		\item \textbf {Proposition 1:} We have re-written this proof.
-		\item \textbf {Lemma 2:} We've corrected the final part of Lemma 2. As you pointed out, more care was needed to show that the sequence of fixed points to the equation
-		\begin{equation*}
-			\frac{\lambda}{1- \gamma} = V^K_\gamma(y, \lambda)
-		\end{equation*}
-		converges to the Gittins index (assuming $V_K^\gamma$ converges to $V_\gamma$, as was shown earlier in the proof). In the current revision, we prove this statment by showing that the sequence of the aforementioned fixed points has a convergent subsequence (Bolzano-Weirstress), and that the limit of this sequence has to equal the Gittins index. We are eager to hear your feedback on the corrected proof.
+		\item \textbf {Proof of Proposition 1:} 	
+		
+		{\color{blue}
+		This proof was indeed incorrect. In addition to the fact that the Lai result is asymptotic, the key problematic issue you raised was the fact that even if one made the assumptions in Theorem 3 of Lai (1987) on the prior, there was no guarantee that these regularity assumptions held for all possible posteriors. In addition we found a further issue -- the constructive policy in Theorem 3 of Lai (1987) specifies policies for a fixed horizon, whereas the manner in which we deploy the doubling trick for the Gittins policy requires a policy that is well specified for arbitrary horizons. 
+		
+		We believe we have managed to salvage this result. Our new proof in essence requires the Lai (1987) result only for the initial prior distribution to hold. Whereas in subsequent doubling epochs, the corresponding regret bound may not hold on any given sample path, we show that when taking expectations over sample paths, one recovers a useful bound. Unfortunately, the additional gap we spotted leads to an increased regret estimate of $\sim \log^4 T$ as opposed to the $~ \log^3 T$ we had earlier. Since this entire result essentially only served the goal of making a conceptual point (that increasing discount factors yielded sub-linear regret for the Gittins policy), we believe that this increased regret estimate still does the job. 
+}
+		
+		
+		\item \textbf {Lemma 2:} 
+		{\color{blue}: TODO: It seems like the poof of Fact 1 needs a tweak -- those functions are not differentiable. Perhaps you need to be thinking about sub-differentials?}	
+		
+		{\color{blue}	
+		Thank you for pointing out the gap here. See the end of the proof (highlighted in blue) for our fix. We showed that $V^K_\gamma(\cdot, \cdot)$ was Lipshcitz in its second argument, and this sufficed to show the result.}
+		
+%		We've corrected the final part of Lemma 2. As you pointed out, more care was needed to show that the sequence of fixed points to the equation
+%		\begin{equation*}
+%			\frac{\lambda}{1- \gamma} = V^K_\gamma(y, \lambda)
+%		\end{equation*}
+%		converges to the Gittins index (assuming $V_K^\gamma$ converges to $V_\gamma$, as was shown earlier in the proof). In the current revision, we prove this statment by showing that the sequence of the aforementioned fixed points has a convergent subsequence (Bolzano-Weirstress), and that the limit of this sequence has to equal the Gittins index. We are eager to hear your feedback on the corrected proof.
 	\end{enumerate}
 	
 	
@@ -208,16 +222,16 @@
 	\begin{enumerate}
 		\item {\it Perhaps the primary reason for interest in Thompson sampling, Bayes UCB, IDS etc. is that there area natural ways to apply or extend these techniques to much more complicated problems. This paper really tries to give a specialized solution for problems with independent arms (and quite naturally leverages the Gittins indices to do so). I'd recommend including some clear comment to this effect, to help readers understand how this fits into the literature.}
 		
-		TODO
+		Done. 
 		
 		\item {\it The authors should read and acknowledge the work of \citep{chang1987optimal}. That paper derives links between upper confidence bounds and Gittins indices and between finite horizon and discounted formulations of the problem. I think anyone who carefully read that paper would come away thinking UCBs are essentially an asymptotic approximation of Gittins indices. Unfortunately, that message mostly gets lost because the paper is so hard to read.}
 		
 		TODO
 		
-		\item {\it The paper sidesteps relevant comparisons to \cite{lattimore2016bayesregret} by mentioning that the paper requires apriori knowledge of the horizon. I don't find that to be convincing. It is easy to apply finite horizon Gittins indices with an increasing planning horizon, as is done in this paper. For most bandit algorithms (and also online gradient algorithms) anytime bounds follow pretty easily once the known horizon case is worked out. If the authors believe there are unusual challenges in extending the techniques of \cite{lattimore2016bayesregret} in this way, perhaps they could mention these. Otherwise, it seems better to give readers some perspective on the connections and differences between that paper and yours.
+		\item {\it The paper sidesteps relevant comparisons to Lattimore [2016] by mentioning that the paper requires apriori knowledge of the horizon. I don't find that to be convincing. It is easy to apply finite horizon Gittins indices with an increasing planning horizon, as is done in this paper. For most bandit algorithms (and also online gradient algorithms) anytime bounds follow pretty easily once the known horizon case is worked out. If the authors believe there are unusual challenges in extending the techniques of Lattimore [2016] in this way, perhaps they could mention these. Otherwise, it seems better to give readers some perspective on the connections and differences between that paper and yours.
 		}
 		
-		TODO
+		In trying to extend the Lattimore [2016] policy to one that does not require the horizon to be pre-specified, one may rely on the so-called doubling trick. In using such an approach one incurs a multiplicative increase in regret by a $\log T$ factor yielding a sub-optimal regret bound. It is unclear to us how one can avoid this. We state this in the literature review. 
 		
 	\end{enumerate}
 	
@@ -227,13 +241,13 @@
 		\item {\it Since you compare algorithms that do not take the time horizon as input, it would be relatively easy to compare their performance over a whole range of time horizons. You present some experiments with extremely long horizon, but the experiment with shortest horizon has 1,000 periods and ten arms. It would be relatively easy to show the regret incurred across varying horizons, either through a regret plot or a table. This is not a requirement, but it would make a more convincing case to readers.}
 		
 		%% BEGIN RESPONSE (1) %%
-		Our experiments section already include results for a range of time horizons (from $T=10^4$ periods to $T = 10^6$); see Table 3. 
+		Table 3 describes an experimental setup for a range of time horizons (from $T=10^4$ periods to $T = 10^6$). More generally, we sought to recreate the experimental setups from (a) the Russo [2014] paper and (b) the Li [2011] paper. 
 		%% END RESPONSE (1) %%
 		
 		\item {\it Similar to the point above, this is not a requirement. But the comparison to Bayesian UCB algorithms would be much more convincing if you compared to a version which tuned the confidence parameter.}
 		
 		%% BEGIN RESPONSE (2) %%
-		We didn't tune the $c$ parameter for  Bayes UCB because the authors of the paper found that $c=0$ was already a good choice in practice. Moreover, when $c > 0$ it turns out that Bayes UCB is no longer an anytime algorithm since the quantile function becomes $1 - 1/(t\log T^c)$ where $T$ is the horizon \citep{kaufmann2012bayesian}.
+		We didn't tune the $c$ parameter for  Bayes UCB because the authors of the paper found that $c=0$ was already a good choice in practice. Moreover, when $c > 0$ the quantile function suggested in the Kauffman [2012] paper becomes $1 - 1/(t\log T^c)$ where $T$ is the horizon. Experimenting with quantiles of the form $1 - a/t$ did not yield consistent improvements over simply setting $a=1$.  
 		%% END RESPONSE (2) %%
 		
 		\item {\it For multiple arm experiment in section 5.3, using 100 Monte Carlo samples seems far too low in the implementation of IDS. It looks like the information-directed sampling paper used 10,000.}
