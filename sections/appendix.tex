@@ -64,7 +64,11 @@
 \end{myproof}
 \section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
 
-We begin by establishing a simple Lemma concerning the allocation rule proposed in \cite{lai1987adaptive}; we note that the allocation rule there is specified for a fixed time horizon, and the Lemma below extends it to a policy as defined in this paper. 
+{\color{blue}
+We first establish notation useful in the proof. Specifically, we let $h_t^{t'}$ denote the sequence of arms pulled and the corresponding rewards earned between periods $t$ and $t'$ ($h_t^{t'} = \emptyset$ is $t' < t$) . Recall that $\mathbf y$ denotes the $A$-tuple of sufficient statistics of priors on the the arm means of each of the $A$ arms. We denote by $g(\mathbf y, h_t^{t'})$ the $A$-tuple of sufficient statistics of posteriors on the arm means of each of the $A$ arms, obtained starting with the prior $\mathbf y$ and observing the sequence of arm pulls $h_t^{t'}$. 
+
+
+We begin by establishing a simple Lemma concerning the allocation rule proposed in \cite{lai1987adaptive}; we note that the allocation rule there is specified for a {\em fixed} time horizon and the Lemma below extends it to a policy that specifics a choice of arm for every epoch. 
 
 \begin{lemma} 
 \label{lemma:laianytime}
@@ -86,7 +90,25 @@ C_{\mathbf y} \log^3 T
 for all $T$. 
 \end{lemma}
 \begin{myproof}[Proof.]
-By Theorem $3$ in \cite{lai1987adaptive}, we know that there exists a constant $\bar C_{\mathbf y}$ such that for any $T$, there exists a policy, $\tilde \pi_{\mathbf y, T}$  (that depends on $T$ and is specified only up to time $T$), for which
+By Theorem $3$ in \cite{lai1987adaptive}, we know that there exists a constant $\hat C_{\mathbf y}$ and a sequence of policies, $\tilde \pi_{\mathbf y, T}$ \footnote{this entails a minor abuse of our definition of a policy: $\tilde \pi_{\mathbf y, T}$ is not specified for $t > T$}  such that 
+\[
+\lim_T 
+\frac{
+\E
+_{\mathbf y}
+\left[
+{\rm Regret}\left(
+\tilde \pi_{\mathbf y, T}, T,\theta
+\right)
+\right]
+}
+{
+\log^2 T
+}
+=
+\hat C_{\mathbf y}.
+\]
+Consequently, there exists a constant $\bar C_{\mathbf y}$, so that for any $T$, 
 \[
 \E
 _{\mathbf y}
@@ -98,7 +120,7 @@ _{\mathbf y}
 \leq
 \bar C_{\mathbf y} \log^2 T
 \]
-Now consider the `doubling' policy $\tilde \pi_{\mathbf y}$ which at time $t$ selects arms according to the policy $\tilde \pi_{\mathbf y,2^k}$ applied at the state $g\left(\mathbf y, h_{2^{k(t)}-1}^t\right)$ where $k(t) = \lfloor \log_2(t+1) \rfloor$. In words, this is the policy obtained wherein (a) time is divided into epochs such that the $k$th epoch extends from time $2^{k}-1$ to $2^{k+1}-2$, and (b) at the start of the $k$th epoch we `forget' everything learned up until that time and subsequently use the policy $\tilde \pi_{\mathbf y,2^k}$ over the course of that epoch. Thus,
+Now consider the `doubling' policy $\tilde \pi_{\mathbf y}$ which at time $t$ selects arms according to the policy $\tilde \pi_{\mathbf y,2^k}$ applied at the state $g\left(\mathbf y, h_{2^{k(t)}-1}^{t-1}\right)$ where $k(t) = \lfloor \log_2(t+1) \rfloor$. In words, this is the policy obtained wherein (a) time is divided into epochs such that the $k$th epoch extends from time $2^{k}-1$ to $2^{k+1}-2$, and (b) at the start of the $k$th epoch we `forget' everything learned up until that time and subsequently use the policy $\tilde \pi_{\mathbf y,2^k}$ over the course of that epoch. Thus,
 \[
 \begin{split}
 \E
@@ -124,7 +146,7 @@ _{\mathbf y}
 &
 =
 \sum_{k=1}^{\lfloor \log (T+2) \rfloor}
-\E
+\E_{\mathbf y}
 \left[
 {\rm Regret}\left(
 \tilde \pi_{\mathbf y,2^k}, 2^k,\theta
@@ -134,11 +156,11 @@ _{\mathbf y}
 &
 \leq
 \sum_{k=1}^{\lfloor \log (T+2) \rfloor}
-C_y \log^2 2^k
+\bar C_{\mathbf y} \log^2 2^k
 \\
 &
 \leq
-\bar C_y C \log^3 T
+\bar C_{\mathbf y} C \log^3 T
 \end{split}
 \]
 where the equality follows from the tower property and where $C$ is some absolute constant. 
@@ -244,7 +266,7 @@ k^3
 \end{split}
 \]
 where the first inequality follows simply from the definition of $\pi^D$, the second inequality follows from Lemma~\ref{lemma:gittinsfiniteinfinite}, the third inequality follows from the aforementioned optimality of the Gittins policy (namely, \eqref{eq:gittinsopt}), the first equality follows from the tower property, the fourth inequality follows from Lemma~\ref{lemma:laianytime}, and the fifth and final inequality is simply Jensen's inequality. 
-
+}
 
 
 
@@ -487,21 +509,25 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	where equation \eqref{eqn:proof_lem_vk_bound_iter_exp} follows from the definition of the random variable $R(.)$ and the law of iterated expectation. Now because $0 < \gamma < 1$ and $\E_y\left[|\mu(\theta_i)|\right] < \infty$, the right hand side above converges to $V_{\gamma}(y, \lambda)$. Finally, notice that $V^M_\gamma(y, \lambda) \ge V_\gamma(y, \lambda)$, and from this equation~\eqref{eqn:proof_vk_bound_convergence_of_continuation_value} follows. 
 	
 	{\color{blue}
-	To finish the proof, we consider the sequence of fixed points of the equations $\lambda = V^K_\gamma(y, \lambda)$ denoted by $\{V_K\}$. 
-	Because this sequence is bounded, there exists a convergent sub-sequence $\{ \lambda_k \}$ whose elements we index with $k$. Let $\hat \lambda$ denote the limit of this sub-sequence. We will prove that this limit is the Gittins index.
-	
-	Indeed, we can bound the difference between each element $\lambda_k$ and $V_\gamma(y, \hat \lambda)$ as follows
+	To finish the proof, we consider the sequence of fixed points of the equations $\lambda = V^K_\gamma(y, \lambda)$, $\{v^K_\gamma(y)\}$. 
+	Because this sequence is monotone (established in the first part of this proof) and bounded, we know that this sequence, has a limit; $v^K_\gamma(y) \tends \hat v_\gamma(y)$. 	
+%	there exists a convergent sub-sequence $\{ \lambda_k \}$ whose elements we index with $k$. Let $\hat \lambda$ denote the limit of this sub-sequence. We will prove that this limit is the Gittins index. 
+
+It remains to show that $\hat v_\gamma(y) = V_\gamma(y, \hat v_\gamma(y))$. For this it suffices to show that $v^K_\gamma(y) \tends V_\gamma(y, \hat v_\gamma(y))$, which we establish as follows: 
+%	
+%	Indeed, we can bound the difference between each element $\lambda_k$ and $V_\gamma(y, \hat \lambda)$ as follows
 	\begin{align*}
-	|\lambda_k - V_\gamma(y, \hat \lambda)| &  = |V^k_\gamma(y, \lambda_k) - V_\gamma(y, \hat \lambda) | \\
-	&  \leq \underbrace{|V^k_\gamma(y, \lambda_k) - V^k_\gamma(y, \hat \lambda)|}_{=: a_k} + \underbrace{|V^k_\gamma(y, \hat \lambda) - V_\gamma(y, \hat \lambda)|}_{=:b_k}.
+	|v^K_\gamma(y) - V_\gamma(y, \hat v_\gamma(y))| &  = |V^K_\gamma(y, v^K_\gamma(y)) - V_\gamma(y, \hat v_\gamma(y)) | \\
+	&  \leq \underbrace{|V^K_\gamma(y, v^K_\gamma(y)) - V^K_\gamma(y, \hat v_\gamma(y))|}_{=: a_k} + \underbrace{|V^K_\gamma(y, \hat v_\gamma(y)) - V_\gamma(y, \hat v_\gamma(y))|}_{=:b_k}.
 	\end{align*}
 	We already proved \eqref{eqn:proof_vk_bound_convergence_of_continuation_value} and therefore know that $b_k \to 0$ as $k \to \infty$. As for the $a_k$ sequence, we have
 	\begin{align}
-	a_k & = |V^k_\gamma(y, \lambda_k) - V^k_\gamma(y, \hat \lambda)| \nonumber \\
-	& \leq | \lambda_k - \hat \lambda | \label{eqn:use_of_lipshitz_bound}\\
+	a_k & = |V^K_\gamma(y, v^K_\gamma(y)) - V^K_\gamma(y, \hat v_\gamma(y))| \nonumber \\
+	& \leq | v^K_\gamma(y) - \hat v_\gamma(y) | \label{eqn:use_of_lipshitz_bound}\\
 	&  \to 0 \nonumber
 	\end{align}
-	where \eqref{eqn:use_of_lipshitz_bound} follows from the Lipschitz continuity of $V^K$ as shown in Fact~\ref{fact:v_is_convex}. Therefore $\lambda_k \to V_\gamma(y, \hat \lambda)$, which implies that $\hat \lambda = V_\gamma(y, \hat \lambda)$. This proves that $\hat \lambda$ is a fixed point of the function $V_\gamma(y, .)$, namely the Gittins index.
+	where \eqref{eqn:use_of_lipshitz_bound} follows from the Lipschitz continuity of $V^K_\gamma(\cdot, \cdot)$ in its second argument as shown in Fact~\ref{fact:v_is_convex}. Therefore $v^K_\gamma(y) \tends V_\gamma(y, \hat v_\gamma(y))$, which completes the proof. 	
+%	$\lambda_k \to V_\gamma(y, \hat \lambda)$, which implies that $\hat \lambda = V_\gamma(y, \hat \lambda)$. This proves that $\hat \lambda$ is a fixed point of the function $V_\gamma(y, .)$, namely the Gittins index.
 	}
 \end{myproof}
 
