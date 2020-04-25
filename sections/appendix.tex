@@ -336,7 +336,7 @@ S_i(t) \defeq \sum_{s=1}^{\Ntg{i}{t}} X_{i,s}.
 We begin by investigating the effect of the parameter $\lambda$, which gives the deterministic payoff in \eqref{eqn:ogi_general}, on the continuation value $V^K_\gamma(y, \lambda)$ and use that to find out how close an approximation $v^K_\gamma(y)$ is to the Gittins index.
 \begin{fact}\label{fact:v_is_convex}
 	For any state $y \in \mathcal{Y}$, discount factor $\gamma$ and parameter $K$, the function $V^K_\gamma(y,\lambda)$ is convex in $\lambda$.
-	{\color{blue}Moreover, $V^K_\gamma(y,\lambda)$ is Lipschitz continuous in $\lambda$ with a constant of 1.}
+	{\color{blue}Moreover, the function $V^K_\gamma(y,\lambda)$ is Lipschitz continuous in $\lambda$ with a Lipshitz constant of $\gamma/(1-\gamma)$.}
 	% Moreover, if $R(y)$ is a continuous random variable, the function is also differentiable.
 \end{fact}
 \begin{myproof}[Proof.]
@@ -345,17 +345,31 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	{\color{blue} V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \frac{\gamma}{1-\gamma} \E_y\left[\max(\lambda, R(y_{i,0}))\right].}
 	\end{align*}
 	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$.
-	{\color{blue}Moreover it's Lipschitz with a constant of 1 since its derivative with respect to $\lambda$ is bounded by 1.}
+	{\color{blue}To prove Lipschitz continuity, it's enough to note that
+	for any $\lambda_1, \lambda_2 \in \R$, that
+	\begin{align*}
+		| V^1_\gamma(y, \lambda_1) - V^1_\gamma(y, \lambda_2)| = & \frac{\gamma}{1-\gamma} |\E_y[\max(\lambda_1, R(y_{i,0})) - \max(\lambda_2, R(y_{i,0}))  ]  | \\
+	& \leq \frac{\gamma}{1-\gamma} |\lambda_1 - \lambda_2 |	.
+	\end{align*}
+		
+	}
 	
 	%Now assume that $R(y)$ is a continuous random variable. We will verify through the bounded convergence theorem that $V^1_\gamma(y, \lambda)$ is differentiable. Indeed, this holds because the event $\{ R(y)= \lambda/(1-\gamma)\}$, at which the random variable inside the expectation is not differentiable, has measure zero, precisely because $R(y)$ is a continuous random variable.
-	Now we show the inductive step. For any $K > 1$, assume that $V^{K-1}_\gamma(y, \lambda)$ is convex. By writing the Bellman equation,
+	Now we prove the inductive step. For any $K > 1$, assume that $V^{K-1}_\gamma(y, \lambda)$ is convex and Lipshitz continuous. By writing the Bellman equation,
 	{\color{blue}
 	\begin{align*}
 	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \gamma\E_y\left[\max\left(\lambda, V^{K-1}_\gamma(y_{i,1}, \lambda)\right) \right],
 	\end{align*}
 	}
 	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$. % If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
-	{\color{blue}Finally, Lipschitz continuity follows since the derivative of both terms in the maximization, $\lambda$ and $V^{K-1}_\gamma(y_{i,1}, \lambda)$ (by induction), are bounded by 1.}
+	{\color{blue}Finally, to prove Lipschitz continuity, we will use the fact that the pointwise maximum of two Lipschitz functions, having respective constants $L_1$ and $L_2$, is also Lipshitz with a constant of $\max(L_1, L_2)$. Because of this, by fixing $\lambda_1, \lambda_2 \in \R$, we have that
+		\begin{align*}
+		| V^K_\gamma(y, \lambda_1) - V^K_\gamma(y, \lambda_2)| & =  \gamma \left|\E_y[\max(\lambda_1, V^{K-1}_\gamma(y_{i,1}, \lambda_1)) - \max(\lambda_2, V^{K-1}_\gamma(y_{i,1}, \lambda_2))  ]  \right| \\
+		& \leq \frac{\gamma^2}{1-\gamma} |\lambda_1 - \lambda_2| \\
+		& \leq \frac{\gamma}{1-\gamma} |\lambda_1 - \lambda_2|
+		\end{align*}
+	where the second-to-last inequality follows from the induction hypothesis that $V^{K-1}_\gamma(y_{i,1}, \lambda))$ is Lipschitz continuous in $\lambda$ with a constant of $\gamma/(1-\gamma)$, and also from the fact that the identity function for $\lambda$ (within the maximum expression) is trivially Lipschitz continuous.
+	}
 \end{myproof}
 
 \begin{lemma} \label{cor:equivalent_event}
