@@ -204,7 +204,6 @@
 		
 		
 		\item \textbf {Lemma 2:} 
-		{\color{blue}: TODO: It seems like the poof of Fact 1 needs a tweak -- those functions are not differentiable. Perhaps you need to be thinking about sub-differentials?}	
 		
 		{\color{blue}	
 		Thank you for pointing out the gap here. See the end of the proof (highlighted in blue) for our fix. We showed that $V^K_\gamma(\cdot, \cdot)$ was Lipshcitz in its second argument, and this sufficed to show the result.}
@@ -266,7 +265,12 @@
 	\begin{enumerate}
 		\item {\it The paper considers the Bayesian and frequentist formulations of the MAB, which is very interesting, but can lead to confusion. This happens a few times in the paper. For instance, at the top of page 8 the paper talks about policies that are Bayes optimal, though Bayes optimality hasn't been introduced (it is mentioned in passing after Proposition 1). Another example is the bottom of page 9 where it says that one cannot even hope for the policy $\pi^{G,\gamma}$ to have sub-linear regret in the frequentist sense, but then Lemma 1 is given for the Bayesian formulation. Since the main performance metric used in the paper is the frequentist regret, to avoid confusion I would suggest that only the frequentist results are kept in the main text. That would mean rewriting Lemma 1 in the frequentist sense and moving Proposition 1 to the appendix. I believe that would streamline the paper and would help the reader.}
 		
-		TODO
+		{
+			\color{blue}TODO do we need to do more?
+			
+			Thank you for your suggestions. We changed Lemma 1 and  showed that the Gittins index fails to be regret-optimal in the frequentist sense.
+			
+		}
 		
 		\item {\it The way the time $t$ is counted can also generate confusion. The paper is written as if time moves forward, but to understand the logic of the OGI policy one has to think of time moving backwards. For instance, when $t = 1$, there's no discount $\gamma_1 = 0$ and the OGI is just the expected reward $\mathbb E_y [X_{i,1}]$ so there's no weight given to exploration. That makes sense in the last period, i.e., when t is counted backwards. In contrast, when t is very large, the discount $\gamma$ tends to one so the OGI index will give a lot of weight to exploration, which makes sense in the early periods. It's important for the reader to understand how the OGI policy captures the tension between exploration and exploitation since it's the underlying trade-off in the MAB problem.
 		}

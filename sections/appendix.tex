@@ -1,7 +1,9 @@
 \appendix
+
 \section{Proof of Lemma~\ref{le:linearregret}} \label{proof:linearregret}
+{\color{blue}
 \begin{myproof}[Proof.]
-	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha)$ prior where $\alpha$ is a parameter we set later. Then, it is simple to check that $\pi^{G,\gamma}$ must pull arm $2$ at the first time period. With probability $1/2$, we receive a reward of $0$, so that the posterior on arm $2$ is given by a {\rm Beta}$(\alpha,\alpha+1)$ prior. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
+	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha)$ prior where $\alpha$ is a parameter we set later. {\color{blue} Furthermore, we assume that the true paremeter for arm $2$ is equal to $\theta \in (1/2, 1)$, which represents a draw from the prior distribution on that arm}. Then, it is simple to check that $\pi^{G,\gamma}$ must pull arm $2$ at the first time period. With probability {\color{blue} $1-\theta$}, we receive a reward of $0$, so that the posterior on arm $2$ is given by a {\rm Beta}$(\alpha,\alpha+1)$ prior. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
 	\[
 	\frac{\alpha}{1+2\alpha}
 	+
@@ -19,7 +21,7 @@
 		1-\gamma
 	}.
 	\]
-	It follows that any optimal policy must pull arm $1$ if
+	It follows that the Gittins index policy must pull arm $1$ if
 	\[
 	\frac{1/2}{1-\gamma}
 	>
@@ -51,17 +53,17 @@
 		\Big| y_{2,0} = \left(\alpha, \alpha+1 \right)
 	} + 1/2\right) ,
 	\]
-	But the right hand side of the above expression goes to $\gamma/2 < 1/2$ as $\alpha \tends 0$}. Consequently, we can choose an $\alpha$ such that any optimal policy (for the discounted infinite horizon problem) chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. Consequently, $\pi^{G,\gamma}$ must incur $T$-period regret lower bounded by 
-	$\frac{T}{2}
-	\E
-	\left[
-	(
-	R((\alpha^*,\alpha^*+1)) - 1/2
-	)^+
-	\right].
+	But the right hand side of the above expression goes to $\gamma/2 < 1/2$ as $\alpha \tends 0$}. Consequently, we can choose an $\alpha$ such that the Gittins index policy chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. {\color{blue}Consequently, $\pi^{G,\gamma}$ must incur a $T$-period frequentist regret lower bounded by 
 	$
-	The result follows. 
+	(1-\theta)
+	T
+	\left(
+	\theta - 1/2
+	\right) .
+	$
+	The result follows. }
 \end{myproof}
+}
 \section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
 
 {\color{blue}

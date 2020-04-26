@@ -22,17 +22,21 @@ y_{i,N_i(t-1)}
 } 
 \end{center}
 where $N_i(0) \equiv 0$ and $y_{i,0}$ is understood to be the sufficient statistic corresponding to the prior on that arm. Ignoring computational considerations, we cannot hope for the policy $\pi^{G,\gamma}$ to be regret optimal. In fact, as the result below indicates, one cannot even hope for such a policy to be consistent (i.e. have sub-linear regret) in the sense of \cite{lai1985asymptotically}:
+{
+\color{blue}
 \begin{lemma}
 \label{le:linearregret}
-	For any $\gamma > 0$, there exists an instance of the multi armed bandit problem for which 
+	
+	For any $\gamma > 0$, there exists an instance of the multi armed bandit problem, with parameters $\theta \in \Theta$, for which 
 	\[
 	{\rm Regret}\left(
-	\pi^{G,\gamma},T
+	\pi^{G,\gamma},T,\theta
 	\right)
 	= 
 	\Omega(T).
 	\]
 \end{lemma}
+}
 The proof, given in Appendix~\ref{proof:linearregret}, rests on the simple fact that for any fixed discount factor, if the posterior means on the two arms are sufficiently apart, the Gittins index policy will pick the arm with the larger posterior mean. The threshold beyond which the Gittins policy `exploits' depends on the discount factor and with a fixed discount factor there is a positive probability that the superior arm is never explored sufficiently so as to establish that it is, in fact, the superior arm. 
 
 \subsection{Increasing Discount Factors yield sub-linear Bayesian Regret}
