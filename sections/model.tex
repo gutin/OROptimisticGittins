@@ -77,11 +77,11 @@ where $d_{\rm KL}$ is the Kullback-Liebler divergence. A policy $\pi'$ that achi
 
 An algorithm that leverages knowledge of $q$ will frequently maintain a posterior distribution on $\theta_i$ given observations from that arm. To that end, denote by $q_{i,s}$ the posterior distribution on $\theta_i$ given the first $s$ rewards from that arm, $X_{i,1},X_{i,2},\dots,X_{i,s}$. Denote by $y_{i,s}$ the corresponding values of the sufficient statistic describing the posterior. Of course, $q_{i,0} \triangleq q$. 
 
-Now, one can define a notion of regret that depends on the prior $q$. Specifically, the Bayes' risk (or Bayesian regret) for any policy $\pi$ is simply the expected regret over draws of $\theta$ according to the prior $q$:
+Now, one can define a notion of regret that depends on the prior $q$. Specifically, the Bayes risk (or Bayesian regret) for any policy $\pi$ is simply the expected regret over draws of $\theta$ according to the prior $q$:
 \[
 \Regret{\pi, T} := \int_\Theta \Regret{\pi, T, \theta} q^A\left(d\theta\right).
 \]
-In yet another landmark paper, \cite{lai1987adaptive} showed that for a restricted class of priors $q$ a similar class of algorithms to those found to be regret optimal in \citep{lai1985asymptotically} were also Bayes optimal. Interestingly, however, this class of algorithms ignores information about the prior altogether -- i.e. they do not require knowledge of $q$.
+In yet another landmark paper, \cite{lai1987adaptive} showed that for a restricted class of priors $q$ a similar class of algorithms to those found to be regret optimal in \citep{lai1985asymptotically} were {\color{blue} also `Bayes' optimal in the sense that they achieved a lower bound on the Bayes risk (also established in \cite{lai1987adaptive})}. Interestingly, however, this class of algorithms ignores information about the prior altogether -- i.e. they do not require knowledge of $q$.
 However, this class of algorithms is not anytime and does require knowledge of the problem horizon.
 A number of algorithms that {\em do} exploit prior information have in recent years received a good deal of attention; these include Thompson sampling \citep{thompson1933likelihood}, Bayes-UCB \citep{kaufmann2012thompson}, KL-UCB \citep{garivier2011kl}, and Information Directed Sampling \citep{russo2014learning}. All of these algorithms maintain a posterior on the mean of an arm, but leverage this posterior in different ways. It has been empirically observed that these approaches offer excellent performance, even in a frequentist sense. In fact, Thompson sampling, Bayes-UCB and KL-UCB have each been shown to be regret optimal in the sense of meeting the lower bound  \eqref{eq:lai_robbins_lb}. 
  

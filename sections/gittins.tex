@@ -43,7 +43,7 @@ The proof, given in Appendix~\ref{proof:linearregret}, rests on the simple fact 
 
 Lemma~\ref{le:linearregret} tells us that we cannot hope for sub-linear regret by applying the Gittins index policy with a constant discount factor. One may naturally wonder whether an increasing discount factor might fix this issue. Now observe that any schedule of increasing discount factors effectively implies a change in the trade-off between exploration and exploitation. With a fixed discount factor, we have already seen that once the priors between two arms are sufficiently far apart, the Gittins policy will not explore, thereby leading to the possibility of linear regret. As the discount factor increases, the `gap' between priors above which exploration is not justified goes up over time. If we increase this `gap' too fast, we might incur too much exploration. Too slow, and we might incur too little exploration. As such, the schedule at which we increase the discount factor is likely to play a significant role in determining the regret of the resulting policy. 
 
-Now notice that the Gittins index policy for a discount factor $\gamma$ can be viewed as optimal for a {\em random} finite horizon, distributed geometrically with parameter $1-\gamma$. As $\gamma$ approaches one, this may be thought of as a near optimal policy for the fixed finite horizon $1/(1-\gamma)$. Now consider for a moment that we had access to a policy that has optimal $T$ period expected regret (assuming $T$ is known in advance). One way to convert such a policy into a policy that has `low' regret for any $T$ is to employ the so-called doubling trick: Apply the optimal policy for the horizon $T$ for $T$ steps, then the optimal policy for horizon $2T$ for the following $2T$ steps, followed by the optimal policy for $4T$ for the next $4T$ steps, and so-forth. Such a policy will be `near'-optimal for any horizon, in a manner we now make precise. 
+Now notice that the Gittins index policy for a discount factor $\gamma$ can be viewed as optimal for a {\em random} finite horizon, distributed geometrically with parameter $1-\gamma$. As $\gamma$ approaches one, this may be thought of as a near optimal policy for the fixed finite horizon $1/(1-\gamma)$. Now consider for a moment that we had access to a policy that has optimal $T$ period expected regret (assuming $T$ is known in advance). One way to convert such a policy into a policy that has `low' regret for any $T$ is to employ the so-called doubling trick: Apply the optimal policy for the horizon $T$ for $T$ steps, then the optimal policy for horizon $2T$ for the following $2T$ steps, followed by the optimal policy for $4T$ for the next $4T$ steps, and so-forth. {\color{blue} Intuitively, such doubling tricks leverage finite time horizon results to get so-called `anytime' results by picking an update schedule such that the choice of horizon at any point is roughly consistent with the elapsed time up to that point; \cite{besson2018doubling} provide an insightful analysis of this trick and its broad applicability. Such a policy will be `near'-optimal for any horizon, in a manner we now make precise.}
 
 Consider employing discount factors that increase at roughly the rate $1 - 1/t$; specifically, consider setting 
 \[
@@ -55,13 +55,14 @@ Consider employing discount factors that increase at roughly the rate $1 - 1/t$;
 and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t-1)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is within a factor of $\log T$ of the optimal Bayes risk. Specifically, we have:	and consider using the policy that at time $t$ picks an arm from the set $\argmax_i \nu_{\gamma_t}(y_{i,N_i(t-1)})$. Denote this policy by $\pi^{\rm D}$. The following proposition shows that this `doubling' policy achieves Bayes risk that is within a factor of $\log T$ of the optimal Bayes risk. Specifically, we have:
 \begin{proposition}
 	\label{prop:gittins_log3T}
+	Assume that $q$ satisfies the requirements of Theorem 3 in \cite{lai1987adaptive}. Then, 
 	\[
 	{\rm Regret}(\pi^{\rm D},T)
 	=
 	O
 	\left(
 	\log^4 T
-	\right).
+	\right),
 	\] 
 	where the constant in the big-Oh term depends on the prior $q$ and $A$.
 \end{proposition}
