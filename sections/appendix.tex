@@ -67,7 +67,7 @@
 \section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
 
 {\color{blue}
-We first establish notation useful in the proof. Specifically, we let $h_t^{t'}$ denote the sequence of arms pulled and the corresponding rewards earned between periods $t$ and $t'$ ($h_t^{t'} = \emptyset$ is $t' < t$) . Recall that $\mathbf y$ denotes the $A$-tuple of sufficient statistics of priors on the the arm means of each of the $A$ arms. We denote by $g(\mathbf y, h_t^{t'})$ the $A$-tuple of sufficient statistics of posteriors on the arm means of each of the $A$ arms, obtained starting with the prior $\mathbf y$ and observing the sequence of arm pulls $h_t^{t'}$. 
+We first establish notation useful in the proof. Specifically, we let $h_t^{t'}$ denote the sequence of arms pulled and the corresponding rewards earned between periods $t$ and $t'$ ($h_t^{t'} = \emptyset$ if $t' < t$) . Recall that $\mathbf y$ denotes the $A$-tuple of sufficient statistics of priors on the the arm means of each of the $A$ arms. We denote by $g(\mathbf y, h_t^{t'})$ the $A$-tuple of sufficient statistics of posteriors on the arm means of each of the $A$ arms, obtained starting with the prior $\mathbf y$ and observing the sequence of arm pulls $h_t^{t'}$. 
 
 
 We begin by establishing a simple Lemma concerning the allocation rule proposed in \cite{lai1987adaptive}; we note that the allocation rule there is specified for a {\em fixed} time horizon and the Lemma below extends it to a policy that specifics a choice of arm for every epoch. 
@@ -350,7 +350,7 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	{\color{blue}To prove Lipschitz continuity, it's enough to note that
 	for any $\lambda_1, \lambda_2 \in \R$, that
 	\begin{align*}
-		| V^1_\gamma(y, \lambda_1) - V^1_\gamma(y, \lambda_2)| = & \frac{\gamma}{1-\gamma} |\E_y[\max(\lambda_1, R(y_{i,0})) - \max(\lambda_2, R(y_{i,0}))  ]  | \\
+		| V^1_\gamma(y, \lambda_1) - V^1_\gamma(y, \lambda_2)| & =  \frac{\gamma}{1-\gamma} |\E_y[\max(\lambda_1, R(y_{i,0})) - \max(\lambda_2, R(y_{i,0}))  ]  | \\
 	& \leq \frac{\gamma}{1-\gamma} |\lambda_1 - \lambda_2 |	.
 	\end{align*}
 		
