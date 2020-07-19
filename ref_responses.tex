@@ -178,8 +178,7 @@ Thank you! In this revision, we have closed gaps in two technical results spotte
 		Of course, the authors may know all of this already, and I am not insisting that they overhaul computational experiments. I would just like to see some clarification about what methods they are using for calculating Gittins indices and whether parametric LP approaches could be effective (if they are not using these). Given that this paper could receive attention from researchers studying multi-armed bandits from different perspectives, and computational effort is a motivation of the OGI approach, it seems important to acknowledge leading methods for calculating Gittins indices. (On a related note, I believe parametric LP could be useful for calculating $OGI(K)$ indices for finite (but long) $K$ as well, although that may not be necessary in any of the authors experiments, given the fast runtimes).
 
 		}
-		
-{\color{blue} TODO: Eli, lets discuss}		
+
 Thank you for this excellent suggestion. First, in the case of $OGI(1)$ special structure lets us solve for this index very quickly via Newton-Raphson (we discuss this in the manuscript). For $OGI(\infty)$ we rely on Gittins index approximation from the literature, including \cite{brezzi2002optimal, powell2012optimal}. For $OGI(k)$, implemented for the Beta-Bernoulli case, we relied on a relatively naive implementation that was sufficiently fast for our setup -- we believe this is primarily because the number of dynamic programs to solve for an index evaluation can be made quite small by heuristically guessing useful intervals for the index. We do believe that in general, the parametric LP you suggest is precisely the right tool. In the Beta-Bernoulli case, however, the state space considered at each time step is distinct (effectively, we consider the set of states that are reachable in $k$ steps from the current state), and this requires setting up new LPs at each time step; the overhead in doing this ends up being quite significant.
 		
 		
@@ -207,17 +206,14 @@ We do this now, and present useful references for the general use of this trick,
 	\begin{enumerate}
 		\item \textbf {Proof of Proposition 1:} 	
 		
-		{\color{blue}
 		This proof was indeed incorrect. In addition to the fact that the Lai result is asymptotic, the key problematic issue you raised was the fact that even if one made the assumptions in Theorem 3 of Lai (1987) on the prior, there was no guarantee that these regularity assumptions held for all possible posteriors. In addition we found a further issue -- the constructive policy in Theorem 3 of Lai (1987) specifies policies for a fixed horizon, whereas the manner in which we deploy the doubling trick for the Gittins policy requires a policy that is well specified for arbitrary horizons. 
 		
 		We believe we have managed to salvage this result. Our new proof and approach to using the doubling trick requires the Lai (1987) result only for the initial prior distribution to hold. Unfortunately, the additional gap we spotted leads to an increased regret estimate of $\sim \log^4 T$ as opposed to the $~ \log^3 T$ we had earlier. Since this entire result essentially only served the goal of making a conceptual point (that increasing discount factors yielded sub-linear regret for the Gittins policy), we believe that this increased regret estimate still does the job. As an aside, it may be possible to get the regret estimate all the way down to $\sim \log^2 T$ using exponential doubling but we have not attempted to do this. 
-}
 		
 		
 		\item \textbf {Lemma 2:} 
 		
-		{\color{blue}	
-		Thank you for pointing out the gap here. See the end of the proof (highlighted in blue) for our fix. We showed that $V^K_\gamma(\cdot, \cdot)$ was Lipschitz in its second argument, and this sufficed to show the result.}
+		Thank you for pointing out the gap here. See the end of the proof (highlighted in blue) for our fix. We showed that $V^K_\gamma(\cdot, \cdot)$ was Lipschitz in its second argument, and this sufficed to show the result.
 		
 %		We've corrected the final part of Lemma 2. As you pointed out, more care was needed to show that the sequence of fixed points to the equation
 %		\begin{equation*}
@@ -241,8 +237,7 @@ We do this now, and present useful references for the general use of this trick,
 		\item {\it The paper sidesteps relevant comparisons to Lattimore [2016] by mentioning that the paper requires apriori knowledge of the horizon. I don't find that to be convincing. It is easy to apply finite horizon Gittins indices with an increasing planning horizon, as is done in this paper. For most bandit algorithms (and also online gradient algorithms) anytime bounds follow pretty easily once the known horizon case is worked out. If the authors believe there are unusual challenges in extending the techniques of Lattimore [2016] in this way, perhaps they could mention these. Otherwise, it seems better to give readers some perspective on the connections and differences between that paper and yours.
 		}
 		
-{\color{blue} 		
-In trying to extend the contemporaneous Lattimore [2016] policy to one that does not require the horizon to be pre-specified, one may rely on the doubling trick. In using the doubling trick, one incurs a multiplicative increase in regret by a $\log T$ factor yielding a sub-optimal regret bound. In light of your comment, we have given this further thought. As it turns out, a recent preprint \citep{besson2018doubling} apparently motivated by the same issue, shows that {\em exponential} doubling tricks can reduce this multiplicative term to a constant (that constant is precisely 2) for the Lattimore [2016] approach. While much better, this bound remains slightly sub-optimal. More interestingly, however, the resulting algorithm performs very poorly, by up to almost an order of magnitude worse than vanilla UCB \citep{besson2018doubling}}.
+In trying to extend the contemporaneous Lattimore [2016] policy to one that does not require the horizon to be pre-specified, one may rely on the doubling trick. In using the doubling trick, one incurs a multiplicative increase in regret by a $\log T$ factor yielding a sub-optimal regret bound. In light of your comment, we have given this further thought. As it turns out, a recent preprint \citep{besson2018doubling} apparently motivated by the same issue, shows that {\em exponential} doubling tricks can reduce this multiplicative term to a constant (that constant is precisely 2) for the Lattimore [2016] approach. While much better, this bound remains slightly sub-optimal. More interestingly, however, the resulting algorithm performs very poorly, by up to almost an order of magnitude worse than vanilla UCB \citep{besson2018doubling}.
 		
 	\end{enumerate}
 	
@@ -299,7 +294,6 @@ In trying to extend the contemporaneous Lattimore [2016] policy to one that does
 	
 	%% BEGIN RESPONSE %%
 	
-	{\color{blue} TODO: Eli, move some of the original OGI results to Appendix E2}
 	Thank you for these suggestions! We agree that there is value in simulating alternative but related policies. We include the results from the simulations in Appendix E.2. Briefly, here is what we learned: Greedy, as expected performs poorly. The fixed parameter works well if the parameter is set with knowledge of the horizon -- this is also expected from the optimality of the Gittins index (and further motivated by our proof of Proposition 1). On the other hand, if set incorrectly, this policy can perform quite poorly. Finally, the Brezzi-Lai closed form approximation performed poorly relative to the closed form index approximation we utilized in our original experiments. 
 	
 	
