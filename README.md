@@ -1,3 +1,3 @@
 # OROptimisticGittins
-Repo for the Optimistic Gittins manuscript
+Repo for the Optimistic Gittins manuscript.
 .
