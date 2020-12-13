@@ -1,0 +1,263 @@
+\documentclass[11pt]{article}
+
+%%%%%%%% start of generic header CCM 2010-04-09
+%% packages
+\usepackage{epsfig}
+\usepackage{latexsym}
+\usepackage{url}
+\usepackage{float}
+\usepackage[hypertexnames=false,hyperfootnotes=false]{hyperref}
+\usepackage{texnansi}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{subfigure}
+\usepackage{afterpage}
+\usepackage{enumitem}
+\usepackage[boxed]{algorithm}
+\usepackage{algpseudocode}
+\usepackage[normalem]{ulem}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{sectsty}
+\usepackage{ifthen}
+\usepackage[leqno]{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+%\usepackage{xspace}
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}
+%\usepackage[sort&compress]{natbib}
+\usepackage{natbib}
+%\usepackage{xfrac}
+%% useful math macros
+\newcommand{\field}[1]{\ensuremath{\mathbb{#1}}}
+\newcommand{\N}{\ensuremath{\field{N}}} % natural numbers
+\newcommand{\R}{\ensuremath{\field{R}}} % real numbers
+\newcommand{\Rp}{\ensuremath{\R_+}} % positive real numbers
+\newcommand{\Z}{\ensuremath{\field{Z}}} % integers
+\newcommand{\Zp}{\ensuremath{\Z_+}} % positive integers
+\newcommand{\1}{\ensuremath{\mathbf{1}}} % vector of all 1's
+\newcommand{\I}[1]{\ensuremath{\mathbb{I}_{\left\{#1\right\}}}} % indicator function
+\newcommand{\Inb}[1]{\ensuremath{\mathbb{I}_{#1}}} % indicator function, no brackets
+\newcommand{\tends}{\ensuremath{\rightarrow}} % arrow for limits
+\newcommand{\ra}{\ensuremath{\rightarrow<}} % abbreviation for right arrow
+\newcommand{\PR}{\ensuremath{\mathsf{P}}} % probability
+\newcommand{\E}{\ensuremath{\mathsf{E}}} % expectation
+\newcommand{\defeq}{\ensuremath{\triangleq}}
+\newcommand{\subjectto}{\text{\rm subject to}} % subject to
+\renewcommand{\Re}{\ensuremath{\R}} % expectation
+%% some caligraphic symbols
+\newcommand{\Ascr}{\ensuremath{\mathcal A}}
+\newcommand{\Bscr}{\ensuremath{\mathcal B}}
+\newcommand{\Cscr}{\ensuremath{\mathcal C}}
+\newcommand{\Dscr}{\ensuremath{\mathcal D}}
+\newcommand{\Escr}{\ensuremath{\mathcal E}}
+\newcommand{\Fscr}{\ensuremath{\mathcal F}}
+\newcommand{\Gscr}{\ensuremath{\mathcal G}}
+\newcommand{\Hscr}{\ensuremath{\mathcal H}}
+\newcommand{\Iscr}{\ensuremath{\mathcal I}}
+\newcommand{\Jscr}{\ensuremath{\mathcal J}}
+\newcommand{\Kscr}{\ensuremath{\mathcal K}}
+\newcommand{\Lscr}{\ensuremath{\mathcal L}}
+\newcommand{\Mscr}{\ensuremath{\mathcal M}}
+\newcommand{\Nscr}{\ensuremath{\mathcal N}}
+\newcommand{\Oscr}{\ensuremath{\mathcal O}}
+\newcommand{\Pscr}{\ensuremath{\mathcal P}}
+\newcommand{\Qscr}{\ensuremath{\mathcal Q}}
+\newcommand{\Rscr}{\ensuremath{\mathcal R}}
+\newcommand{\Sscr}{\ensuremath{\mathcal S}}
+\newcommand{\Tscr}{\ensuremath{\mathcal T}}
+\newcommand{\Uscr}{\ensuremath{\mathcal U}}
+\newcommand{\Vscr}{\ensuremath{\mathcal V}}
+\newcommand{\Wscr}{\ensuremath{\mathcal W}}
+\newcommand{\Xscr}{\ensuremath{\mathcal X}}
+\newcommand{\Yscr}{\ensuremath{\mathcal Y}}
+\newcommand{\Zscr}{\ensuremath{\mathcal Z}}
+%% math operators
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\mean}{mean}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator*{\argmin}{\mathrm{argmin}}
+\DeclareMathOperator*{\argmax}{\mathrm{argmax}}
+\newcommand{\minimize}{\ensuremath{\mathop{\mathrm{minimize}}\limits}}
+\newcommand{\maximize}{\ensuremath{\mathop{\mathrm{maximize}}\limits}}
+%% theorem environments
+\newtheoremstyle{thm-sf}{}{}{\itshape}{}{\sffamily\bfseries}{.}{ }{}
+\theoremstyle{thm-sf}
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{fact}{Fact}
+\newtheorem{proposition}{Proposition}
+\renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
+\renewcommand{\proofname}{{\normalfont\sffamily\bfseries Proof}}
+\newcommand{\proofnamest}[1]{{\normalfont\sffamily\bfseries #1}}
+%% Tikz customizations
+\usetikzlibrary{arrows,patterns,plotmarks}
+\tikzstyle{every picture} += [>=stealth]
+%% customize section titles
+\allsectionsfont{\sffamily}
+\makeatletter
+\def\@seccntformat#1{\csname the#1\endcsname.\quad}
+\makeatother
+%% abstract, table, figure names
+\renewcommand{\figurename}{\normalfont\sffamily\bfseries Figure}
+\renewcommand{\tablename}{\normalfont\sffamily\bfseries Table}
+\renewcommand{\abstractname}{\normalfont\sffamily\bfseries Abstract}
+\floatname{algorithm}{\normalfont\sffamily\bfseries Algorithm}
+%% other customizations
+%\numberwithin{equation}{section}
+\floatstyle{ruled}
+\newcommand{\emailhref}[1]{\href{mailto:#1}{\tt #1}} % hyperlinked email address
+%% boolean for fast compilation
+\provideboolean{fastcompile}
+\newcommand{\hidefastcompile}[1]{\ifthenelse{\boolean{fastcompile}}{}{#1}}
+%% for editing comments
+\newcommand{\todo}[1]{{\color{red} \noindent {\sffamily\bfseries TODO:} #1}}
+\newcommand{\vff}[1]{{\color{red} \noindent {\sffamily\bfseries VFF:} #1}}
+%%%%%%%% end of generic header
+
+%% many person editing commands
+\newcommand{\delvf}[1]{{\color{blue} [{\sffamily\bfseries DELETED VF:} #1]}}
+\newcommand{\delccm}[1]{{\color{red} [{\sffamily\bfseries DELETED RM:} #1]}}
+\newcommand{\notevf}[1]{{\color{blue} [{\sffamily\bfseries NOTE VF:} {\em #1}]}}
+\newcommand{\noteccm}[1]{{\color{red} [{\sffamily\bfseries NOTE RM:} {\em #1}]}}
+\newcommand{\newvf}[1]{{\color{blue} #1}}
+\newcommand{\newccm}[1]{{\color{red} #1}}
+\newcommand{\newtw}[1]{{\color{green} #1}}
+\newcommand{\newbvr}[1]{{\color{orange} #1}}
+
+%%% margins
+\marginparwidth 0pt\marginparsep 0pt
+\topskip 0pt\headsep 0pt\headheight 0pt
+\oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+\usepackage{setspace}
+\setstretch{1.1}
+
+%%% bibliography
+%\setcitestyle{numbers,square}
+
+%\setenumerate[1]{resume}
+
+\begin{document}
+	\begin{center} {\Large {\sffamily\bfseries Responses to the Comments Made by \\
+				the Editors and the Referees}}
+	\end{center}
+	
+	\bigskip
+	
+	\section{Response to the Department Editor}
+	
+	
+	
+	\section{Response to the Associate Editor}
+	
+	\subsection{Responses to Comments}
+	{\it The two referees from the first round have again provided reports on the paper, and I thank them again. Referee 1 (“I thank the authors...”) has a few minor suggestions (in particular, Referee 1 questions the value of Proposition 1) and recommends a minor revision. Referee 2 (“In my previous review...”) also raises some minor issues (primarily, requesting additional clarity on Lemma 1) and recommends accept.
+		I read the authors’ response and the revision again. Like the referees, I appreciate the authors’ efforts and I am almost ready to sign off on the paper. I agree with the referees’ comments and have a few (minor) comments of my own.:
+	} 
+\newline
+\newline
+Thank you for your comments. We have ...
+
+	
+	\begin{enumerate}
+		
+		\item {\it I appreciate the authors’ addressing my question on how the OGI($\infty$) values (i.e., the “exact” Gittins indices) are calculated (or approximated), but I am afraid I am still not entirely clear on what was done in the numerical experiments. For the Gaussian case, my understanding is the approximation based on Powell and Ryzhov (2012) is used. I am not sure what was done in the Bernoulli case. The overview at the start of Section 5 (p. 17) also mentions Powell and Ryzhov (2012) but evidently the OGI($\infty$) case is not an approximation in the Bernoulli case (e.g., looking at Tables 7 and 8 in the appendix, it appears these are nearly “exact” calculations).
+			
+		The response letter does not fully resolve this for me – there you also mention the Brezzi and Lai (2002) paper but I don’t see this mentioned in Section 5. My specific questions are: (a) what methods are used for calculating the “exact” Gittins indices in the Beta-Bernoulli case and (b) when approximations are used (e.g., Powell and Ryzhov 2012) can you please briefly discuss how good these approximations are?
+		Apologies if I am missing something here – this does seem important, since a major advantage of the OGI(K) framework is computational tractability.
+		}
+
+Thank you
+		
+		
+		\item {\it Conceptual clarification: the idea behind the choice of the discount factors is as a handle for controlling exploration vs. exploitation. However, given that OGI is based on a finite-horizon approximation, I wonder if this could also be accomplished by tuning the time horizon as well ($K$). In other words, at least from a purely theoretical/conceptual standpoint, is there some redundancy by having both K and $\gamma$ in the OGI calculations? I wonder if similar regret-optimal results could be obtained by taking $\gamma=1$ throughout and increasing K appropriately (and indeed the motivation from the “doubling trick” on p. 11 only involves intuition over a finite horizon).
+	   
+	   Of course, there are clear advantages to having both – e.g., in the limit as K grows large, for fixed $\gamma$, we recover the traditional Gittins index. And computationally it’s nice to be able to retain a fixed effort through K while changing $\gamma$.
+	   To be clear, I am not asking the authors to change anything. I just think a brief discussion on this point could potentially help add intuition for the OGI approach.	
+	}
+
+	
+Thank you
+		
+	\item {\it The discussion in the first paragraph of Section 3.3 could use a bit more precision. First, the Chappelle and Li (2011) paper studies contextual bandits, which is somewhat different than a classical MAB. Second, although I agree that calculating a Gittins index is harder than, say, Thompson sampling, it’s not always the case that the entire state space $\cal{Y}$ is relevant for the Gittins index calculations (only downstream states from an arm’s current state are needed in the Gittins index calculations).}
+	
+	\item {\it A brief discussion of the Beta(1,1) assumption in Theorem 1 would be useful. This is a natural (and somewhat standard) assumption in that it assumes no prior knowledge about arms. But presumably such assumptions are not necessary for obtaining asymptotically optimal regret.
+	}
+	
+	\item {\it  P. 17, line 45 – there appears to be a typo after “choice of $\alpha$.”}
+	
+	\item {\it It probably would be helpful to describe the large-scale experiments as Bernoulli bandits earlier in Section 5.2 (the reader does not get to this until the third paragraph).}
+	\end{enumerate}
+	
+	\newpage
+	\section{Response to  Referee 1}
+	
+	{\it I thank the authors for their response to my comments. As I said in the previous round, the paper makes a significant contribution to the MAB literature. I only have one last comment (see below). Congratulations on your excellent work.
+		I'm not convinced about the value of Proposition 1 and the discussion about Bayes risk. It's interesting as a curiosity, but having it in section 3.2 is more of a distraction/detour that confuses the reader rather than something that helps building intuition. The index in Proposition 1 is not exactly the OGI analyzed later and the authors acknowledge in the response that this result is "not essential to the main results of the paper in any way". Therefore, it can be moved to the appendix. The paper can mention that the OGI policy is motivated by the Bayesian setting, and though the paper cannot show that it's optimal in the Bayesian regret sense, it does surprisingly achieve optimal regret in the frequentist sense. The reader that's interested in Bayesian regret can be referred to the appendix for further discussion. A streamlined paper along these lines will gain in readability.
+		
+Note also that the current section 3.2 needs some editing. The three lines preceding Proposition 1 (starting with "and consider using the policy...") appear twice and the factor with respect to the optimal Bayes risk is now $\log^2 T$ (it still says $\log T$ from the previous version).	
+}
+	
+	\newpage
+	\section{Respone to Referee 2}
+	{
+	\it 
+	In my previous review, I made several suggestions to the authors and stated that my main concern was a few technical issues in the proofs. Based on the new proofs, it seems the technical issues have been fixed. Thanks to the authors for a clear and thorough revision.
+	}
+    \newline
+    \newline
+    Thank you for all your feedback. We were able to greatly improve and fix the technical issues in our paper because of it. We responded to your most recent comments below.
+	\subsection{Typos or minor issues}
+	
+	\begin{itemize}
+		\item {\it On Lemma 1: It would be helpful if you stated this more clearly. Now that you revised the statement to be ``fequentist", the proof you wrote actually constructs jointly a prior and problem instance on which regret grows linearly. I don't think it's sufficiently clear to say ``there exists an instance of the multi-armed bandit problem, with parameters $\theta$" since this does not clarify that you’ve picked a prior that fails on this instance. Less important, but it also feels like you can substantially simplify the proof of Lemma 1: can’t you just pick $(\alpha + 1, \alpha)$ to be the prior parameters of the second arm rather than create a construction in which that arm is sampled exactly once?
+		}
+		
+		These are great points -- thank you. We re-worded the Lemma to say that there exists an instance of the multi-armed bandit problem with a certain prior, and a $\theta$ drawn from the prior, in which regret grows linearly. We believe this is indeed clearer.
+		
+		We also simplified the proof as you suggested.
+		
+		\item {\it On Proposition 1: Looks correct. I find the proof approach using Lemma 6 to be pretty elegant.
+			\begin{itemize}
+				\item Typo: `that specifics a choice of arm for every epoch'
+				\item  Typo: should say $\lim_{T\to\infty}$ not $\lim T$.
+			\end{itemize}
+		}
+	
+		Fixed both.
+	
+		\item {\it Lemma 7: At the start of the proof, I think you want to assume $X_{i,t}$ is not almost surely equal to$ B$, or else you should write weak rather than strict inequalities at the start of the proof.}
+		Thank you, this is a great observation. We stated this assumption now in Lemma 7.
+	%% BEGIN RESPONSE %%
+	
+	
+	
+	%% END RESPONSE %%
+
+
+	
+	\end{itemize}
+
+	
+
+%\singlespacing
+
+
+
+\bibliographystyle{named}
+\bibliography{references} 
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
