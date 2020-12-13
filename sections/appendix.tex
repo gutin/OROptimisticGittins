@@ -3,7 +3,7 @@
 \section{Proof of Lemma~\ref{le:linearregret}} \label{proof:linearregret}
 {\color{blue}
 \begin{myproof}[Proof.]
-	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha)$ prior where $\alpha$ is a parameter we set later. {\color{blue} Furthermore, we assume that the true paremeter for arm $2$ is equal to $\theta \in (1/2, 1)$, which represents a draw from the prior distribution on that arm}. Then, it is simple to check that $\pi^{G,\gamma}$ must pull arm $2$ at the first time period. With probability {\color{blue} $1-\theta$}, we receive a reward of $0$, so that the posterior on arm $2$ is given by a {\rm Beta}$(\alpha,\alpha+1)$ prior. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
+	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha+1)$ prior where $\alpha$ is a parameter we set later. {\color{blue} Furthermore, we assume that the true paremeter for arm $2$ is equal to $\theta \in (1/2, 1)$, which represents a draw from the prior distribution on that arm}. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
 	\[
 	\frac{\alpha}{1+2\alpha}
 	+
@@ -51,11 +51,10 @@
 	\left(\P{
 		R(y_{2,0})>1/2 \
 		\Big| y_{2,0} = \left(\alpha, \alpha+1 \right)
-	} + 1/2\right) ,
+	} + 1/2\right) .
 	\]
 	But the right hand side of the above expression goes to $\gamma/2 < 1/2$ as $\alpha \tends 0$}. Consequently, we can choose an $\alpha$ such that the Gittins index policy chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. {\color{blue}Consequently, $\pi^{G,\gamma}$ must incur a $T$-period frequentist regret lower bounded by 
 	$
-	(1-\theta)
 	T
 	\left(
 	\theta - 1/2
@@ -70,7 +69,7 @@
 We first establish notation useful in the proof. Specifically, we let $h_t^{t'}$ denote the sequence of arms pulled and the corresponding rewards earned between periods $t$ and $t'$ ($h_t^{t'} = \emptyset$ if $t' < t$) . Recall that $\mathbf y$ denotes the $A$-tuple of sufficient statistics of priors on the the arm means of each of the $A$ arms. We denote by $g(\mathbf y, h_t^{t'})$ the $A$-tuple of sufficient statistics of posteriors on the arm means of each of the $A$ arms, obtained starting with the prior $\mathbf y$ and observing the sequence of arm pulls $h_t^{t'}$. 
 
 
-We begin by establishing a simple Lemma concerning the allocation rule proposed in \cite{lai1987adaptive}; we note that the allocation rule there is specified for a {\em fixed} time horizon and the Lemma below extends it to a policy that specifics a choice of arm for every epoch. 
+We begin by establishing a simple Lemma concerning the allocation rule proposed in \cite{lai1987adaptive}; we note that the allocation rule there is specified for a {\em fixed} time horizon and the Lemma below extends it to a policy that specifies a choice of arm for every epoch. 
 
 \begin{lemma} 
 \label{lemma:laianytime}
@@ -94,7 +93,7 @@ for all $T$.
 \begin{myproof}[Proof.]
 By Theorem $3$ in \cite{lai1987adaptive}, we know that there exists a constant $\hat C_{\mathbf y}$ and a sequence of policies, $\tilde \pi_{\mathbf y, T}$ \footnote{this entails a minor abuse of our definition of a policy: $\tilde \pi_{\mathbf y, T}$ is not specified for $t > T$}  such that 
 \[
-\lim_T 
+\lim_{T\to \infty} 
 \frac{
 \E
 _{\mathbf y}
@@ -375,7 +374,7 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 \end{myproof}
 
 \begin{lemma} \label{cor:equivalent_event}
-	Suppose that arm rewards are bounded. That is, there exists a constant $B \in \Re_+$ such that $X_{i,t} \in [0, B]$ for every arm $i$ and time $t$. 
+	Suppose that arm rewards are bounded. That is, there exists a constant $B \in \Re_+$ such that $X_{i,t} \in [0, B]$ for every arm $i$ and time $t$. {\color{blue}Further assume that $X_{i,t}$ is not almost surely equal to $B$}.
 	
 	Let $v^K_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $\eta$ be a scalar, then the following equivalence holds
 	\[

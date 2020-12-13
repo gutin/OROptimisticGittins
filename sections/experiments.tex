@@ -5,7 +5,7 @@ The experiment from \cite{kaufmann2012bayesian} is deferred to Appendix~\ref{exp
 
 For the majority of experiments, we configure the OGI algorithm with $K =1$ to keep the computational burden under control {\color{blue} (there we simply use the Newton-Raphson method to compute the index directly)}. In one experiment, included for completeness, we test OGI with $K = 3$ and $K=\infty$, where the latter is equivalent to using Gittins indices. {\color{blue} There we use direct dynamic programming for the $K=3$ case, and rely on an approximation due to \cite{powell2012optimal} for the $K=\infty$ case.} The purpose of those experiments is to show the (limited) value of a higher lookahead in the OGI algorithm. 
 
-We use a common discount factor schedule in all experiments setting $\gamma_t = 1 - 1/(100 + t)$. The choice of $\alpha =å 100$ is second order; our conclusions remain unchanged, and actually appear to improve in an absolute sense with other choices of $\alpha$. In addition, in one experiment we examine the regret of OGI relative to its competitors up to a horizon of $10^6$ epochs, so that this choice of $\alpha$ does not represent an attempt to tune the performance of OGI for a specific time horizon. 
+We use a common discount factor schedule in all experiments setting $\gamma_t = 1 - 1/(100 + t)$. The choice of $\alpha = 100$ is second order; our conclusions remain unchanged, and actually appear to improve in an absolute sense with other choices of $\alpha$. In addition, in one experiment we examine the regret of OGI relative to its competitors up to a horizon of $10^6$ epochs, so that this choice of $\alpha$ does not represent an attempt to tune the performance of OGI for a specific time horizon. 
 
 
 
@@ -60,6 +60,7 @@ As an aside, we note that the regret we computed for the IDS algorithm is slight
 
 \subsection{Large scale experiment} \label{exp:ts_sampling_experiment}
 This experiment replicates a large scale synthetic experiment in \cite{chapelle2011empirical}.
+{\color{blue}Here the arms' rewards are Bernoulli and their means are independently sampled from a uniform prior. Every algorithm that we will test assumes this same prior over the arms' mean rewards.}
 The key feature here is that we simulate a  longer horizon of $T = 10^6$ and include a large number of arms, particularly we let $A = 100$. This is an order of magnitude greater than in the majority of synthetic bandit experiments we are aware of.
 Our goal is to see how the algorithms scale both computationally and in terms of performance.
 Such a setup is practically relevant because in applications such as e-commerce or online advertising, the problems of interest are typically modeled with many arms relative to the horizon, where each arm could represent a product or ad.
@@ -71,7 +72,7 @@ We will see that even when the ratio $T/A$ and $A$ itself are large, there is a 
 
 As this experiment requires an order of magnitude more iterations than the earlier ones, we are only able to simulate the fastest algorithms, which are OGI with $K=1$, Thompson Sampling and Bayes UCB. 
 It was not possible to include IDS because its performance is hindered by the fact that each arm pull decision requires time that is quadratic in the number of arms to compute. 
-Again, this is a Bernoulli experiment where arm means are independently sampled from a uniform prior and each algorithm assumes this same prior over the unknown mean rewards from the arms.
+
 We show the algorithms' regret averaged over 5,000 trials in Figure~\ref{fig:chapelle_and_li} and Table~\ref{table:additional_cli_table}.
 \begin{figure}[h!]
 	\centering
