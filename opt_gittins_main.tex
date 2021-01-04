@@ -389,9 +389,7 @@
 
 \begin{abstract}
 \noindent
-Recent years have seen a resurgence of interest in Bayesian algorithms for the Multi-armed Bandit (MAB) problem, such as Thompson sampling. These algorithms seek to exploit prior information on arm biases. The empirically observed performance of these algorithms makes them a compelling alternative to their frequentist counterparts. Nonetheless, there appears to be a wide range in empirical performance amongst such Bayesian algorithms. These algorithms also vary substantially in their design (as opposed to being variations on a theme). In contrast, if one cared about Bayesian regret discounted over an infinite horizon at a {\em fixed, pre-specified} rate, the celebrated Gittins index theorem offers an {\em optimal} algorithm. Unfortunately, the Gittins analysis does not appear to carry over to minimizing Bayesian regret over all sufficiently large horizons and computing a Gittins index is onerous relative to essentially any incumbent index scheme for the Bayesian MAB problem. 
 
-The present paper proposes a tightening sequence of `optimistic' approximations to the Gittins index. We show that the use of these approximations in concert with the use of an increasing discount factor appears to offer a compelling alternative to state-of-the-art index schemes proposed for the Bayesian MAB problem in recent years. We prove that these optimistic indices constitute a regret optimal algorithm, in the sense of meeting the Lai-Robbins lower bound, including matching constants. Perhaps more interestingly, the use of even the loosest of these approximations appears to offer substantial performance improvements over state of the art alternatives (including Thompson Sampling, Information Direct Sampling and the Bayes-UCB algorithm) while incurring little to no additional computational overhead relative to the simplest of these alternatives. 
 
 
 \vskip 5pt

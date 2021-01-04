@@ -176,7 +176,10 @@ Thank you for your comments. We have ...
 		Apologies if I am missing something here – this does seem important, since a major advantage of the OGI(K) framework is computational tractability.
 		}
 
-Thank you
+To answer your specific questions: {\em (a) what methods are used for calculating the “exact” Gittins indices in the Beta-Bernoulli case?} As you note, we calculate exact Gittins indices (accurate to the third decimal place - i.e. an additive error of $0.5*10^{-3}$) in Tables 7 and 8 in the Beta-Bernoulli case. This is for purposes of comparison with the $OGI(K)$ indices for the Beta-Bernoulli case which are calculated exactly. To calculate those indices, we use value iteration, with a termination condition based on Proposition 2.2.1 of \cite{.} (in the case of Tables 7 and 8, so that $\bar{c}_k - \underline{c}_k$ (as in that Proposition 2.2.1) is at most $0.5*10^{-3}$). We note that we only need to track value at a number of states that grows quadratically with the number of iterations of value iteration used. We make all of this clear in the paper now; apologies for any lack of clarity. {\em (b) when approximations are used (e.g., Powell and Ryzhov 2012) can you please briefly discuss how good these approximations are?} TBD
+
+As a final point, it is perhaps worth noting that a uniform approximation to the exact Gittins index while interesting is {\em not} a prerequisite for adequate performance. For instance, our main theorem applies to the $K=1$ case, where one may not hope for a uniform approximation guarantee to the Gittins index itself. Put a different way, the value of optimistic approximations to the Gittins index is not that they provide uniformly good approximations to the index itself, but rather that they allow for low regret. In that sense, Tables 7 and 8 are perhaps a distraction, and we are happy to remove them altogether. 
+
 		
 		
 		\item {\it Conceptual clarification: the idea behind the choice of the discount factors is as a handle for controlling exploration vs. exploitation. However, given that OGI is based on a finite-horizon approximation, I wonder if this could also be accomplished by tuning the time horizon as well ($K$). In other words, at least from a purely theoretical/conceptual standpoint, is there some redundancy by having both K and $\gamma$ in the OGI calculations? I wonder if similar regret-optimal results could be obtained by taking $\gamma=1$ throughout and increasing K appropriately (and indeed the motivation from the “doubling trick” on p. 11 only involves intuition over a finite horizon).
@@ -186,9 +189,15 @@ Thank you
 	}
 
 	
-Thank you
+This is a great question. Indeed if we were to calculate exact Gittins indices, then (using the equivalence between discounted infinite horizon problems, and random finite horizon problems) one could conceivably posit that solving the Gittins stopping problem with $\gamma = 1$ and $K = 1 - 1/\gamma_t$ provides a good approximation to the corresponding exact Gittins index $v_{\gamma_t}(\cdot)$. We believe that it is conceivable that similar regret guarantees may be derived for such an approach provided $\gamma_t \sim 1- 1/t$. The downside however, as you already observe, is that this approach would be unnecessarily computationally burdensome. Specifically, as $t$ grows, and $\gamma_t \tends 1$, we would effectively require $K$ to grow large. On the other hand we already know that $K=1$ already provides optimal regret guarantees (and very good practical performance), so that in essence having two separate parameters allows for a family of approximations that is simultaneously not as computationally burdensome, but still regret optimal. 
+
+
+
+
 		
 	\item {\it The discussion in the first paragraph of Section 3.3 could use a bit more precision. First, the Chappelle and Li (2011) paper studies contextual bandits, which is somewhat different than a classical MAB. Second, although I agree that calculating a Gittins index is harder than, say, Thompson sampling, it’s not always the case that the entire state space $\cal{Y}$ is relevant for the Gittins index calculations (only downstream states from an arm’s current state are needed in the Gittins index calculations).}
+	
+	Fixed. We were referring to situations where the prior on the mean of a single arm is itself high dimensional, but indeed, this is not as interesting a case practically outside of the contextual bandit setting which we do not address. 
 	
 	\item {\it A brief discussion of the Beta(1,1) assumption in Theorem 1 would be useful. This is a natural (and somewhat standard) assumption in that it assumes no prior knowledge about arms. But presumably such assumptions are not necessary for obtaining asymptotically optimal regret.
 	}
