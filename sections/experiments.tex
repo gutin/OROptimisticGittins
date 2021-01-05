@@ -37,7 +37,13 @@ The key feature of the results here is that OGI offers an approximately 10\% imp
 
 \paragraph{Bernoulli}
 We next replicate the Beta-Bernoulli experiments from \cite{russo2014learning}.
-In this experiment regret is simulated over 1,000 periods, with 10 arms each having a uniformly distributed Bernoulli parameter. We simulate 1,000 independent trials and Table~\ref{table:bernoulli_experiment1} summarizes the results.
+In this experiment regret is simulated over 1,000 periods, with 10 arms each having a uniformly distributed Bernoulli parameter. 
+{\color{blue} 
+We compute approximations to the exact Gittins index, i.e. OGI($\infty$), via value iteration \footnote{
+We use the termination condition in Proposition 2.2.1 of \cite{bertsekas2011dynamic}. That is, we iterate the value iteration operator $k$ times so that $\bar{c}_k - \underline{c}_k$ (as in Proposition 2.2.1) is at most some predetermined fixed tolerance.
+}.
+}
+We simulate 1,000 independent trials and Table~\ref{table:bernoulli_experiment1} summarizes the results.
 
 \begin{table}[h!]
 	\centering
