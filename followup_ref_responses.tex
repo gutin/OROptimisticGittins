@@ -182,7 +182,9 @@ To answer your specific questions:
 
 %As you note, we calculate exact Gittins indices (accurate to the third decimal place - i.e. an additive error of $0.5*10^{-3}$) in Tables 7 and 8 in the Beta-Bernoulli case. This is for purposes of comparison with the $OGI(K)$ indices for the Beta-Bernoulli case which are calculated exactly. To calculate those indices, we use value iteration, with a termination condition based on Proposition 2.2.1 of \cite{.} (in the case of Tables 7 and 8, so that $\bar{c}_k - \underline{c}_k$ (as in that Proposition 2.2.1) is at most $0.5*10^{-3}$). We note that we only need to track value at a number of states that grows quadratically with the number of iterations of value iteration used. We make all of this clear in the paper now; apologies for any lack of clarity. 
 
-{\em (b) when approximations are used (e.g., Powell and Ryzhov 2012) can you please briefly discuss how good these approximations are?} TBD
+{\em (b) when approximations are used (e.g., Powell and Ryzhov 2012) can you please briefly discuss how good these approximations are?}
+
+The Powell and Rhyzhov approximation to the Gaussian Gittins index is better than OGI(1) and decreases with the discount factor. We briefly added a discussion of this in the text without going into too much detail to avoid distraction. Our intention is to convery that this other approximation is closer to the true Gittins index than OGI, which allows us to  estimate OGI's loss in performance relative to a policy that has access to exact Gittins indices. This is necessary as computing the Gittins indices is computationally intractable in our Gaussian experiments. We believe both these points should now be clear in the text.
 
 As a final point, it is perhaps worth noting that a uniform approximation to the exact Gittins index while interesting is {\em not} a prerequisite for adequate performance. For instance, our main theorem applies to the $K=1$ case, where one may not hope for a uniform approximation guarantee to the Gittins index itself. Put a different way, the value of optimistic approximations to the Gittins index is not that they provide uniformly good approximations to the index itself, but rather that they allow for low regret. In that sense, Tables 7 and 8 are perhaps a distraction, and we are happy to remove them altogether. 
 
@@ -207,10 +209,16 @@ This is a great question. Indeed if we were to calculate exact Gittins indices, 
 	
 	\item {\it A brief discussion of the Beta(1,1) assumption in Theorem 1 would be useful. This is a natural (and somewhat standard) assumption in that it assumes no prior knowledge about arms. But presumably such assumptions are not necessary for obtaining asymptotically optimal regret.
 	}
+
+	Agreed. We mentioned in the text that the uniform prior is a natural assumption in these cases.
 	
 	\item {\it  P. 17, line 45 – there appears to be a typo after “choice of $\alpha$.”}
 	
+	Fixed.
+	
 	\item {\it It probably would be helpful to describe the large-scale experiments as Bernoulli bandits earlier in Section 5.2 (the reader does not get to this until the third paragraph).}
+	
+	Great suggestion. We re-wrote the first few parapgraphs of Section 5.2 accordingly.
 	\end{enumerate}
 	
 	\newpage
