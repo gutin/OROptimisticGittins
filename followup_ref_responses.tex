@@ -184,17 +184,13 @@ To answer your specific questions:
 
 {\em (b) when approximations are used (e.g., Powell and Ryzhov 2012) can you please briefly discuss how good these approximations are?}
 
-The Powell and Rhyzhov approximation to the Gaussian Gittins index is better than OGI(1) and decreases with the discount factor. We briefly added a discussion of this in the text without going into too much detail to avoid distraction. Our intention is to convery that this other approximation is closer to the true Gittins index than OGI, which allows us to  estimate OGI's loss in performance relative to a policy that has access to exact Gittins indices. This is necessary as computing the Gittins indices is computationally intractable in our Gaussian experiments. We believe both these points should now be clear in the text.
-
-As a final point, it is perhaps worth noting that a uniform approximation to the exact Gittins index while interesting is {\em not} a prerequisite for adequate performance. For instance, our main theorem applies to the $K=1$ case, where one may not hope for a uniform approximation guarantee to the Gittins index itself. Put a different way, the value of optimistic approximations to the Gittins index is not that they provide uniformly good approximations to the index itself, but rather that they allow for low regret. In that sense, Tables 7 and 8 are perhaps a distraction, and we are happy to remove them altogether. 
-
+Thank you for the suggestion. We added a brief discussion of the approximations and believe it helps add context to make the relevant sections more readable.
 		
-		
-		\item {\it Conceptual clarification: the idea behind the choice of the discount factors is as a handle for controlling exploration vs. exploitation. However, given that OGI is based on a finite-horizon approximation, I wonder if this could also be accomplished by tuning the time horizon as well ($K$). In other words, at least from a purely theoretical/conceptual standpoint, is there some redundancy by having both K and $\gamma$ in the OGI calculations? I wonder if similar regret-optimal results could be obtained by taking $\gamma=1$ throughout and increasing K appropriately (and indeed the motivation from the “doubling trick” on p. 11 only involves intuition over a finite horizon).
-	   
-	   Of course, there are clear advantages to having both – e.g., in the limit as K grows large, for fixed $\gamma$, we recover the traditional Gittins index. And computationally it’s nice to be able to retain a fixed effort through K while changing $\gamma$.
-	   To be clear, I am not asking the authors to change anything. I just think a brief discussion on this point could potentially help add intuition for the OGI approach.	
-	}
+\item {\it Conceptual clarification: the idea behind the choice of the discount factors is as a handle for controlling exploration vs. exploitation. However, given that OGI is based on a finite-horizon approximation, I wonder if this could also be accomplished by tuning the time horizon as well ($K$). In other words, at least from a purely theoretical/conceptual standpoint, is there some redundancy by having both K and $\gamma$ in the OGI calculations? I wonder if similar regret-optimal results could be obtained by taking $\gamma=1$ throughout and increasing K appropriately (and indeed the motivation from the “doubling trick” on p. 11 only involves intuition over a finite horizon).
+
+Of course, there are clear advantages to having both – e.g., in the limit as K grows large, for fixed $\gamma$, we recover the traditional Gittins index. And computationally it’s nice to be able to retain a fixed effort through K while changing $\gamma$.
+To be clear, I am not asking the authors to change anything. I just think a brief discussion on this point could potentially help add intuition for the OGI approach.	
+}
 
 	
 This is a great question. Indeed if we were to calculate exact Gittins indices, then (using the equivalence between discounted infinite horizon problems, and random finite horizon problems) one could conceivably posit that solving the Gittins stopping problem with $\gamma = 1$ and $K_t \triangleq 1/1 - \gamma_t$ at the $t$th epoch provides a good approximation to using the corresponding exact Gittins index $v_{\gamma_t}(\cdot)$ \footnote{In fact, such an index precedes Gittins' paper, see \cite{bradt1956sequential}}. We believe that it is conceivable that similar regret guarantees may be derived for such an approach provided $K_t \sim t$. The downside however, as you already observe, is that this approach would be unnecessarily computationally burdensome, especially as $t$ grows. On the other hand we already know that using $K=1$ with the OGI approximation provides optimal regret guarantees (and very good practical performance), so that in essence having two separate parameters allows for a family of approximations that is simultaneously not as computationally burdensome, but still regret optimal. (Given how speculative many of these points are, we have not added this discussion to the paper, but are happy to do so if you find it necessary.) 
@@ -218,7 +214,7 @@ This is a great question. Indeed if we were to calculate exact Gittins indices, 
 	
 	\item {\it It probably would be helpful to describe the large-scale experiments as Bernoulli bandits earlier in Section 5.2 (the reader does not get to this until the third paragraph).}
 	
-	Great suggestion. We re-wrote the first few parapgraphs of Section 5.2 accordingly.
+	Great suggestion. We re-wrote the first few paragraphs of Section 5.2 accordingly.
 	\end{enumerate}
 	
 	\newpage
@@ -232,10 +228,10 @@ Note also that the current section 3.2 needs some editing. The three lines prece
 \newline
 \newline
 \noindent
-Thank you for your assessment of the contribution! We fixed the typos you point out. We also edited that section to alert the reader to the portion of the section that they could skip without loss of continuity. After struggling with various iterations, we eventually chose to keep the statemnt of the proposition in the body, since we find that it really helps solidify intuition for the discount factor schedule in the OGI scheme we propose. While you are indeed correct that the proposition itself is not essential to proving our main theorem, absent the proposition, the discount factor schedule we propose would not be nearly as well motivated and our attempts to say this in words felt quite imprecise. Finally, it is worth noting that the other reviewer (who studied various aspects of the result carefully) and the AE (who asks about other approximation schemes motivated by the section) evidently found this content valuable. 
+Thank you for your assessment of the contribution! We fixed the typos you point out. We also edited that section to alert the reader to the portion of the section that they could skip without loss of continuity. After struggling with various iterations, we eventually chose to keep the statement of the proposition in the body, since we find that it really helps solidify intuition for the discount factor schedule in the OGI scheme we propose. While you are indeed correct that the proposition itself is not essential to proving our main theorem, absent the proposition, the discount factor schedule we propose would not be nearly as well motivated and our attempts to say this in words felt quite imprecise. Finally, it is worth noting that the other reviewer (who studied various aspects of the result carefully) and the AE (who asks about other approximation schemes motivated by the section) evidently found this content valuable. 
 	
 	\newpage
-	\section{Respone to Referee 2}
+	\section{Response to Referee 2}
 	{
 	\it 
 	In my previous review, I made several suggestions to the authors and stated that my main concern was a few technical issues in the proofs. Based on the new proofs, it seems the technical issues have been fixed. Thanks to the authors for a clear and thorough revision.
@@ -246,7 +242,7 @@ Thank you for your assessment of the contribution! We fixed the typos you point 
 	\subsection{Typos or minor issues}
 	
 	\begin{itemize}
-		\item {\it On Lemma 1: It would be helpful if you stated this more clearly. Now that you revised the statement to be ``fequentist", the proof you wrote actually constructs jointly a prior and problem instance on which regret grows linearly. I don't think it's sufficiently clear to say ``there exists an instance of the multi-armed bandit problem, with parameters $\theta$" since this does not clarify that you’ve picked a prior that fails on this instance. Less important, but it also feels like you can substantially simplify the proof of Lemma 1: can’t you just pick $(\alpha + 1, \alpha)$ to be the prior parameters of the second arm rather than create a construction in which that arm is sampled exactly once?
+		\item {\it On Lemma 1: It would be helpful if you stated this more clearly. Now that you revised the statement to be ``frequentest", the proof you wrote actually constructs jointly a prior and problem instance on which regret grows linearly. I don't think it's sufficiently clear to say ``there exists an instance of the multi-armed bandit problem, with parameters $\theta$" since this does not clarify that you’ve picked a prior that fails on this instance. Less important, but it also feels like you can substantially simplify the proof of Lemma 1: can’t you just pick $(\alpha + 1, \alpha)$ to be the prior parameters of the second arm rather than create a construction in which that arm is sampled exactly once?
 		}
 		
 		These are great points -- thank you. We re-worded the Lemma to say that there exists an instance of the multi-armed bandit problem with a certain prior, and a $\theta$ drawn from the prior, in which regret grows linearly. We believe this is indeed clearer.
