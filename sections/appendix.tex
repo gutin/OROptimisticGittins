@@ -1,9 +1,9 @@
 \appendix
 
 \section{Proof of Lemma~\ref{le:linearregret}} \label{proof:linearregret}
-{\color{blue}
+{
 \begin{myproof}[Proof.]
-	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha+1)$ prior where $\alpha$ is a parameter we set later. {\color{blue} Furthermore, we assume that the true paremeter for arm $2$ is equal to $\theta \in (1/2, 1)$, which represents a draw from the prior distribution on that arm}. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
+	Consider an instance of the MAB with $A=2$ arms and Bernoulli rewards. We assume that the prior on arm $1$ is degenerate with mean $\lambda = 1/2$ while arm $2$ has a {\rm Beta}$(\alpha,\alpha+1)$ prior where $\alpha$ is a parameter we set later. {Furthermore, we assume that the true paremeter for arm $2$ is equal to $\theta \in (1/2, 1)$, which represents a draw from the prior distribution on that arm}. Now, the continuation value from pulling arm $1$ at this stage is lower bounded by $\frac{1/2}{1-\gamma}$, while the continuation value from pulling arm $2$ is upper bounded by
 	\[
 	\frac{\alpha}{1+2\alpha}
 	+
@@ -41,7 +41,7 @@
 		1-\gamma
 	},
 	\]
-	{\color{blue}an inequality which in turn is satisfied if
+	{an inequality which in turn is satisfied if
 	\[
 	1/2
 	>
@@ -65,7 +65,7 @@
 }
 \section{Proof of Proposition~\ref{prop:gittins_log3T}} \label{proof:prop_log3T}
 
-{\color{blue}
+{
 We first establish notation useful in the proof. Specifically, we let $h_t^{t'}$ denote the sequence of arms pulled and the corresponding rewards earned between periods $t$ and $t'$ ($h_t^{t'} = \emptyset$ if $t' < t$) . Recall that $\mathbf y$ denotes the $A$-tuple of sufficient statistics of priors on the the arm means of each of the $A$ arms. We denote by $g(\mathbf y, h_t^{t'})$ the $A$-tuple of sufficient statistics of posteriors on the arm means of each of the $A$ arms, obtained starting with the prior $\mathbf y$ and observing the sequence of arm pulls $h_t^{t'}$. 
 
 
@@ -93,7 +93,7 @@ for all $T$.
 \begin{myproof}[Proof.]
 By Theorem $3$ in \cite{lai1987adaptive}, we know that there exists a constant $\hat C_{\mathbf y}$ and a sequence of policies, $\tilde \pi_{\mathbf y, T}$ \footnote{this entails a minor abuse of our definition of a policy: $\tilde \pi_{\mathbf y, T}$ is not specified for $t > T$}  such that 
 \[
-\lim_{T\to \infty} 
+{\color{blue} \lim_{T\to \infty}}
 \frac{
 \E
 _{\mathbf y}
@@ -337,16 +337,16 @@ S_i(t) \defeq \sum_{s=1}^{\Ntg{i}{t}} X_{i,s}.
 We begin by investigating the effect of the parameter $\lambda$, which gives the deterministic payoff in \eqref{eqn:ogi_general}, on the continuation value $V^K_\gamma(y, \lambda)$ and use that to find out how close an approximation $v^K_\gamma(y)$ is to the Gittins index.
 \begin{fact}\label{fact:v_is_convex}
 	For any state $y \in \mathcal{Y}$, discount factor $\gamma$ and parameter $K$, the function $V^K_\gamma(y,\lambda)$ is convex in $\lambda$.
-	{\color{blue}Moreover, the function $V^K_\gamma(y,\lambda)$ is Lipschitz continuous in $\lambda$ with a Lipshitz constant of $\gamma/(1-\gamma)$.}
+	{Moreover, the function $V^K_\gamma(y,\lambda)$ is Lipschitz continuous in $\lambda$ with a Lipshitz constant of $\gamma/(1-\gamma)$.}
 	% Moreover, if $R(y)$ is a continuous random variable, the function is also differentiable.
 \end{fact}
 \begin{myproof}[Proof.]
 	Fix an arbitrary state $y$ and discount factor $\gamma \in (0,1)$. Our proof is by induction on the parameter $K$. For $K = 1$, recall from Section~\ref{sec:gittins_and_approx} that
 	\begin{align*}
-	{\color{blue} V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \frac{\gamma}{1-\gamma} \E_y\left[\max(\lambda, R(y_{i,0}))\right].}
+	{V^1_\gamma(y, \lambda) = \E_y\left[X_{i,1} \right] +  \frac{\gamma}{1-\gamma} \E_y\left[\max(\lambda, R(y_{i,0}))\right].}
 	\end{align*}
 	Thus the function is convex because it is an expectation over a convex piecewise linear function of random variables $X_{i,1}$ and $R(y_{i,0})$.
-	{\color{blue}To prove Lipschitz continuity, it's enough to note that
+	{To prove Lipschitz continuity, it's enough to note that
 	for any $\lambda_1, \lambda_2 \in \R$, that
 	\begin{align*}
 		| V^1_\gamma(y, \lambda_1) - V^1_\gamma(y, \lambda_2)| & =  \frac{\gamma}{1-\gamma} |\E_y[\max(\lambda_1, R(y_{i,0})) - \max(\lambda_2, R(y_{i,0}))  ]  | \\
@@ -357,13 +357,13 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	
 	%Now assume that $R(y)$ is a continuous random variable. We will verify through the bounded convergence theorem that $V^1_\gamma(y, \lambda)$ is differentiable. Indeed, this holds because the event $\{ R(y)= \lambda/(1-\gamma)\}$, at which the random variable inside the expectation is not differentiable, has measure zero, precisely because $R(y)$ is a continuous random variable.
 	Now we prove the inductive step. For any $K > 1$, assume that $V^{K-1}_\gamma(y, \lambda)$ is convex and Lipshitz continuous. By writing the Bellman equation,
-	{\color{blue}
+	{
 	\begin{align*}
 	V^K_\gamma(y, \lambda) & = \E_y\left[X_{i,1}\right] + \gamma\E_y\left[\max\left(\lambda, V^{K-1}_\gamma(y_{i,1}, \lambda)\right) \right],
 	\end{align*}
 	}
 	we again notice an expectation over a maximum of convex functions in $\lambda$. This form for $V^K_\gamma(y, \lambda)$ implies that  it is also convex in $\lambda$. % If $V^{K-1}$ is differentiable and $R(y)$ is a continuous random variable, then the form of $V^{K-1}$ also implies that it is differentiable in $\lambda$.
-	{\color{blue}Finally, to prove Lipschitz continuity, we will use the fact that the pointwise maximum of two Lipschitz functions, having respective constants $L_1$ and $L_2$, is also Lipshitz with a constant of $\max(L_1, L_2)$. Because of this, by fixing $\lambda_1, \lambda_2 \in \R$, we have that
+	{Finally, to prove Lipschitz continuity, we will use the fact that the pointwise maximum of two Lipschitz functions, having respective constants $L_1$ and $L_2$, is also Lipshitz with a constant of $\max(L_1, L_2)$. Because of this, by fixing $\lambda_1, \lambda_2 \in \R$, we have that
 		\begin{align*}
 		| V^K_\gamma(y, \lambda_1) - V^K_\gamma(y, \lambda_2)| & =  \gamma \left|\E_y[\max(\lambda_1, V^{K-1}_\gamma(y_{i,1}, \lambda_1)) - \max(\lambda_2, V^{K-1}_\gamma(y_{i,1}, \lambda_2))  ]  \right| \\
 		& \leq \frac{\gamma^2}{1-\gamma} |\lambda_1 - \lambda_2| \\
@@ -382,7 +382,6 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	where {\color{blue}$y_{i,\Ntg{i}{t}}$} is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
 \end{lemma}
 {
-\color{blue}
 \begin{myproof}[Proof.]
 	Fix any state $y$ and discount factor $\gamma$. At $\lambda = 0$, we have
 	\[
@@ -430,7 +429,6 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\end{align*}
 	Thus we conclude, because $\hat \theta_i$ was arbitrary, that almost surely,
 	\begin{equation} \label{ineq:fundamntal_bound_for_lemma_2}
-	\color{blue}
 	\Ee{\sum_{t=\tau_1+1}^{\tau_2} \gamma^{t-1} X_{i,t} + \gamma^{\tau_2}\frac{\zeta( \theta_i)}{1 - \gamma} \given[\Bigg] \theta_i}  \le \Ee{\gamma^{\tau_1} \given \theta_i }  \frac{\max(\zeta( \theta_i), \mu(\theta_i))}{1-\gamma}.
 	\end{equation}
 	Let $\tau^\star$ be a stopping time that achieves the supremum in  $V_\gamma^M(y, \lambda)$ and define the predictable stopping time $\tau^\star_K \defeq K \wedge \tau^\star$. Consider the (conditional) cumulative rewards in the definition of $V^M_\gamma(y)$, from time $\tau^\star_K+1$ onwards, given the sufficient statistic observed at time $\tau_K^\star$. That is, 
@@ -443,7 +441,7 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\P{R(\hat y) \le r} = \P{\mu(\theta_i) \le r \given y_{i,s} = \hat y}, \qquad \forall r \in \Re
 	\end{equation}
 	meaning that the posterior distribution of the arm's expected reward $R(y_{i,s})$ is the same as $\mu(\theta_i)$ \emph{conditioned} on having observed statistic $\hat y$ about the arm. This holds by definition of the random variable $R(y)$. Because of this observation, we have that the following inequality  holds almost surely,
-	{\color{blue}
+	{
 	\begin{align*}
 		& \gamma^{\tau^\star} \frac{R_{\lambda,M}(\tau^\star, y_{i,\tau^\star-1})}{1-\gamma}
 		 \nonumber \\
@@ -523,7 +521,7 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	\end{align}
 	where equation \eqref{eqn:proof_lem_vk_bound_iter_exp} follows from the definition of the random variable $R(.)$ and the law of iterated expectation. Now because $0 < \gamma < 1$ and $\E_y\left[|\mu(\theta_i)|\right] < \infty$, the right hand side above converges to $V_{\gamma}(y, \lambda)$. Finally, notice that $V^M_\gamma(y, \lambda) \ge V_\gamma(y, \lambda)$, and from this equation~\eqref{eqn:proof_vk_bound_convergence_of_continuation_value} follows. 
 	
-	{\color{blue}
+	{
 	To finish the proof, we consider the sequence of fixed points of the equations $\lambda = V^K_\gamma(y, \lambda)$, $\{v^K_\gamma(y)\}$. 
 	Because this sequence is monotone (established in the first part of this proof) and bounded, we know that this sequence, has a limit; $v^K_\gamma(y) \tends \hat v_\gamma(y)$. 	
 %	there exists a convergent sub-sequence $\{ \lambda_k \}$ whose elements we index with $k$. Let $\hat \lambda$ denote the limit of this sub-sequence. We will prove that this limit is the Gittins index. 
@@ -855,7 +853,7 @@ This experiment is motivated by \cite{kaufmann2012bayesian} and in it we simulat
 	\caption{Frequentist regret. The OGI policy is configured with $K=1$ and $\alpha=100$.}
 	\label{fig:kaufmann_regret}
 \end{figure}
-{\color{blue}
+{
 \subsection{Additional benchmark algorithms}
 In this section, we simulate a few additional algorithms to understand the importance of the varying discount factor, and to try out a different approximation of the Gittins index.
 We also simulate the greedy policy to see the inherent value of exploration in our benchmark problems.
@@ -872,7 +870,7 @@ We also see that either over or under-estimating the horizon leads to worse perf
 
 \begin{table}[h!]
 	\centering
-	{\color{blue}
+	{
 	\begin{tabular}{lrrrrrr}
 		\toprule
 		{} &  \textbf{BL-OGI} &  \textbf{Greedy} &  \textbf{OGI(1)} &  \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
@@ -892,7 +890,7 @@ We also see that either over or under-estimating the horizon leads to worse perf
 	
 \begin{table}[h!]
 	\centering
-	{\color{blue}
+	{
 		\begin{tabular}{lrrrrrr}
 			\toprule
 			\textbf{Algorithm} &  \textbf{BL-OGI} &  \textbf{Greedy} & \textbf{OGI(1)} & \textbf{FOGI($T$)} &  \textbf{FOGI($T/10$)} &  \textbf{FOGI($10T$)} \\
@@ -904,7 +902,7 @@ We also see that either over or under-estimating the horizon leads to worse perf
 			75\%   &   28.18 &   74.64 &  27.63  &    19.72 &         23.29 &        23.62 \\
 			\bottomrule
 		\end{tabular}
-		\caption[Table caption text]{\color{blue}Comparison against some of OGI's simpler variants in the  Bernoulli setup.}
+		\caption[Table caption text]{Comparison against some of OGI's simpler variants in the  Bernoulli setup.}
 		\label{table:bernoulli_experiment2}
 	}
 \end{table}
