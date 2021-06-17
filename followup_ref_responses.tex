@@ -155,19 +155,18 @@
 	
 	\section{Response to the Department Editor}
 	
+	Thank you for facilitating the review process! This revision primarily adds discussion on a few different points, requested by the review team. 
 	
 	
 	\section{Response to the Associate Editor}
+	
+	Thank you for your positive feedback! In brief, this revision includes expository content recommended by you and the review team, and fixes a few outstanding typos. Please find responses to your specific comments below.
 	
 	\subsection{Responses to Comments}
 	{\it The two referees from the first round have again provided reports on the paper, and I thank them again. Referee 1 (“I thank the authors...”) has a few minor suggestions (in particular, Referee 1 questions the value of Proposition 1) and recommends a minor revision. Referee 2 (“In my previous review...”) also raises some minor issues (primarily, requesting additional clarity on Lemma 1) and recommends accept.
 		I read the authors’ response and the revision again. Like the referees, I appreciate the authors’ efforts and I am almost ready to sign off on the paper. I agree with the referees’ comments and have a few (minor) comments of my own.:
 	} 
 \newline
-\newline
-Thank you for your comments. We have ...
-
-	
 	\begin{enumerate}
 		
 		\item {\it I appreciate the authors’ addressing my question on how the OGI($\infty$) values (i.e., the “exact” Gittins indices) are calculated (or approximated), but I am afraid I am still not entirely clear on what was done in the numerical experiments. For the Gaussian case, my understanding is the approximation based on Powell and Ryzhov (2012) is used. I am not sure what was done in the Bernoulli case. The overview at the start of Section 5 (p. 17) also mentions Powell and Ryzhov (2012) but evidently the OGI($\infty$) case is not an approximation in the Bernoulli case (e.g., looking at Tables 7 and 8 in the appendix, it appears these are nearly “exact” calculations).
@@ -176,15 +175,17 @@ Thank you for your comments. We have ...
 		Apologies if I am missing something here – this does seem important, since a major advantage of the OGI(K) framework is computational tractability.
 		}
 
-To answer your specific questions: 
+You are indeed correct that this is not clear from the exposition. Sorry for being sloppy. To answer your specific questions: 
 
-{\em (a) what methods are used for calculating the “exact” Gittins indices in the Beta-Bernoulli case?} To approximate the exact Gittins indices in the Beta-Bernoulli case (such as those reported in Tables 7 and 8), we use value iteration, with a termination condition based on Proposition 2.2.1 of \cite{bertsekas2011dynamic}. That is, we iterate the value iteration operator $k$ times so that $\bar{c}_k - \underline{c}_k$ (as in Proposition 2.2.1) is at most some predetermined fixed tolerance ($0.5 \times 10^{-3}$). In the Beta-Bernoulli case, this effectively requires tracking value at a number of states that grows quadratically in $k$. In our experiments, this typically required on the order of $1/1-\gamma$ iterations when the discount factor was $\gamma$. We earlier referred to this as simply the `naive implementation' in our response, but we make all of this clear in the paper now; apologies for any lack of clarity. 
+{\em (a) what methods are used for calculating the “exact” Gittins indices in the Beta-Bernoulli case?} 
+
+To approximate the exact Gittins indices in the Beta-Bernoulli case (such as those reported in Tables 7 and 8), we use value iteration, with a termination condition based on Proposition 2.2.1 of Bertsekas (2011). That is, we iterate the value iteration operator $k$ times so that $\bar{c}_k - \underline{c}_k$ (as in Proposition 2.2.1) is at most some predetermined fixed tolerance ($0.5 \times 10^{-3}$). In the Beta-Bernoulli case, this effectively requires tracking value at a number of states that grows quadratically in $k$. In our experiments, this typically required on the order of $1/1-\gamma$ iterations when the discount factor was $\gamma$. We earlier referred to this as simply the `naive implementation' in our response, but we make all of this clear in the paper now; apologies for any lack of clarity. 
 
 %As you note, we calculate exact Gittins indices (accurate to the third decimal place - i.e. an additive error of $0.5*10^{-3}$) in Tables 7 and 8 in the Beta-Bernoulli case. This is for purposes of comparison with the $OGI(K)$ indices for the Beta-Bernoulli case which are calculated exactly. To calculate those indices, we use value iteration, with a termination condition based on Proposition 2.2.1 of \cite{.} (in the case of Tables 7 and 8, so that $\bar{c}_k - \underline{c}_k$ (as in that Proposition 2.2.1) is at most $0.5*10^{-3}$). We note that we only need to track value at a number of states that grows quadratically with the number of iterations of value iteration used. We make all of this clear in the paper now; apologies for any lack of clarity. 
 
 {\em (b) when approximations are used (e.g., Powell and Ryzhov 2012) can you please briefly discuss how good these approximations are?}
 
-Thank you for the suggestion. We added a brief discussion of the approximations and believe it helps add context to make the relevant sections more readable.
+The approximation in Powell and Ryzhov is based on a calculation due to Gittins: in the Gaussian model, the index can effectively be written as a simple function of the discount factor multiplied by a certain {\em univariate} function of the posterior variance divided by the discount factor. Whereas this latter univariate function is not characterized analytically, Powell and Ryzhov propose a certain analytic approximation of this univariate function which they show (in their Figure 5.1) to provide an excellent approximation to the exact index for a variety of values of the discount factor and posterior variance.    
 		
 \item {\it Conceptual clarification: the idea behind the choice of the discount factors is as a handle for controlling exploration vs. exploitation. However, given that OGI is based on a finite-horizon approximation, I wonder if this could also be accomplished by tuning the time horizon as well ($K$). In other words, at least from a purely theoretical/conceptual standpoint, is there some redundancy by having both K and $\gamma$ in the OGI calculations? I wonder if similar regret-optimal results could be obtained by taking $\gamma=1$ throughout and increasing K appropriately (and indeed the motivation from the “doubling trick” on p. 11 only involves intuition over a finite horizon).
 
@@ -193,7 +194,7 @@ To be clear, I am not asking the authors to change anything. I just think a brie
 }
 
 	
-This is a great question. Indeed if we were to calculate exact Gittins indices, then (using the equivalence between discounted infinite horizon problems, and random finite horizon problems) one could conceivably posit that solving the Gittins stopping problem with $\gamma = 1$ and $K_t \triangleq 1/1 - \gamma_t$ at the $t$th epoch provides a good approximation to using the corresponding exact Gittins index $v_{\gamma_t}(\cdot)$ \footnote{In fact, such an index precedes Gittins' paper, see \cite{bradt1956sequential}}. We believe that it is conceivable that similar regret guarantees may be derived for such an approach provided $K_t \sim t$. The downside however, as you already observe, is that this approach would be unnecessarily computationally burdensome, especially as $t$ grows. On the other hand we already know that using $K=1$ with the OGI approximation provides optimal regret guarantees (and very good practical performance), so that in essence having two separate parameters allows for a family of approximations that is simultaneously not as computationally burdensome, but still regret optimal. (Given how speculative many of these points are, we have not added this discussion to the paper, but are happy to do so if you find it necessary.) 
+This is a great question. Indeed if we were to calculate exact Gittins indices, then (using the equivalence between discounted infinite horizon problems, and random finite horizon problems) one could conceivably posit that solving the Gittins stopping problem with $\gamma = 1$ and $K_t \triangleq 1/1 - \gamma_t$ at the $t$th epoch provides a good approximation to using the corresponding exact Gittins index $v_{\gamma_t}(\cdot)$ \footnote{In fact, such an index precedes Gittins' paper, see Bradt (1956)}. We believe that it is conceivable that similar regret guarantees may be derived for such an approach provided $K_t \sim t$. The downside however, as you already observe, is that this approach would be unnecessarily computationally burdensome, especially as $t$ grows. On the other hand we already know that using $K=1$ with the OGI approximation provides optimal regret guarantees (and very good practical performance), so that in essence having two separate parameters allows for a family of approximations that is simultaneously not as computationally burdensome, but still regret optimal. (Given how speculative many of these points are, we have not added this discussion to the paper, but are happy to do so if you find it necessary.) 
 
 
 
@@ -206,7 +207,7 @@ This is a great question. Indeed if we were to calculate exact Gittins indices, 
 	\item {\it A brief discussion of the Beta(1,1) assumption in Theorem 1 would be useful. This is a natural (and somewhat standard) assumption in that it assumes no prior knowledge about arms. But presumably such assumptions are not necessary for obtaining asymptotically optimal regret.
 	}
 
-	Agreed. We mentioned in the text that the uniform prior is a natural assumption in these cases.
+	Indeed. We add such a comment in the text. 
 	
 	\item {\it  P. 17, line 45 – there appears to be a typo after “choice of $\alpha$.”}
 	
