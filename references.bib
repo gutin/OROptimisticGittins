@@ -8,7 +8,7 @@
 %% Saved with string encoding Unicode (UTF-8) 
 
 @article{bertsekas2011dynamic,
-  title={Dynamic programming and optimal control 3rd edition, volume II},
+  title={Dynamic {P}rogramming and {O}ptimal {C}ontrol, 3rd edition, volume II},
   author={Bertsekas, Dimitri P},
   journal={Belmont, MA: Athena Scientific},
   year={2011}
@@ -39,7 +39,7 @@
 }
 
 @article{nino20072,
-  title={A (2/3) n 3 fast-pivoting algorithm for the Gittins index and optimal stopping of a Markov chain},
+  title={A $(2/3)n^3$ fast-pivoting algorithm for the {G}ittins index and optimal stopping of a {M}arkov {C}hain},
   author={Ni{\~n}o-Mora, Jos{\'e}},
   journal={INFORMS Journal on Computing},
   volume={19},
@@ -53,14 +53,20 @@
   title={What doubling tricks can and can't do for multi-armed bandits},
   author={Besson, Lilian and Kaufmann, Emilie},
   journal={arXiv preprint arXiv:1803.06971},
-  year={2018}
+  year={2018},
+  url={https://arxiv.org/abs/1803.06971}
 }
 
+
 @article{russo2019note,
-  title={A Note on the Equivalence of Upper Confidence Bounds and Gittins Indices for Patient Agents},
-  author={Russo, Daniel},
-  journal={arXiv preprint arXiv:1904.04732},
-  year={2019}
+	title={A note on the equivalence of upper confidence bounds and gittins indices for patient agents},
+	author={Russo, Daniel},
+	journal={Operations Research},
+	volume={69},
+	number={1},
+	pages={273--278},
+	year={2021},
+	publisher={INFORMS}
 }
 
 @article{fang1987characterization,
@@ -94,18 +100,15 @@
 	publisher={Institute of Mathematical Statistics}
 }
 
-@book{berry1985bandit,
-	title={Bandit problems: sequential allocation of experiments ({M}onographs on statistics and applied probability)},
-	author={Berry, Donald A and Fristedt, Bert},
-	year={1985},
-	publisher={Springer}
-}
-
-@techreport{brown2017index,
+@article{brown2017index,
 	title={Index policies and performance bounds for dynamic selection problems},
 	author={Brown, David B and Smith, James E},
-	year={2017},
-	institution={Working paper}
+	journal={Management Science},
+	volume={66},
+	number={7},
+	pages={3029--3050},
+	year={2020},
+	publisher={INFORMS}
 }
 
 @article{brezzi2002optimal,
@@ -149,9 +152,13 @@
 	publisher={IEEE}
 }
 
-@book{berry1985bandit,
-	title={Bandit problems: sequential allocation of experiments ({M}onographs on statistics and applied probability)},
+@article{berry1985bandit,
+	title={Bandit problems: sequential allocation of experiments (Monographs on statistics and applied probability)},
 	author={Berry, Donald A and Fristedt, Bert},
+	journal={London: Chapman and Hall},
+	volume={5},
+	number={71-87},
+	pages={7--7},
 	year={1985},
 	publisher={Springer}
 }
@@ -172,12 +179,15 @@
 	publisher={JSTOR}
 }
 
-@inproceedings{russo2014learning,
-  title={Learning to optimize via {I}nformation-{D}irected {S}ampling},
-  author={Russo, Dan and Van Roy, Benjamin},
-  booktitle={Advances in Neural Information Processing Systems},
-  pages={1583--1591},
-  year={2014}
+@article{russo2014learning,
+	title={Learning to optimize via information-directed sampling},
+	author={Russo, Daniel and Van Roy, Benjamin},
+	journal={Operations Research},
+	volume={66},
+	number={1},
+	pages={230--252},
+	year={2018},
+	publisher={INFORMS}
 }
 
 @book{powell2012optimal,
@@ -189,10 +199,12 @@
 }
 
 @inproceedings{agrawalanalysis,
-	title={Analysis of {T}hompson {S}ampling for the {M}ulti-armed {B}andit problem},
+	title={Analysis of thompson sampling for the multi-armed bandit problem},
 	author={Agrawal, Shipra and Goyal, Navin},
-	booktitle={COLT},
-	year={2012}
+	booktitle={Conference on learning theory},
+	pages={39--1},
+	year={2012},
+	organization={JMLR Workshop and Conference Proceedings}
 }
 
 @article{lai1987adaptive,
@@ -251,7 +263,7 @@
 @inproceedings{kaufmann2012thompson,
 	title={Thompson {S}ampling: {A}n asymptotically optimal finite-time analysis},
 	author={Kaufmann, Emilie and Korda, Nathaniel and Munos, R{\'e}mi},
-	booktitle={Algorithmic Learning Theory},
+	booktitle={Algorithmic {L}earning {T}heory},
 	pages={199--213},
 	year={2012},
 	organization={Springer}
@@ -259,9 +271,11 @@
 
 @inproceedings{garivier2011kl,
 	title={The {KL-UCB} algorithm for bounded stochastic bandits and beyond},
-	author={Garivier, Aur{\'e}lien},
-	booktitle={COLT},
-	year={2011}
+	author={Garivier, Aur{\'e}lien and Capp{\'e}, Olivier},
+	booktitle={Proceedings of the 24th annual conference on learning theory},
+	pages={359--376},
+	year={2011},
+	organization={JMLR Workshop and Conference Proceedings}
 }
 
 @article{nino2011computing,
@@ -275,15 +289,6 @@
 	publisher={INFORMS}
 }
 
-@inproceedings{kaufmann2012thompson,
-	title={Thompson {S}ampling: An asymptotically optimal finite-time analysis},
-	author={Kaufmann, Emilie and Korda, Nathaniel and Munos, R{\'e}mi},
-	booktitle={Algorithmic Learning Theory},
-	pages={199--213},
-	year={2012},
-	organization={Springer}
-}
-
 @inproceedings{korda2013thompson,
 	title={Thompson sampling for 1-dimensional exponential family bandits},
 	author={Korda, Nathaniel and Kaufmann, Emilie and Munos, R{\'e}mi},
@@ -292,12 +297,14 @@
 	year={2013}
 }
 
-@inproceedings{chapelle2011empirical,
+@article{chapelle2011empirical,
 	title={An empirical evaluation of {T}hompson {S}ampling},
 	author={Chapelle, Olivier and Li, Lihong},
-	booktitle={Advances in neural information processing systems},
+	journal={Advances in neural information processing systems},
+	volume={24},
 	pages={2249--2257},
-	year={2011}
+	year={2011},
+	publisher={Citeseer}
 }
 
 @article{auer2002finite,
@@ -318,15 +325,6 @@
 	pages={169--177},
 	year={1985},
 	publisher={Springer}
-}
-
-@article{whittle1980multi,
-	title={Multi-armed {B}andits and the {G}ittins index},
-	author={Whittle, Peter},
-	journal={Journal of the Royal Statistical Society. Series B (Methodological)},
-	pages={143--149},
-	year={1980},
-	publisher={JSTOR}
 }
 
 @article{weber1992gittins,
@@ -373,6 +371,7 @@
 	title={Regret {A}nalysis of the {A}nytime {O}ptimally {C}onfident {UCB} Algorithm},
 	author={Lattimore, Tor},
 	journal={arXiv preprint arXiv:1603.08661},
+	url={https://arxiv.org/abs/1603.08661},
 	year={2016}
 }
 
@@ -408,7 +407,7 @@
 @inproceedings{maillard2011finite,
 	title={A {F}inite-{T}ime {A}nalysis of {M}ulti-armed {B}andits problems with {K}ullback-{L}eibler {D}ivergences.},
 	author={Maillard, Odalric-Ambrym and Munos, R{\'e}mi and Stoltz, Gilles and others},
-	booktitle={COLT},
+	booktitle={Conference on Learning Theory},
 	pages={497--514},
 	year={2011}
 }
@@ -475,17 +474,6 @@
 	publisher={National Academy of Sciences}
 }
 
-@article{bradt1956sequential,
-	title={On sequential designs for maximizing the sum of $n$ observations},
-	author={Bradt, Russell N and Johnson, SM and Karlin, Samuel},
-	journal={The Annals of Mathematical Statistics},
-	volume={27},
-	number={4},
-	pages={1060--1074},
-	year={1956},
-	publisher={JSTOR}
-}
-
 @article{chang1987optimal,
 	title={Optimal stopping and dynamic allocation},
 	author={Chang, Fu and Lai, Tze Leung},
@@ -498,10 +486,14 @@
 }
 
 @article{kaufmann2016bayesian,
-	title={On {B}ayesian index policies for sequential resource allocation},
+	title={On Bayesian index policies for sequential resource allocation},
 	author={Kaufmann, Emilie},
-	journal={arXiv preprint arXiv:1601.01190},
-	year={2016}
+	journal={The Annals of Statistics},
+	volume={46},
+	number={2},
+	pages={842--865},
+	year={2018},
+	publisher={Institute of Mathematical Statistics}
 }
 
 @inproceedings{kaufmann2012bayesian,

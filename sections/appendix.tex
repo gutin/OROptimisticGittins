@@ -53,7 +53,7 @@
 		\Big| y_{2,0} = \left(\alpha, \alpha+1 \right)
 	} + 1/2\right) .
 	\]
-	But the right hand side of the above expression goes to $\gamma/2 < 1/2$ as $\alpha \tends 0$}. Consequently, we can choose an $\alpha$ such that the Gittins index policy chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. {\color{blue}Consequently, $\pi^{G,\gamma}$ must incur a $T$-period frequentist regret lower bounded by 
+	But the right hand side of the above expression goes to $\gamma/2 < 1/2$ as $\alpha \tends 0$}. Consequently, we can choose an $\alpha$ such that the Gittins index policy chooses to pull the first arm; let $\alpha^*$ be the largest such $\alpha$. Since the state of the first arm does not change (the prior on that arm was assumed degenerate), the same condition must hold at subsequent iterations. {Consequently, $\pi^{G,\gamma}$ must incur a $T$-period frequentist regret lower bounded by 
 	$
 	T
 	\left(
@@ -93,7 +93,7 @@ for all $T$.
 \begin{myproof}[Proof.]
 By Theorem $3$ in \cite{lai1987adaptive}, we know that there exists a constant $\hat C_{\mathbf y}$ and a sequence of policies, $\tilde \pi_{\mathbf y, T}$ \footnote{this entails a minor abuse of our definition of a policy: $\tilde \pi_{\mathbf y, T}$ is not specified for $t > T$}  such that 
 \[
-{\color{blue} \lim_{T\to \infty}}
+{\lim_{T\to \infty}}
 \frac{
 \E
 _{\mathbf y}
@@ -374,12 +374,12 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 \end{myproof}
 
 \begin{lemma} \label{cor:equivalent_event}
-	Suppose that arm rewards are bounded. That is, there exists a constant $B \in \Re_+$ such that $X_{i,t} \in [0, B]$ for every arm $i$ and time $t$. {\color{blue}Further assume that $X_{i,t}$ is not almost surely equal to $B$}.
+	Suppose that arm rewards are bounded. That is, there exists a constant $B \in \Re_+$ such that $X_{i,t} \in [0, B]$ for every arm $i$ and time $t$. {Further assume that $X_{i,t}$ is not almost surely equal to $B$}.
 	
 	Let $v^K_{i,t}$ be the Optimistic Gittins Index of arm $i$ at time $t$ and let $\eta$ be a scalar, then the following equivalence holds
 	\[
 	\{v^K_{i,t} < \eta \} = \{(1-\gamma_t)V^K_{\gamma_t}(y_{i,\Ntg{i}{t}}, \eta) < \eta\}\]
-	where {\color{blue}$y_{i,\Ntg{i}{t}}$} is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
+	where {$y_{i,\Ntg{i}{t}}$} is the sufficient statistic for estimating the $i$th arm's parameter $\theta_i$ at time $t$.
 \end{lemma}
 {
 \begin{myproof}[Proof.]
@@ -409,7 +409,7 @@ We begin by investigating the effect of the parameter $\lambda$, which gives the
 	These together with Fact~\ref{fact:v_is_convex} show that the univariate function  $(1-\gamma)V^K_\gamma(y, \lambda) - \lambda$ is continuous and decreasing in $\lambda$. Moreover, this function is non-negative for any $\lambda \le v^K_\gamma(y)$ (since $v^K_\gamma(y)$ is the root of the function) and is also negative for $\lambda > v^K_\gamma(y)$.
 	\begin{figure}
 		\centering
-		\input{plots/visualize_gx.pgf} 
+		\input{plots/figure_3_visualize_gx.pgf} 
 		\caption{Visualization of Lemma~\ref{cor:equivalent_event}'s proof for a instance of the problem with a Beta prior corresponding to the pair $y = (4,5)$, a discount factor of $\gamma=0.95$ and $K = 2$. The intersection of the two lines represents the Optimistic Gittins index.}
 		\label{fig:visaulize_gx_proof}
 	\end{figure}
@@ -849,7 +849,7 @@ We list notation and facts related to Beta and Binomial distributions, which are
 This experiment is motivated by \cite{kaufmann2012bayesian} and in it we simulate the Bernoulli bandit problem with a $T = 500$ and two arms. Since we are interested in measuring expected regret over the prior, we draw the arms' mean rewards at random from the uniform distribution. There are 5,000 independent trials and we show the results in Figures~\ref{fig:kaufmann_regret}. OGI offers notable performance improvements over both Thompson Sampling and IDS for this modest horizon.
 \begin{figure}[h!]
 	\centering
-	\input{plots/kaufmann_fig1.pgf}
+	\input{plots/figure_4_kaufmann.pgf}
 	\caption{Frequentist regret. The OGI policy is configured with $K=1$ and $\alpha=100$.}
 	\label{fig:kaufmann_regret}
 \end{figure}
